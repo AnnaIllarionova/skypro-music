@@ -1,10 +1,10 @@
 import "./App.css";
-import { Navigation } from "./components/navigation.js";
-import { Bar } from "./components/bar.js";
-import { SearchComponent } from "./components/search.js";
-import { FilterTracks } from "./components/filter-tracks.js";
-import { GetPlaylist } from "./components/playlist.js";
-import { Sidebar } from "./components/sidebar.js";
+import { Navigation } from "./components/navigation/navigation.js";
+import { Bar } from "./components/bar/bar.js";
+import { SearchComponent } from "./components/search/search.js";
+import { FilterTracks } from "./components/filter-tracks/filter-tracks.js";
+import { GetPlaylist } from "./components/playlist/playlist.js";
+import { Sidebar } from "./components/sidebar/sidebar.js";
 
 function App() {
   return (

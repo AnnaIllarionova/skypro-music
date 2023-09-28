@@ -1,4 +1,4 @@
-import { GetPersonalData } from "./personal-data.js";
+import { GetPersonalData } from "../personal-data/personal-data.js";
 import "./sidebar.css";
 
 export function Sidebar() {
