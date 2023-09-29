@@ -33,6 +33,7 @@
   .sidebar__item {
     width: 250px;
     height: 150px;
+    background-color: #313131;
   }
   
   .sidebar__item:not(:last-child) {

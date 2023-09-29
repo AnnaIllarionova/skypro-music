@@ -229,6 +229,7 @@
   -ms-grid-column: 2;
   grid-area: author;
   min-width: 49px;
+  min-height: 19px;
 }
 
 .track-play__author-link {
@@ -245,6 +246,7 @@
   -ms-grid-column: 2;
   grid-area: album;
   min-width: 49px;
+  min-height: 19px;
 }
 
 .track-play__album-link {
