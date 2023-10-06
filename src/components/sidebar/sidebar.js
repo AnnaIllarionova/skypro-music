@@ -1,13 +1,13 @@
 import { GetPersonalData } from "../personal-data/personal-data.js";
-import "./sidebar.css";
+import * as S from "./sidebar.styled.js";
 import { useState } from "react";
 
 export function Sidebar() {
   return (
-    <div className="main__sidebar sidebar">
+    <S.MainSidebar className="sidebar">
       <GetPersonalData />
-      <div className="sidebar__block">
-        <div className="sidebar__list">
+      <S.SidebarBlock>
+        <S.SidebarList>
           <GetSidebarItem
             imgUrl="./img/playlist01.png"
             label="day's playlist"
@@ -20,9 +20,9 @@ export function Sidebar() {
             imgUrl="./img/playlist03.png"
             label="day's playlist"
           />
-        </div>
-      </div>
-    </div>
+        </S.SidebarList>
+      </S.SidebarBlock>
+    </S.MainSidebar>
   );
 }
 
@@ -32,12 +32,12 @@ function GetSidebarItem(props) {
     setIsVisiable(true);
   }, 3000);
   return (
-    <div className="sidebar__item">
+    <S.SidebarItem>
       {isVisiable && (
-        <a className="sidebar__link" href="#">
-          <img className="sidebar__img" src={props.imgUrl} alt={props.label} />
-        </a>
+        <S.SidebarLink href="#">
+          <S.SidebarImage src={props.imgUrl} alt={props.label} />
+        </S.SidebarLink>
       )}
-    </div>
+    </S.SidebarItem>
   );
 }
