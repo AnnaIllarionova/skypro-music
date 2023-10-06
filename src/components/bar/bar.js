@@ -1,72 +1,72 @@
 import { useState } from "react";
-import "./bar.css";
+import * as S from "./bar.styled";
 
-export function Bar() {
+export function MusicBar() {
   return (
-    <div className="bar">
-      <div className="bar__content">
-        <div className="bar__player-progress"></div>
-        <div className="bar__player-block">
-          <div className="bar__player player">
+    <S.Bar>
+      <S.BarContent>
+        <S.BarPlayerProgress></S.BarPlayerProgress>
+        <S.BarPlayerBlock>
+          <S.BarPlayer>
             <PlayerControls />
-            <div className="player__track-play track-play">
+            <S.PlayerTrackPlay>
               <SeeCurrentTrack />
               <LikeOrDislikeCurrentTrack />
-            </div>
-          </div>
+            </S.PlayerTrackPlay>
+          </S.BarPlayer>
           <CorrectVolume />
-        </div>
-      </div>
-    </div>
+        </S.BarPlayerBlock>
+      </S.BarContent>
+    </S.Bar>
   );
 }
 
 function PlayerControls() {
   return (
-    <div className="player__controls">
-      <div className="player__btn-prev">
-        <svg className="player__btn-prev-svg" alt="prev">
+    <S.PlayerControlsItems>
+      <S.PlayerBtnPrev>
+        <S.PlayerBtnPrevSvg alt="prev">
           <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
-        </svg>
-      </div>
-      <div className="player__btn-play _btn">
-        <svg className="player__btn-play-svg" alt="play">
+        </S.PlayerBtnPrevSvg>
+      </S.PlayerBtnPrev>
+      <S.PlayerBtnPlay className="player__btn-play _btn">
+        <S.PlayerBtnPlaySvg alt="play">
           <use xlinkHref="img/icon/sprite.svg#icon-play"></use>
-        </svg>
-      </div>
-      <div className="player__btn-next">
-        <svg className="player__btn-next-svg" alt="next">
+        </S.PlayerBtnPlaySvg>
+      </S.PlayerBtnPlay>
+      <S.PlayerBtnNext>
+        <S.PlayerBtnNextSvg alt="next">
           <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
-        </svg>
-      </div>
-      <div className="player__btn-repeat _btn-icon">
-        <svg className="player__btn-repeat-svg" alt="repeat">
+        </S.PlayerBtnNextSvg>
+      </S.PlayerBtnNext>
+      <S.PlayerBtnRepeat className="player__btn-repeat _btn-icon">
+        <S.PlayerBtnRepeatSvg alt="repeat">
           <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
-        </svg>
-      </div>
-      <div className="player__btn-shuffle _btn-icon">
-        <svg className="player__btn-shuffle-svg" alt="shuffle">
+        </S.PlayerBtnRepeatSvg>
+      </S.PlayerBtnRepeat>
+      <S.PlayerBtnShuffle className="player__btn-shuffle _btn-icon">
+        <S.PlayerBtnShuffleSvg alt="shuffle">
           <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
-        </svg>
-      </div>
-    </div>
+        </S.PlayerBtnShuffleSvg>
+      </S.PlayerBtnShuffle>
+    </S.PlayerControlsItems>
   );
 }
 
 function LikeOrDislikeCurrentTrack() {
   return (
-    <div className="track-play__like-dis">
-      <div className="track-play__like _btn-icon">
-        <svg className="track-play__like-svg" alt="like">
+    <S.TrackPlayLikeOrDislike>
+      <S.TrackPlayLike className="_btn-icon">
+        <S.TrackPlayLikeSvg alt="like">
           <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
-        </svg>
-      </div>
-      <div className="track-play__dislike _btn-icon">
-        <svg className="track-play__dislike-svg" alt="dislike">
+        </S.TrackPlayLikeSvg>
+      </S.TrackPlayLike>
+      <S.TrackPlayDislike className="_btn-icon">
+        <S.TrackPlayDislikeSvg alt="dislike">
           <use xlinkHref="img/icon/sprite.svg#icon-dislike"></use>
-        </svg>
-      </div>
-    </div>
+        </S.TrackPlayDislikeSvg>
+      </S.TrackPlayDislike>
+    </S.TrackPlayLikeOrDislike>
   );
 }
 
@@ -76,55 +76,41 @@ function SeeCurrentTrack() {
     setIsVisiable(true);
   }, 3000);
   return (
-    <div className="track-play__contain">
-      <div className="track-play__image">
+    <S.TrackPlayContain>
+      <S.TrackPlayImage>
         {isVisiable && (
-          <svg className="track-play__svg" alt="music">
+          <S.TrackPlaySvg alt="music">
             <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
-          </svg>
+          </S.TrackPlaySvg>
         )}
-      </div>
-      <div
-        className="track-play__author"
-        style={isVisiable === false ? { background: "#313131" } : {}}
-      >
+      </S.TrackPlayImage>
+      <S.TrackPlayAuthor isVisiable={!isVisiable}>
         {isVisiable && (
-          <a className="track-play__author-link" href="http://">
-            Ты та...
-          </a>
+          <S.TrackPlayAuthorLink href="http://">Ты та...</S.TrackPlayAuthorLink>
         )}
-      </div>
-      <div
-        className="track-play__album"
-        style={!isVisiable ? { background: "#313131" } : {}}
-      >
+      </S.TrackPlayAuthor>
+      <S.TrackPlayAlbum isVisiable={!isVisiable}>
         {isVisiable && (
-          <a className="track-play__album-link" href="http://">
-            Баста
-          </a>
+          <S.TrackPlayAlbumLink href="http://">Баста</S.TrackPlayAlbumLink>
         )}
-      </div>
-    </div>
+      </S.TrackPlayAlbum>
+    </S.TrackPlayContain>
   );
 }
 
 function CorrectVolume() {
   return (
-    <div className="bar__volume-block volume">
-      <div className="volume__content">
-        <div className="volume__image">
-          <svg className="volume__svg" alt="volume">
+    <S.BarVolumeBlock className="volume">
+      <S.VolumeContent>
+        <S.VolumeImage>
+          <S.VolumeSvg alt="volume">
             <use xlinkHref="img/icon/sprite.svg#icon-volume"></use>
-          </svg>
-        </div>
-        <div className="volume__progress _btn">
-          <input
-            className="volume__progress-line _btn"
-            type="range"
-            name="range"
-          />
-        </div>
-      </div>
-    </div>
+          </S.VolumeSvg>
+        </S.VolumeImage>
+        <S.VolumeProgress className="_btn">
+          <S.VolumeProgressLine className="_btn" type="range" name="range" />
+        </S.VolumeProgress>
+      </S.VolumeContent>
+    </S.BarVolumeBlock>
   );
 }

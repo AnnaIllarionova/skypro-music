@@ -1,12 +1,15 @@
-.bar {
+import styled from "styled-components";
+
+// for MusicBar
+export const Bar = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   background: rgba(28, 28, 28, 0.5);
-}
+`;
 
-.bar__content {
+export const BarContent = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14,15 +17,14 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-}
+`;
 
-.bar__player-progress {
+export const BarPlayerProgress = styled.div`
   width: 100%;
   height: 5px;
   background: #2e2e2e;
-}
-
-.bar__player-block {
+`;
+export const BarPlayerBlock = styled.div`
   height: 73px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -34,9 +36,9 @@
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-}
+`;
 
-.bar__player {
+export const BarPlayer = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -50,9 +52,9 @@
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-}
+`;
 
-.player__track-play {
+export const PlayerTrackPlay = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -60,10 +62,10 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-}
+`;
 
 /* for PlayerControls */
-.player__controls {
+export const PlayerControlsItems = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -72,13 +74,10 @@
   -ms-flex-direction: row;
   flex-direction: row;
   padding: 0 27px 0 31px;
-}
+  align-items: center;
+`;
 
-.player__btn-prev,
-.player__btn-play,
-.player__btn-next,
-.player__btn-repeat,
-.player__btn-shuffle {
+export const CommonStylesForBtn = styled.div`
   padding: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -86,68 +85,69 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
+`;
 
-.player__btn-prev {
+export const PlayerBtnPrev = styled(CommonStylesForBtn)`
   margin-right: 23px;
-}
+`;
 
-.player__btn-prev-svg {
+export const PlayerBtnPrevSvg = styled.svg`
   width: 15px;
   height: 14px;
-}
+  stroke: #d9d9d9;
+`;
 
-.player__btn-play {
+export const PlayerBtnPlay = styled(CommonStylesForBtn)`
   margin-right: 23px;
-}
+`;
 
-.player__btn-play-svg {
+export const PlayerBtnPlaySvg = styled.svg`
   width: 22px;
   height: 20px;
   fill: #d9d9d9;
-}
+`;
 
-.player__btn-next {
+export const PlayerBtnNext = styled(CommonStylesForBtn)`
   margin-right: 28px;
   fill: #a53939;
-}
+`;
 
-.player__btn-next-svg {
+export const PlayerBtnNextSvg = styled.svg`
   width: 15px;
   height: 14px;
   fill: inherit;
   stroke: #d9d9d9;
-}
+`;
 
-.player__btn-repeat {
+export const PlayerBtnRepeat = styled(CommonStylesForBtn)`
   margin-right: 24px;
-}
+`;
 
-.player__btn-repeat-svg {
+export const PlayerBtnRepeatSvg = styled.svg`
   width: 18px;
   height: 12px;
   fill: transparent;
   stroke: #696969;
-}
+`;
 
-.player__btn-shuffle {
+export const PlayerBtnShuffle = styled(CommonStylesForBtn)`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
+`;
 
-.player__btn-shuffle-svg {
+export const PlayerBtnShuffleSvg = styled.svg`
   width: 19px;
   height: 12px;
   fill: transparent;
   stroke: #696969;
-}
+`;
 
 /* for LikeOrDislikeCurrentTrack */
-.track-play__like-dis {
+export const TrackPlayLikeOrDislike = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -159,33 +159,31 @@
   -ms-flex-align: center;
   align-items: center;
   margin-left: 26%;
-}
-
-.track-play__like,
-.track-play__dislike {
-  padding: 5px;
-}
-
-.track-play__like-svg {
+`;
+export const TrackPlayLikeSvg = styled.svg`
   width: 14px;
   height: 12px;
   fill: transparent;
   stroke: #696969;
-}
-
-.track-play__dislike {
-  margin-left: 28.5px;
-}
-
-.track-play__dislike-svg {
+`;
+export const TrackPlayDislikeSvg = styled.svg`
   width: 14.34px;
   height: 13px;
   fill: transparent;
   stroke: #696969;
-}
+`;
+export const CommonStylesForLikeOrDislike = styled.div`
+  padding: 5px;
+`;
+
+export const TrackPlayLike = styled(CommonStylesForLikeOrDislike)``;
+
+export const TrackPlayDislike = styled(CommonStylesForLikeOrDislike)`
+  margin-left: 28.5px;
+`;
 
 /* for SeeCurrentTrack */
-.track-play__contain {
+export const TrackPlayContain = styled.div`
   width: auto;
   display: -ms-grid;
   display: grid;
@@ -195,9 +193,9 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
+`;
 
-.track-play__image {
+export const TrackPlayImage = styled.div`
   width: 51px;
   height: 51px;
   background-color: #313131;
@@ -215,50 +213,50 @@
   -ms-grid-row-span: 2;
   -ms-grid-column: 1;
   grid-area: image;
-}
+`;
 
-.track-play__svg {
+export const TrackPlaySvg = styled.svg`
   width: 18px;
   height: 17px;
   fill: transparent;
   stroke: #4e4e4e;
-}
-
-.track-play__author {
+`;
+export const TrackPlayAuthor = styled.div`
   -ms-grid-row: 1;
   -ms-grid-column: 2;
   grid-area: author;
   min-width: 49px;
   min-height: 19px;
-}
+  background: ${(props) => (props.isVisiable ? "#313131" : "initial")};
+`;
 
-.track-play__author-link {
+export const TrackPlayAuthorLink = styled.a`
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
   white-space: nowrap;
-}
-
-.track-play__album {
+`;
+export const TrackPlayAlbum = styled.div`
   -ms-grid-row: 2;
   -ms-grid-column: 2;
   grid-area: album;
   min-width: 49px;
   min-height: 19px;
-}
+  background: ${(props) => (props.isVisiable ? "#313131" : "initial")};
+`;
 
-.track-play__album-link {
+export const TrackPlayAlbumLink = styled.a`
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
   line-height: 24px;
   color: #ffffff;
-}
+`;
 
 /* for CorrectVolume */
-.bar__volume-block {
+export const BarVolumeBlock = styled.div`
   width: auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -267,9 +265,9 @@
   -ms-flex-align: center;
   align-items: center;
   padding: 0 92px 0 0;
-}
+`;
 
-.volume__content {
+export const VolumeContent = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -283,24 +281,24 @@
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: end;
-}
+`;
 
-.volume__image {
+export const VolumeImage = styled.div`
   width: 13px;
   height: 18px;
   margin-right: 17px;
-}
+`;
 
-.volume__svg {
+export const VolumeSvg = styled.svg`
   width: 13px;
   height: 18px;
   fill: transparent;
-}
+`;
 
-.volume__progress {
+export const VolumeProgress = styled.div`
   width: 109px;
-}
+`;
 
-.volume__progress-line {
+export const VolumeProgressLine = styled.input`
   width: 109px;
-}
+`;

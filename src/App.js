@@ -1,10 +1,11 @@
 import "./App.css";
 import { Navigation } from "./components/navigation/navigation.js";
-import { Bar } from "./components/bar/bar.js";
+import { MusicBar } from "./components/bar/bar.js";
 import { SearchComponent } from "./components/search/search.js";
 import { FilterTracks } from "./components/filter-tracks/filter-tracks.js";
 import { GetPlaylist } from "./components/playlist/playlist.js";
 import { Sidebar } from "./components/sidebar/sidebar.js";
+
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           </div>
           <Sidebar />
         </main>
-        <Bar />
+        <MusicBar />
         <footer className="footer"></footer>
       </div>
     </div>
