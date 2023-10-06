@@ -1,5 +1,6 @@
-import { GetPersonalData } from "./personal-data.js";
+import { GetPersonalData } from "../personal-data/personal-data.js";
 import "./sidebar.css";
+import { useState } from "react";
 
 export function Sidebar() {
   return (
@@ -26,12 +27,17 @@ export function Sidebar() {
 }
 
 function GetSidebarItem(props) {
+  const [isVisiable, setIsVisiable] = useState(false);
+  setTimeout(() => {
+    setIsVisiable(true);
+  }, 3000);
   return (
     <div className="sidebar__item">
-      <a className="sidebar__link" href="#">
-        <img className="sidebar__img" src={props.imgUrl} alt={props.label} />
-      </a>
+      {isVisiable && (
+        <a className="sidebar__link" href="#">
+          <img className="sidebar__img" src={props.imgUrl} alt={props.label} />
+        </a>
+      )}
     </div>
   );
 }
-

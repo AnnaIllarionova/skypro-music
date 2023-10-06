@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./bar.css";
 
 export function Bar() {
@@ -70,22 +71,38 @@ function LikeOrDislikeCurrentTrack() {
 }
 
 function SeeCurrentTrack() {
+  const [isVisiable, setIsVisiable] = useState(false);
+  setTimeout(() => {
+    setIsVisiable(true);
+  }, 3000);
   return (
     <div className="track-play__contain">
       <div className="track-play__image">
-        <svg className="track-play__svg" alt="music">
-          <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
-        </svg>
+        {isVisiable && (
+          <svg className="track-play__svg" alt="music">
+            <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
+          </svg>
+        )}
       </div>
-      <div className="track-play__author">
-        <a className="track-play__author-link" href="http://">
-          Ты та...
-        </a>
+      <div
+        className="track-play__author"
+        style={isVisiable === false ? { background: "#313131" } : {}}
+      >
+        {isVisiable && (
+          <a className="track-play__author-link" href="http://">
+            Ты та...
+          </a>
+        )}
       </div>
-      <div className="track-play__album">
-        <a className="track-play__album-link" href="http://">
-          Баста
-        </a>
+      <div
+        className="track-play__album"
+        style={!isVisiable ? { background: "#313131" } : {}}
+      >
+        {isVisiable && (
+          <a className="track-play__album-link" href="http://">
+            Баста
+          </a>
+        )}
       </div>
     </div>
   );
