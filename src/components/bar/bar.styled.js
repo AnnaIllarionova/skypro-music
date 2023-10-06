@@ -85,13 +85,32 @@ export const CommonStylesForBtn = styled.div`
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+
+  &:active {
+    fill: #696969;
+    stroke: #ffffff;
+    cursor: pointer;
+  }
 `;
 
 export const PlayerBtnPrev = styled(CommonStylesForBtn)`
   margin-right: 23px;
 `;
 
-export const PlayerBtnPrevSvg = styled.svg`
+export const Button = styled.svg`
+  &:hover {
+    fill: transparent;
+    stroke: #acacac;
+    cursor: pointer;
+  }
+  &:active {
+    fill: transparent;
+    stroke: #ffffff;
+    cursor: pointer;
+  }
+`;
+
+export const PlayerBtnPrevSvg = styled(Button)`
   width: 15px;
   height: 14px;
   stroke: #d9d9d9;
@@ -101,7 +120,7 @@ export const PlayerBtnPlay = styled(CommonStylesForBtn)`
   margin-right: 23px;
 `;
 
-export const PlayerBtnPlaySvg = styled.svg`
+export const PlayerBtnPlaySvg = styled(Button)`
   width: 22px;
   height: 20px;
   fill: #d9d9d9;
@@ -112,7 +131,7 @@ export const PlayerBtnNext = styled(CommonStylesForBtn)`
   fill: #a53939;
 `;
 
-export const PlayerBtnNextSvg = styled.svg`
+export const PlayerBtnNextSvg = styled(Button)`
   width: 15px;
   height: 14px;
   fill: inherit;
@@ -123,7 +142,7 @@ export const PlayerBtnRepeat = styled(CommonStylesForBtn)`
   margin-right: 24px;
 `;
 
-export const PlayerBtnRepeatSvg = styled.svg`
+export const PlayerBtnRepeatSvg = styled(Button)`
   width: 18px;
   height: 12px;
   fill: transparent;
@@ -139,7 +158,7 @@ export const PlayerBtnShuffle = styled(CommonStylesForBtn)`
   align-items: center;
 `;
 
-export const PlayerBtnShuffleSvg = styled.svg`
+export const PlayerBtnShuffleSvg = styled(Button)`
   width: 19px;
   height: 12px;
   fill: transparent;
@@ -160,13 +179,18 @@ export const TrackPlayLikeOrDislike = styled.div`
   align-items: center;
   margin-left: 26%;
 `;
-export const TrackPlayLikeSvg = styled.svg`
+
+export const SvgActive = styled.svg`
+  cursor: pointer;
+`;
+
+export const TrackPlayLikeSvg = styled(SvgActive)`
   width: 14px;
   height: 12px;
   fill: transparent;
   stroke: #696969;
 `;
-export const TrackPlayDislikeSvg = styled.svg`
+export const TrackPlayDislikeSvg = styled(SvgActive)`
   width: 14.34px;
   height: 13px;
   fill: transparent;

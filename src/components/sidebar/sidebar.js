@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export function Sidebar() {
   return (
-    <S.MainSidebar className="sidebar">
+    <S.MainSidebar>
       <GetPersonalData />
       <S.SidebarBlock>
         <S.SidebarList>

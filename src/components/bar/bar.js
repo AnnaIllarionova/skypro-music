@@ -29,7 +29,7 @@ function PlayerControls() {
           <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
         </S.PlayerBtnPrevSvg>
       </S.PlayerBtnPrev>
-      <S.PlayerBtnPlay className="player__btn-play _btn">
+      <S.PlayerBtnPlay>
         <S.PlayerBtnPlaySvg alt="play">
           <use xlinkHref="img/icon/sprite.svg#icon-play"></use>
         </S.PlayerBtnPlaySvg>
@@ -39,12 +39,12 @@ function PlayerControls() {
           <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
         </S.PlayerBtnNextSvg>
       </S.PlayerBtnNext>
-      <S.PlayerBtnRepeat className="player__btn-repeat _btn-icon">
+      <S.PlayerBtnRepeat>
         <S.PlayerBtnRepeatSvg alt="repeat">
           <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
         </S.PlayerBtnRepeatSvg>
       </S.PlayerBtnRepeat>
-      <S.PlayerBtnShuffle className="player__btn-shuffle _btn-icon">
+      <S.PlayerBtnShuffle>
         <S.PlayerBtnShuffleSvg alt="shuffle">
           <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
         </S.PlayerBtnShuffleSvg>
@@ -56,12 +56,12 @@ function PlayerControls() {
 function LikeOrDislikeCurrentTrack() {
   return (
     <S.TrackPlayLikeOrDislike>
-      <S.TrackPlayLike className="_btn-icon">
+      <S.TrackPlayLike>
         <S.TrackPlayLikeSvg alt="like">
           <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
         </S.TrackPlayLikeSvg>
       </S.TrackPlayLike>
-      <S.TrackPlayDislike className="_btn-icon">
+      <S.TrackPlayDislike>
         <S.TrackPlayDislikeSvg alt="dislike">
           <use xlinkHref="img/icon/sprite.svg#icon-dislike"></use>
         </S.TrackPlayDislikeSvg>
@@ -100,15 +100,15 @@ function SeeCurrentTrack() {
 
 function CorrectVolume() {
   return (
-    <S.BarVolumeBlock className="volume">
+    <S.BarVolumeBlock>
       <S.VolumeContent>
         <S.VolumeImage>
           <S.VolumeSvg alt="volume">
             <use xlinkHref="img/icon/sprite.svg#icon-volume"></use>
           </S.VolumeSvg>
         </S.VolumeImage>
-        <S.VolumeProgress className="_btn">
-          <S.VolumeProgressLine className="_btn" type="range" name="range" />
+        <S.VolumeProgress>
+          <S.VolumeProgressLine type="range" name="range" />
         </S.VolumeProgress>
       </S.VolumeContent>
     </S.BarVolumeBlock>

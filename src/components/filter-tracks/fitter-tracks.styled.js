@@ -23,6 +23,8 @@ export const FilterTitle = styled.div`
   line-height: 24px;
   margin-right: 15px;
 `;
+
+// active?
 export const FilterButton = styled.div`
   font-style: normal;
   font-weight: 400;
@@ -39,6 +41,18 @@ export const FilterButton = styled.div`
     props.isAuthorClicked || props.isYearClicked || props.isGenreClicked
       ? "#B672FF"
       : "inherit"};
+
+  &:hover {
+    border-color: #d9b6ff;
+    color: #d9b6ff;
+    cursor: pointer;
+  }
+
+  &:active {
+    border-color: #ad61ff;
+    color: #ad61ff;
+    cursor: pointer;
+  }
 `;
 
 /* for ListofAuthors */

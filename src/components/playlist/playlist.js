@@ -6,7 +6,7 @@ export function GetPlaylist() {
   return (
     <S.CenterblockContent>
       <GetTitleOfPlaylist />
-      <S.ContentPlaylist className="playlist">
+      <S.ContentPlaylist>
         <TracksOfPlaylist />
       </S.ContentPlaylist>
     </S.CenterblockContent>
@@ -19,7 +19,7 @@ function TracksOfPlaylist() {
     setIsVisiable(true);
   }, 3000);
   const tracks = tracksList.map((track) => (
-    <S.PlaylistTrack className="track" key={track.id}>
+    <S.PlaylistTrack key={track.id}>
       <S.TrackTitle>
         <S.TrackTitleImage>
           {isVisiable && (
@@ -66,7 +66,7 @@ function TracksOfPlaylist() {
 
 function GetTitleOfPlaylist() {
   return (
-    <S.ContentTitle className="playlist-title">
+    <S.ContentTitle >
       <S.PlaylistTitleCol01>Трек</S.PlaylistTitleCol01>
       <S.PlaylistTitleCol02>ИСПОЛНИТЕЛЬ</S.PlaylistTitleCol02>
       <S.PlaylistTitleCol03>АЛЬБОМ</S.PlaylistTitleCol03>

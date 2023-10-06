@@ -26,11 +26,10 @@ export function FilterTracks() {
   }
 
   return (
-    <S.CenterblockFilter className="filter">
-      <S.FilterTitle className="filter__title">Искать по:</S.FilterTitle>
+    <S.CenterblockFilter >
+      <S.FilterTitle >Искать по:</S.FilterTitle>
       <div className="filter__list">
         <S.FilterButton
-          className="button-author _btn-text"
           onClick={handleIsAuthorClicked}
           isAuthorClicked={isAuthorClicked}
         >
@@ -40,7 +39,6 @@ export function FilterTracks() {
       </div>
       <div className="filter__list">
         <S.FilterButton
-          className="button-year _btn-text"
           onClick={handleIsYearClicked}
           isYearClicked={isYearClicked}
         >
@@ -51,7 +49,6 @@ export function FilterTracks() {
 
       <div className="filter__list">
         <S.FilterButton
-          className="button-genre _btn-text"
           onClick={handleIsGenreClicked}
           isGenreClicked={isGenreClicked}
         >
