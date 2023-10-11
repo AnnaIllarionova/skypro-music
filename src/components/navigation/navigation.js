@@ -27,13 +27,13 @@ function PopUpMenu() {
     <S.NavMenu>
       <S.MenuList>
         <S.MenuItem>
-          <S.MenuLink href="#">Главное</S.MenuLink>
+          <S.MenuLink to="/">Главное</S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink href="#">Мой плейлист</S.MenuLink>
+          <S.MenuLink to="/myplaylist">Мой плейлист</S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink href="../signin.html">Войти</S.MenuLink>
+          <S.MenuLink to="/signin">Войти</S.MenuLink>
         </S.MenuItem>
       </S.MenuList>
     </S.NavMenu>

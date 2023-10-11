@@ -1,6 +1,7 @@
 import { GetPersonalData } from "../personal-data/personal-data.js";
 import * as S from "./sidebar.styled.js";
 import { useState } from "react";
+import { categories } from "./categories.js";
 
 export function Sidebar() {
   return (
@@ -8,36 +9,30 @@ export function Sidebar() {
       <GetPersonalData />
       <S.SidebarBlock>
         <S.SidebarList>
-          <GetSidebarItem
-            imgUrl="./img/playlist01.png"
-            label="day's playlist"
-          />
-          <GetSidebarItem
-            imgUrl="./img/playlist02.png"
-            label="day's playlist"
-          />
-          <GetSidebarItem
-            imgUrl="./img/playlist03.png"
-            label="day's playlist"
-          />
+          <GetSidebarItems />
         </S.SidebarList>
       </S.SidebarBlock>
     </S.MainSidebar>
   );
 }
 
-function GetSidebarItem(props) {
+function GetSidebarItems() {
   const [isVisiable, setIsVisiable] = useState(false);
   setTimeout(() => {
     setIsVisiable(true);
   }, 3000);
+
   return (
-    <S.SidebarItem>
-      {isVisiable && (
-        <S.SidebarLink href="#">
-          <S.SidebarImage src={props.imgUrl} alt={props.label} />
-        </S.SidebarLink>
-      )}
-    </S.SidebarItem>
+    <>
+      {categories.map((category) => (
+        <S.SidebarItem key={category.id}>
+          {isVisiable && (
+            <S.SidebarLink to={`/categories-of-hits/${category.id}`}>
+              <S.SidebarImage src={category.imgUrl} alt={category.label} />
+            </S.SidebarLink>
+          )}
+        </S.SidebarItem>
+      ))}
+    </>
   );
 }

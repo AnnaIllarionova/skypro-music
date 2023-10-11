@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const MainNav = styled.nav`
   width: 244px;
@@ -56,7 +57,7 @@ export const MenuItem = styled.li`
   margin-bottom: 16px;
 `;
 
-export const MenuLink = styled.a`
+export const MenuLink = styled(Link)`
   color: #ffffff;
   font-weight: 400;
   font-size: 16px;
