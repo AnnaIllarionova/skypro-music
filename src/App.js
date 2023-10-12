@@ -1,29 +1,31 @@
-import "./App.css";
+import * as S from "./App.styled.js";
 import { Navigation } from "./components/navigation/navigation.js";
-import { Bar } from "./components/bar/bar.js";
+import { MusicBar } from "./components/bar/bar.js";
 import { SearchComponent } from "./components/search/search.js";
 import { FilterTracks } from "./components/filter-tracks/filter-tracks.js";
 import { GetPlaylist } from "./components/playlist/playlist.js";
 import { Sidebar } from "./components/sidebar/sidebar.js";
+import { GlobalStyles } from "./global.styled.js";
 
 function App() {
   return (
-    <div className="wrapper">
-      <div className="container">
-        <main className="main">
+    <S.Wrapper>
+      <GlobalStyles />
+      <S.Container>
+        <S.Main>
           <Navigation />
-          <div className="main__centerblock centerblock">
+          <S.MainCenterblock>
             <SearchComponent />
-            <h2 className="centerblock__h2">Треки</h2>
+            <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
             <FilterTracks />
             <GetPlaylist />
-          </div>
+          </S.MainCenterblock>
           <Sidebar />
-        </main>
-        <Bar />
+        </S.Main>
+        <MusicBar />
         <footer className="footer"></footer>
-      </div>
-    </div>
+      </S.Container>
+    </S.Wrapper>
   );
 }
 

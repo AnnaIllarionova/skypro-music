@@ -1,30 +1,15 @@
-import "./playlist.css";
+import * as S from "./playlist.styled.js";
 import { tracksList } from "./tracklist.js";
 import { useState } from "react";
 
 export function GetPlaylist() {
   return (
-    <div className="centerblock__content">
+    <S.CenterblockContent>
       <GetTitleOfPlaylist />
-      <div className="content__playlist playlist">
+      <S.ContentPlaylist>
         <TracksOfPlaylist />
-      </div>
-    </div>
-  );
-}
-
-function GetTitleOfPlaylist() {
-  return (
-    <div className="content__title playlist-title">
-      <div className="playlist-title__col col01">Трек</div>
-      <div className="playlist-title__col col02">ИСПОЛНИТЕЛЬ</div>
-      <div className="playlist-title__col col03">АЛЬБОМ</div>
-      <div className="playlist-title__col col04">
-        <svg className="playlist-title__svg" alt="time">
-          <use xlinkHref="img/icon/sprite.svg#icon-watch"></use>
-        </svg>
-      </div>
-    </div>
+      </S.ContentPlaylist>
+    </S.CenterblockContent>
   );
 }
 
@@ -34,63 +19,62 @@ function TracksOfPlaylist() {
     setIsVisiable(true);
   }, 3000);
   const tracks = tracksList.map((track) => (
-    <div className="playlist__track track" key={track.id}>
-      <div className="track__title">
-        <div className="track__title-image">
+    <S.PlaylistTrack key={track.id}>
+      <S.TrackTitle>
+        <S.TrackTitleImage>
           {isVisiable && (
-            <svg className="track__title-svg" alt="music">
+            <S.TrackTitleSvg alt="music">
               <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
-            </svg>
+            </S.TrackTitleSvg>
           )}
-        </div>
-        <div
-          className="track__title-text"
-          style={!isVisiable ? { background: "#313131" } : {}}
-        >
+        </S.TrackTitleImage>
+        <S.TrackTitleText isVisiable={!isVisiable}>
           {isVisiable && (
-            <a className="track__title-link" href="http://">
+            <S.TrackTitleLink href="http://">
               {track.nameOfTheSong}
-              <span className="track__title-span">
-                {track.additionToTheSong}
-              </span>
-            </a>
+              <S.TrackTitleSpan>
+                {" " + track.additionToTheSong}
+              </S.TrackTitleSpan>
+            </S.TrackTitleLink>
           )}
-        </div>
-      </div>
-      <div
-        className="track__author"
-        style={!isVisiable ? { background: "#313131" } : {}}
-      >
+        </S.TrackTitleText>
+      </S.TrackTitle>
+      <S.TrackAuthor isVisiable={!isVisiable}>
         {isVisiable && (
-          <a className="track__author-link" href="http://">
-            {track.singer}
-          </a>
+          <S.TrackAuthorLink href="http://">{track.singer}</S.TrackAuthorLink>
         )}
-      </div>
-      <div
-        className="track__album"
-        style={!isVisiable ? { background: "#313131" } : {}}
-      >
+      </S.TrackAuthor>
+      <S.TrackAlbum isVisiable={!isVisiable}>
         {isVisiable && (
-          <a className="track__album-link" href="http://">
-            {track.musicAlbum}
-          </a>
+          <S.TrackAlbumLink href="http://">{track.musicAlbum}</S.TrackAlbumLink>
         )}
-      </div>
-      <div
-        className="track__time"
-        style={!isVisiable ? { background: "#313131" } : {}}
-      >
+      </S.TrackAlbum>
+      <S.TrackTime isVisiable={!isVisiable}>
         {isVisiable && (
           <>
-            <svg className="track__time-svg" alt="time">
+            <S.TrackTimeSvg alt="time">
               <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
-            </svg>
-            <span className="track__time-text">{track.trackDuration}</span>
+            </S.TrackTimeSvg>
+            <S.TrackTimeText>{track.trackDuration}</S.TrackTimeText>
           </>
         )}
-      </div>
-    </div>
+      </S.TrackTime>
+    </S.PlaylistTrack>
   ));
-  return <div className="playlist__item">{tracks}</div>;
+  return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
+}
+
+function GetTitleOfPlaylist() {
+  return (
+    <S.ContentTitle >
+      <S.PlaylistTitleCol01>Трек</S.PlaylistTitleCol01>
+      <S.PlaylistTitleCol02>ИСПОЛНИТЕЛЬ</S.PlaylistTitleCol02>
+      <S.PlaylistTitleCol03>АЛЬБОМ</S.PlaylistTitleCol03>
+      <S.PlaylistTitleCol04>
+        <S.PlaylistTitleSvg alt="time">
+          <use xlinkHref="img/icon/sprite.svg#icon-watch"></use>
+        </S.PlaylistTitleSvg>
+      </S.PlaylistTitleCol04>
+    </S.ContentTitle>
+  );
 }
