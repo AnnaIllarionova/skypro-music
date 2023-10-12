@@ -1,7 +1,14 @@
 import * as S from "./signin-signup.styled.js";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export function SignIn() {
+  const [user, setUser] = useState(null);
+
+  const handleLogin = () => setUser({ login: "test" });
+
+  const handleLogout = () => setUser(null);
+  console.log(user);
   return (
     <S.ContainerEnter>
       <S.ModalBlock>
@@ -13,8 +20,11 @@ export function SignIn() {
           </a>
           <S.ModalInputLogin type="text" name="login" placeholder="Почта" />
           <S.ModalInput type="password" name="password" placeholder="Пароль" />
-          <S.ModalBtnEnter>
-            <a href="../index.html">Войти</a>
+          <S.ModalBtnEnter
+            user={user}
+            onEnterButtonClick={user ? handleLogin : handleLogout}
+          >
+            <S.ModalBtnEnterLink to="/">Войти</S.ModalBtnEnterLink>
           </S.ModalBtnEnter>
           <S.ModalBtnSignup>
             <Link to="/signup">Зарегистрироваться</Link>

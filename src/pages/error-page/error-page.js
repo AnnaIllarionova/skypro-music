@@ -1,6 +1,13 @@
-import * as S from "./error-page.styled"
+import * as S from "./error-page.styled";
+import { useNavigate } from "react-router-dom";
 
 export const ErrorPage = () => {
+  const navigate = useNavigate();
+
+  const handleBackToMainPage = () => {
+    navigate("/", { replace: true });
+  };
+
   return (
     <S.ErrorContent>
       <S.ErrorContainer>
@@ -13,10 +20,8 @@ export const ErrorPage = () => {
           Возможно, она была удалена
           <br /> или перенесена на другой адрес
         </S.ErrorText>
-        <S.ErrorBtnBackToMain>
-          <S.ErrorLinkToMain to="/">
-            Вернуться на главную
-          </S.ErrorLinkToMain>
+        <S.ErrorBtnBackToMain onClick={handleBackToMainPage}>
+          <S.ErrorLinkToMain>Вернуться на главную</S.ErrorLinkToMain>
         </S.ErrorBtnBackToMain>
       </S.ErrorContainer>
     </S.ErrorContent>
