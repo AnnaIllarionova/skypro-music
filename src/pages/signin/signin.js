@@ -1,35 +1,26 @@
-import "./signin.css";
+import * as S from "./signin-signup.styled.js";
+import { Link } from "react-router-dom";
 
 export function SignIn() {
   return (
-    <div className="container-enter">
-      <div className="modal__block">
-        <form className="modal__form-login" action="#">
+    <S.ContainerEnter>
+      <S.ModalBlock>
+        <S.ModalFormLogin action="#">
           <a href="../">
-            <div className="modal__logo">
+            <S.ModalLogo>
               <img src="../img/logo_modal.png" alt="logo" />
-            </div>
+            </S.ModalLogo>
           </a>
-          <input
-            className="modal__input login"
-            type="text"
-            name="login"
-            placeholder="Почта"
-          />
-          <input
-            className="modal__input password"
-            type="password"
-            name="password"
-            placeholder="Пароль"
-          />
-          <button className="modal__btn-enter">
+          <S.ModalInputLogin type="text" name="login" placeholder="Почта" />
+          <S.ModalInput type="password" name="password" placeholder="Пароль" />
+          <S.ModalBtnEnter>
             <a href="../index.html">Войти</a>
-          </button>
-          <button className="modal__btn-signup">
-            <a href="signup.html">Зарегистрироваться</a>
-          </button>
-        </form>
-      </div>
-    </div>
+          </S.ModalBtnEnter>
+          <S.ModalBtnSignup>
+            <Link to="/signup">Зарегистрироваться</Link>
+          </S.ModalBtnSignup>
+        </S.ModalFormLogin>
+      </S.ModalBlock>
+    </S.ContainerEnter>
   );
 }

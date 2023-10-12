@@ -1,38 +1,31 @@
-import "./signup.css";
+import * as S from "../signin/signin-signup.styled";
 
 export function SignUp() {
   return (
-    <div className="container-signup">
-      <div className="modal__block">
-        <form className="modal__form-login">
+    <S.ContainerEnter>
+      <S.ModalBlock>
+        <S.ModalFormLogin action="#">
           <a href="../">
-            <div className="modal__logo">
+            <S.ModalLogo>
               <img src="../img/logo_modal.png" alt="logo" />
-            </div>
+            </S.ModalLogo>
           </a>
-          <input
-            className="modal__input login"
-            type="text"
-            name="login"
-            placeholder="Почта"
-          />
-          <input
-            className="modal__input password-first"
+          <S.ModalInputSignup type="text" name="login" placeholder="Почта" />
+          <S.ModalInputSignup
             type="password"
             name="password"
             placeholder="Пароль"
           />
-          <input
-            className="modal__input password-double"
+          <S.ModalInputSignup
             type="password"
             name="password"
             placeholder="Повторите пароль"
           />
-          <button className="modal__btn-signup-ent">
+          <S.ModalBtnSignupEnt>
             <a href="../index.html">Зарегистрироваться</a>
-          </button>
-        </form>
-      </div>
-    </div>
+          </S.ModalBtnSignupEnt>
+        </S.ModalFormLogin>
+      </S.ModalBlock>
+    </S.ContainerEnter>
   );
 }
