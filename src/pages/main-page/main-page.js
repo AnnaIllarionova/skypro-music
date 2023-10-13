@@ -6,11 +6,11 @@ import { FilterTracks } from "../../components/filter-tracks/filter-tracks.js";
 import { GetPlaylist } from "../../components/playlist/playlist.js";
 import { Sidebar } from "../../components/sidebar/sidebar.js";
 
-export const MainPage = () => {
+export const MainPage = ({user, setUser}) => {
   return (
     <S.Container>
       <S.Main>
-        <Navigation />
+        <Navigation user={user} setUser={setUser} />
         <S.MainCenterblock>
           <SearchComponent />
           <S.MainCenterblockH2>Треки</S.MainCenterblockH2>

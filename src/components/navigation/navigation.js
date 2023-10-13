@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./navigation.styled";
 
-export function Navigation() {
+export function Navigation({ user, setUser }) {
   const [showMenu, setShowMenu] = useState(false);
 
   function handleShowMenu() {
@@ -17,12 +17,16 @@ export function Navigation() {
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
       </S.NavBurger>
-      {showMenu && <PopUpMenu />}
+      {showMenu && <PopUpMenu user={user} setUser={setUser} />}
     </S.MainNav>
   );
 }
 
-function PopUpMenu() {
+function PopUpMenu({ user, setUser }) {
+  const handleLogin = () => setUser({ user: "test" });
+
+  const handleLogout = () => setUser(null);
+  console.log(user);
   return (
     <S.NavMenu>
       <S.MenuList>
@@ -33,7 +37,12 @@ function PopUpMenu() {
           <S.MenuLink to="/myplaylist">Мой плейлист</S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink to="/signin">Выйти</S.MenuLink>
+          <S.MenuLink
+            to="/signin"
+            onClick={user !== null ? handleLogout : handleLogin}
+          >
+            Выйти
+          </S.MenuLink>
         </S.MenuItem>
       </S.MenuList>
     </S.NavMenu>
