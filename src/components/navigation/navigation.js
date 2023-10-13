@@ -23,9 +23,10 @@ export function Navigation({ user, setUser }) {
 }
 
 function PopUpMenu({ user, setUser }) {
-  const handleLogin = () => setUser({ user: "test" });
-
-  const handleLogout = () => setUser(null);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
   console.log(user);
   return (
     <S.NavMenu>
@@ -37,10 +38,7 @@ function PopUpMenu({ user, setUser }) {
           <S.MenuLink to="/myplaylist">Мой плейлист</S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink
-            to="/signin"
-            onClick={user !== null ? handleLogout : handleLogin}
-          >
+          <S.MenuLink to="/signin" onClick={user !== null && handleLogout}>
             Выйти
           </S.MenuLink>
         </S.MenuItem>

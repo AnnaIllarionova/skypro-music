@@ -1,12 +1,14 @@
 import * as S from "./signin-signup.styled.js";
 import { Link } from "react-router-dom";
 
+export function SignIn({ user, setUser }) {
+  const handleLogin = () => {
+    localStorage.setItem("user", "test");
+    const userData = localStorage.getItem("user");
+    console.log(userData);
+    setUser(userData);
+  };
 
-export function SignIn({user, setUser}) {
-  
-  const handleLogin = () => setUser({ user: "test" });
-
-  const handleLogout = () => setUser(null);
   console.log(user);
   return (
     <S.ContainerEnter>
@@ -19,9 +21,7 @@ export function SignIn({user, setUser}) {
           </a>
           <S.ModalInputLogin type="text" name="login" placeholder="Почта" />
           <S.ModalInput type="password" name="password" placeholder="Пароль" />
-          <S.ModalBtnEnter
-            onClick={user === null ? handleLogin : handleLogout}
-          >
+          <S.ModalBtnEnter onClick={user === null && handleLogin}>
             <S.ModalBtnEnterLink to="/">Войти</S.ModalBtnEnterLink>
           </S.ModalBtnEnter>
           <S.ModalBtnSignup>
