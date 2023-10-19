@@ -41,6 +41,10 @@ export const PlaylistTrack = styled.div`
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+
+  &:hover {
+    background-color: #313131;
+  }
 `;
 
 export const TrackTitle = styled.div`
@@ -85,14 +89,14 @@ export const TrackTitleText = styled.div`
   min-width: 225px;
   background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
 `;
-
-export const TrackTitleLink = styled.a`
+export const TrackLink = styled.a`
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
 `;
+export const TrackTitleLink = styled(TrackLink)``;
 
 export const TrackTitleSpan = styled.span`
   font-style: normal;
@@ -114,12 +118,7 @@ export const TrackAuthor = styled.div`
   background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
 `;
 
-export const TrackAuthorLink = styled.a`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: #ffffff;
+export const TrackAuthorLink = styled(TrackLink)`
   text-align: left;
 `;
 
@@ -129,12 +128,12 @@ export const TrackAlbum = styled.div`
   background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
 `;
 
-export const TrackAlbumLink = styled.a`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
+export const TrackAlbumLink = styled(TrackLink)`
   color: #696969;
+`;
+
+export const ErrorText = styled(TrackLink)`
+font-size: 18px;
 `;
 
 export const TrackTime = styled.div`
