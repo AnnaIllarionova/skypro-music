@@ -5,8 +5,23 @@ import { SearchComponent } from "../../components/search/search.js";
 import { FilterTracks } from "../../components/filter-tracks/filter-tracks.js";
 import { GetPlaylist } from "../../components/playlist/playlist.js";
 import { Sidebar } from "../../components/sidebar/sidebar.js";
+import { useState, useEffect } from "react";
 
-export const MainPage = ({user, setUser}) => {
+export const MainPage = ({
+  user,
+  setUser,
+  apiTracks,
+  addTracksGottenError,
+}) => {
+  const [chosenTrack, setChosenTrack] = useState(null);
+
+  const [isVisiable, setIsVisiable] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisiable(true);
+    }, 3000);
+  }, []);
+
   return (
     <S.Container>
       <S.Main>
@@ -15,11 +30,20 @@ export const MainPage = ({user, setUser}) => {
           <SearchComponent />
           <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
           <FilterTracks />
-          <GetPlaylist />
+          <GetPlaylist
+            apiTracks={apiTracks}
+            addTracksGottenError={addTracksGottenError}
+            isVisiable={isVisiable}
+            chosenTrack={chosenTrack}
+            setChosenTrack={setChosenTrack}
+          />
         </S.MainCenterblock>
-        <Sidebar />
+        <Sidebar isVisiable={isVisiable} user={user} setUser={setUser} />
       </S.Main>
-      <MusicBar />
+      {chosenTrack ? (
+        <MusicBar isVisiable={isVisiable} chosenTrack={chosenTrack} />
+      ) : null}
+
       <footer className="footer"></footer>
     </S.Container>
   );

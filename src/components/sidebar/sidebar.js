@@ -1,27 +1,22 @@
 import { GetPersonalData } from "../personal-data/personal-data.js";
 import * as S from "./sidebar.styled.js";
-import { useState } from "react";
+
 import { categories } from "./categories.js";
 
-export function Sidebar() {
+export function Sidebar({ isVisiable, user, setUser }) {
   return (
     <S.MainSidebar>
-      <GetPersonalData />
+      <GetPersonalData user={user} setUser={setUser} />
       <S.SidebarBlock>
         <S.SidebarList>
-          <GetSidebarItems />
+          <GetSidebarItems isVisiable={isVisiable} />
         </S.SidebarList>
       </S.SidebarBlock>
     </S.MainSidebar>
   );
 }
 
-function GetSidebarItems() {
-  const [isVisiable, setIsVisiable] = useState(false);
-  setTimeout(() => {
-    setIsVisiable(true);
-  }, 3000);
-
+function GetSidebarItems({ isVisiable }) {
   return (
     <>
       {categories.map((category) => (
