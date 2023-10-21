@@ -1,16 +1,29 @@
+import { useRef, forwardRef, useState } from "react";
 import * as S from "./bar.styled";
 import { LikeOrDislikeCurrentTrack } from "./like-dislike-current-track";
 import { CorrectVolume, PlayerControls } from "./player-controls";
 
 export const MusicBar = ({ chosenTrack }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+  const handlePlay = () => {
+    audioRef.current.play();
+    setIsPlaying(true);
+  };
+  const handlePause = () => {
+    audioRef.current.pause();
+    setIsPlaying(false);
+  };
+  const togglePlay = !isPlaying ? handlePlay : handlePause;
+  console.log(isPlaying);
   return (
     <S.Bar>
       <S.BarContent>
-        <AudioPlayer chosenTrack={chosenTrack} />
+        <AudioPlayer ref={audioRef} chosenTrack={chosenTrack} />
         <S.BarPlayerProgress></S.BarPlayerProgress>
         <S.BarPlayerBlock>
           <S.BarPlayer>
-            <PlayerControls />
+            <PlayerControls togglePlay={togglePlay} isPlaying={isPlaying} />
             <S.PlayerTrackPlay>
               <SeeCurrentTrack chosenTrack={chosenTrack} />
               <LikeOrDislikeCurrentTrack />
@@ -23,13 +36,11 @@ export const MusicBar = ({ chosenTrack }) => {
   );
 };
 
-const AudioPlayer = ({ chosenTrack }) => {
-  return (
-    <>
-      <audio src={chosenTrack.track_file} controls></audio>
-    </>
-  );
-};
+const AudioPlayer = forwardRef(({ chosenTrack }, ref) => {
+  console.log(ref);
+  return <audio ref={ref} src={chosenTrack.track_file} controls></audio>;
+});
+AudioPlayer.displayName = AudioPlayer;
 
 const SeeCurrentTrack = ({ chosenTrack }) => {
   return (

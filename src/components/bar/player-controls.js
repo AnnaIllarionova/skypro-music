@@ -1,6 +1,6 @@
 import * as S from "./bar.styled";
 
-export const PlayerControls = () => {
+export const PlayerControls = ({ togglePlay, isPlaying }) => {
   return (
     <S.PlayerControlsItems>
       <S.PlayerBtnPrev>
@@ -8,9 +8,15 @@ export const PlayerControls = () => {
           <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
         </S.PlayerBtnPrevSvg>
       </S.PlayerBtnPrev>
-      <S.PlayerBtnPlay>
+      <S.PlayerBtnPlay onClick={togglePlay}>
         <S.PlayerBtnPlaySvg alt="play">
-          <use xlinkHref="img/icon/sprite.svg#icon-play"></use>
+          <use
+            xlinkHref={
+              isPlaying
+                ? "img/icon/sprite.svg#icon-pause"
+                : "img/icon/sprite.svg#icon-play"
+            }
+          ></use>
         </S.PlayerBtnPlaySvg>
       </S.PlayerBtnPlay>
       <S.PlayerBtnNext>
