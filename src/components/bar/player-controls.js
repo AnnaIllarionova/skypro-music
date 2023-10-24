@@ -1,9 +1,17 @@
 import * as S from "./bar.styled";
 
-export const PlayerControls = ({ togglePlay, isPlaying }) => {
+export const PlayerControls = ({
+  togglePlay,
+  isPlaying,
+  isLooped,
+  toggleLoop,
+}) => {
+  const handleClicked = () => {
+    alert("Функционал еще не реализован");
+  };
   return (
     <S.PlayerControlsItems>
-      <S.PlayerBtnPrev>
+      <S.PlayerBtnPrev onClick={handleClicked}>
         <S.PlayerBtnPrevSvg alt="prev">
           <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
         </S.PlayerBtnPrevSvg>
@@ -19,17 +27,23 @@ export const PlayerControls = ({ togglePlay, isPlaying }) => {
           ></use>
         </S.PlayerBtnPlaySvg>
       </S.PlayerBtnPlay>
-      <S.PlayerBtnNext>
+      <S.PlayerBtnNext onClick={handleClicked}>
         <S.PlayerBtnNextSvg alt="next">
           <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
         </S.PlayerBtnNextSvg>
       </S.PlayerBtnNext>
-      <S.PlayerBtnRepeat>
-        <S.PlayerBtnRepeatSvg alt="repeat">
-          <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
-        </S.PlayerBtnRepeatSvg>
+      <S.PlayerBtnRepeat onClick={toggleLoop}>
+        {isLooped ? (
+          <S.PlayerBtnRepeatSvgActive alt="repeat">
+            <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
+          </S.PlayerBtnRepeatSvgActive>
+        ) : (
+          <S.PlayerBtnRepeatSvg alt="repeat">
+            <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
+          </S.PlayerBtnRepeatSvg>
+        )}
       </S.PlayerBtnRepeat>
-      <S.PlayerBtnShuffle>
+      <S.PlayerBtnShuffle onClick={handleClicked}>
         <S.PlayerBtnShuffleSvg alt="shuffle">
           <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
         </S.PlayerBtnShuffleSvg>

@@ -103,11 +103,12 @@ export const Button = styled.svg`
     stroke: #acacac;
     cursor: pointer;
   }
-  &:active {
-    fill: transparent;
-    stroke: #ffffff;
-    cursor: pointer;
-  }
+`;
+
+export const ButtonActive = styled(Button)`
+  fill: transparent;
+  stroke: #ffffff;
+  cursor: pointer;
 `;
 
 export const PlayerBtnPrevSvg = styled(Button)`
@@ -147,6 +148,11 @@ export const PlayerBtnRepeatSvg = styled(Button)`
   height: 12px;
   fill: transparent;
   stroke: #696969;
+`;
+
+export const PlayerBtnRepeatSvgActive = styled(ButtonActive)`
+  width: 18px;
+  height: 12px;
 `;
 
 export const PlayerBtnShuffle = styled(CommonStylesForBtn)`
