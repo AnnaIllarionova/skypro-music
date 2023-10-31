@@ -1,4 +1,4 @@
-import { useRef, forwardRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as S from "./bar.styled";
 import { LikeOrDislikeCurrentTrack } from "./like-dislike-current-track";
 import { CorrectVolume, PlayerControls } from "./player-controls";
@@ -7,18 +7,70 @@ import { TrackTimeText } from "../playlist/playlist.styled";
 export const MusicBar = ({ chosenTrack }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const handlePlay = () => {
+  const [volume, setVolume] = useState(0.3);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    setVolume(audioRef.current.volume);
+    const handleTimeUpdateEvent = () => {
+      if (audioRef.current.currentTime && audioRef.current.duration) {
+        setCurrentTime(audioRef.current.currentTime);
+        setDuration(audioRef.current.duration);
+      } else {
+        setCurrentTime(0);
+        setDuration(0);
+      }
+    };
+    audioRef.current.addEventListener("timeupdate", handleTimeUpdateEvent);
+    return () =>
+      audioRef.current.removeEventListener("timeupdate", handleTimeUpdateEvent);
+  }, []);
+
+  const changeVolume = (event) => {
+    const newVolume = event.target.value;
+    setVolume(newVolume);
+    audioRef.current.volume = newVolume;
+  };
+
+  const changeCurrentTime = (event) => {
+    const newCurrentTime = event.target.value;
+    setDuration(newCurrentTime);
+    audioRef.current.currentTime = newCurrentTime;
+    play();
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const reminingSeconds = Math.floor(seconds % 60);
+    const formatedSeconds =
+      reminingSeconds < 10 ? "0" + reminingSeconds : reminingSeconds;
+    return minutes + "." + formatedSeconds;
+  };
+
+  const play = () => {
     audioRef.current.play();
     setIsPlaying(true);
-    console.log(audioRef.current.duration);
-    console.log(audioRef.current.currentTime);
   };
-  const handlePause = () => {
+  const pause = () => {
     audioRef.current.pause();
     setIsPlaying(false);
   };
-  const togglePlay = !isPlaying ? handlePlay : handlePause;
-  console.log(isPlaying);
+  const togglePlay = () => {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  };
+
+  useEffect(() => {
+    if (chosenTrack) {
+      play();
+    } else {
+      pause();
+    }
+  }, [chosenTrack]);
 
   const [isLooped, setIsLooped] = useState(false);
 
@@ -40,10 +92,18 @@ export const MusicBar = ({ chosenTrack }) => {
     <S.Bar>
       <S.BarContent>
         <TrackTimeText>
-        {/* {audioRef.current.currentTime} / {Math.round((audioRef.current.duration))} */}
+          {formatTime(currentTime)} / {formatTime(duration)}
         </TrackTimeText>
-        <AudioPlayer ref={audioRef} chosenTrack={chosenTrack} />
-        <S.BarPlayerProgress></S.BarPlayerProgress>
+        <audio ref={audioRef} src={chosenTrack.track_file} loop></audio>
+        <S.BarPlayerProgress
+          type="range"
+          min={0}
+          max={formatTime(duration)}
+          value={formatTime(currentTime)}
+          step={0.01}
+          onChange={changeCurrentTime}
+          $color="#ff0000"
+        ></S.BarPlayerProgress>
         <S.BarPlayerBlock>
           <S.BarPlayer>
             <PlayerControls
@@ -53,22 +113,16 @@ export const MusicBar = ({ chosenTrack }) => {
               toggleLoop={toggleLoop}
             />
             <S.PlayerTrackPlay>
-              <SeeCurrentTrack chosenTrack={chosenTrack} />
+              <SeeCurrentTrack chosenTrack={chosenTrack} onClick={togglePlay} />
               <LikeOrDislikeCurrentTrack />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
-          <CorrectVolume />
+          <CorrectVolume volume={volume} changeVolume={changeVolume} />
         </S.BarPlayerBlock>
       </S.BarContent>
     </S.Bar>
   );
 };
-
-const AudioPlayer = forwardRef(({ chosenTrack }, ref) => {
-  console.log(ref);
-  return <audio style={{display: "none"}} ref={ref} src={chosenTrack.track_file} controls loop></audio>;
-});
-AudioPlayer.displayName = AudioPlayer;
 
 const SeeCurrentTrack = ({ chosenTrack }) => {
   return (

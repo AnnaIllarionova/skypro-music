@@ -52,7 +52,7 @@ export const PlayerControls = ({
   );
 };
 
-export const CorrectVolume = () => {
+export const CorrectVolume = ({ volume, changeVolume }) => {
   return (
     <S.BarVolumeBlock>
       <S.VolumeContent>
@@ -62,7 +62,14 @@ export const CorrectVolume = () => {
           </S.VolumeSvg>
         </S.VolumeImage>
         <S.VolumeProgress>
-          <S.VolumeProgressLine type="range" name="range" />
+          <S.VolumeProgressLine
+            type="range"
+            value={volume}
+            onChange={changeVolume}
+            min={0}
+            max={1}
+            step={0.01}
+          />
         </S.VolumeProgress>
       </S.VolumeContent>
     </S.BarVolumeBlock>
