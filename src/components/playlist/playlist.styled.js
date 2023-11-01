@@ -8,6 +8,8 @@ export const CenterblockContent = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  min-height: 0px;
+  height: 70vh;
 `;
 
 export const ContentPlaylist = styled.div`
@@ -133,7 +135,7 @@ export const TrackAlbumLink = styled(TrackLink)`
 `;
 
 export const ErrorText = styled(TrackLink)`
-font-size: 18px;
+  font-size: 18px;
 `;
 
 export const TrackTime = styled.div`

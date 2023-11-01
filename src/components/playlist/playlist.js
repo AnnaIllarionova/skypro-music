@@ -73,7 +73,7 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
               <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
             </S.TrackTimeSvg>
             <S.TrackTimeText>
-              {(track.duration_in_seconds / 60).toFixed(2)}
+              {(track.duration_in_seconds)}
             </S.TrackTimeText>
           </>
         )}

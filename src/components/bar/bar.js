@@ -7,12 +7,14 @@ import { TrackTimeText } from "../playlist/playlist.styled";
 export const MusicBar = ({ chosenTrack }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const [volume, setVolume] = useState(0.3);
+  const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
+    audioRef.current.volume = 0.3;
     setVolume(audioRef.current.volume);
+
     const handleTimeUpdateEvent = () => {
       if (audioRef.current.currentTime && audioRef.current.duration) {
         setCurrentTime(audioRef.current.currentTime);
@@ -35,7 +37,6 @@ export const MusicBar = ({ chosenTrack }) => {
 
   const changeCurrentTime = (event) => {
     const newCurrentTime = event.target.value;
-    setDuration(newCurrentTime);
     audioRef.current.currentTime = newCurrentTime;
     play();
   };
@@ -98,8 +99,8 @@ export const MusicBar = ({ chosenTrack }) => {
         <S.BarPlayerProgress
           type="range"
           min={0}
-          max={formatTime(duration)}
-          value={formatTime(currentTime)}
+          max={duration}
+          value={currentTime}
           step={0.01}
           onChange={changeCurrentTime}
           $color="#ff0000"
