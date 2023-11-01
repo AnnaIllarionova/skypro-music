@@ -64,16 +64,20 @@ export const FilterBox = styled.div`
   border: none;
   margin: 10px;
   position: absolute;
+  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const FilterBoxLinks = styled.div`
-  padding: 34px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 28px;
   overflow-y: auto;
-  max-height: 237px;
+  height: 232px;
+  width: 180px;
 `;
 
 export const FilterBoxLinksItem = styled.a`

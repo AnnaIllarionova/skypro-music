@@ -3,6 +3,7 @@ import * as S from "./bar.styled";
 import { LikeOrDislikeCurrentTrack } from "./like-dislike-current-track";
 import { CorrectVolume, PlayerControls } from "./player-controls";
 import { TrackTimeText } from "../playlist/playlist.styled";
+import { formatTime } from "../formated-time/formated-time";
 
 export const MusicBar = ({ chosenTrack }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -10,6 +11,20 @@ export const MusicBar = ({ chosenTrack }) => {
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const handleMute = () => {
+    audioRef.current.muted = true;
+    setIsMuted(true);
+    console.log('muted');
+  }
+  const handleCancelMute = () => {
+    audioRef.current.muted = false;
+    setIsMuted(false);
+    console.log('cancel mute');
+  }
+
+  const toggleMute = isMuted ? handleCancelMute : handleMute
 
   useEffect(() => {
     audioRef.current.volume = 0.3;
@@ -41,14 +56,7 @@ export const MusicBar = ({ chosenTrack }) => {
     play();
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const reminingSeconds = Math.floor(seconds % 60);
-    const formatedSeconds =
-      reminingSeconds < 10 ? "0" + reminingSeconds : reminingSeconds;
-    return minutes + "." + formatedSeconds;
-  };
-
+  
   const play = () => {
     audioRef.current.play();
     setIsPlaying(true);
@@ -103,7 +111,7 @@ export const MusicBar = ({ chosenTrack }) => {
           value={currentTime}
           step={0.01}
           onChange={changeCurrentTime}
-          $color="#ff0000"
+          // $color="#ff0000"
         ></S.BarPlayerProgress>
         <S.BarPlayerBlock>
           <S.BarPlayer>
@@ -118,7 +126,7 @@ export const MusicBar = ({ chosenTrack }) => {
               <LikeOrDislikeCurrentTrack />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
-          <CorrectVolume volume={volume} changeVolume={changeVolume} />
+          <CorrectVolume volume={volume} changeVolume={changeVolume} toggleMute={toggleMute} isMuted={isMuted} />
         </S.BarPlayerBlock>
       </S.BarContent>
     </S.Bar>

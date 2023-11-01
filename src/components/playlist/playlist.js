@@ -1,5 +1,6 @@
 import * as S from "./playlist.styled.js";
 import { getOneTrack } from "../../Api.js";
+import { formatTime } from "../formated-time/formated-time.js";
 
 export function GetPlaylist({
   apiTracks,
@@ -73,7 +74,7 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
               <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
             </S.TrackTimeSvg>
             <S.TrackTimeText>
-              {(track.duration_in_seconds)}
+              {formatTime(track.duration_in_seconds)}
             </S.TrackTimeText>
           </>
         )}

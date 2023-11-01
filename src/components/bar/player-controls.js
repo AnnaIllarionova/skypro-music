@@ -52,13 +52,24 @@ export const PlayerControls = ({
   );
 };
 
-export const CorrectVolume = ({ volume, changeVolume }) => {
+export const CorrectVolume = ({
+  volume,
+  changeVolume,
+  toggleMute,
+  isMuted,
+}) => {
   return (
     <S.BarVolumeBlock>
       <S.VolumeContent>
         <S.VolumeImage>
-          <S.VolumeSvg alt="volume">
-            <use xlinkHref="img/icon/sprite.svg#icon-volume"></use>
+          <S.VolumeSvg alt="volume" onClick={toggleMute}>
+            <use
+              xlinkHref={
+                isMuted
+                  ? "img/icon/sprite.svg#icon-volume-muted"
+                  : "img/icon/sprite.svg#icon-volume"
+              }
+            ></use>
           </S.VolumeSvg>
         </S.VolumeImage>
         <S.VolumeProgress>
