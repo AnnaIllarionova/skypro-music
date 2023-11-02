@@ -12,37 +12,47 @@ export const MusicBar = ({ chosenTrack }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
+  const [isLooped, setIsLooped] = useState(false);
 
   const handleMute = () => {
     audioRef.current.muted = true;
     setIsMuted(true);
-    console.log('muted');
-  }
+    console.log("muted");
+  };
   const handleCancelMute = () => {
     audioRef.current.muted = false;
     setIsMuted(false);
-    console.log('cancel mute');
-  }
+    console.log("cancel mute");
+  };
 
-  const toggleMute = isMuted ? handleCancelMute : handleMute
+  const toggleMute = isMuted ? handleCancelMute : handleMute;
 
   useEffect(() => {
-    audioRef.current.volume = 0.3;
-    setVolume(audioRef.current.volume);
+    const audioElement = audioRef.current;
+    audioElement.volume = 0.3;
+    setVolume(audioElement.volume);
 
     const handleTimeUpdateEvent = () => {
-      if (audioRef.current.currentTime && audioRef.current.duration) {
-        setCurrentTime(audioRef.current.currentTime);
-        setDuration(audioRef.current.duration);
+      if (audioElement.currentTime && audioElement.duration) {
+        setCurrentTime(audioElement.currentTime);
+        setDuration(audioElement.duration);
       } else {
         setCurrentTime(0);
         setDuration(0);
       }
     };
-    audioRef.current.addEventListener("timeupdate", handleTimeUpdateEvent);
-    return () =>
-      audioRef.current.removeEventListener("timeupdate", handleTimeUpdateEvent);
-  }, []);
+    const timeEnded = () => {
+      if (!isLooped) {
+        pause();
+      }
+    };
+    audioElement.addEventListener("ended", timeEnded);
+    audioElement.addEventListener("timeupdate", handleTimeUpdateEvent);
+    return () => {
+      audioElement.removeEventListener("ended", timeEnded);
+      audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
+    };
+  }, [isLooped]);
 
   const changeVolume = (event) => {
     const newVolume = event.target.value;
@@ -53,10 +63,13 @@ export const MusicBar = ({ chosenTrack }) => {
   const changeCurrentTime = (event) => {
     const newCurrentTime = event.target.value;
     audioRef.current.currentTime = newCurrentTime;
-    play();
+    if (isPlaying) {
+      play();
+    } else {
+      pause();
+    }
   };
 
-  
   const play = () => {
     audioRef.current.play();
     setIsPlaying(true);
@@ -81,7 +94,7 @@ export const MusicBar = ({ chosenTrack }) => {
     }
   }, [chosenTrack]);
 
-  const [isLooped, setIsLooped] = useState(false);
+  
 
   const handleLoop = () => {
     audioRef.current.loop = true;
@@ -103,7 +116,7 @@ export const MusicBar = ({ chosenTrack }) => {
         <TrackTimeText>
           {formatTime(currentTime)} / {formatTime(duration)}
         </TrackTimeText>
-        <audio ref={audioRef} src={chosenTrack.track_file} loop></audio>
+        <audio ref={audioRef} src={chosenTrack.track_file} loop={false}></audio>
         <S.BarPlayerProgress
           type="range"
           min={0}
@@ -126,7 +139,12 @@ export const MusicBar = ({ chosenTrack }) => {
               <LikeOrDislikeCurrentTrack />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
-          <CorrectVolume volume={volume} changeVolume={changeVolume} toggleMute={toggleMute} isMuted={isMuted} />
+          <CorrectVolume
+            volume={volume}
+            changeVolume={changeVolume}
+            toggleMute={toggleMute}
+            isMuted={isMuted}
+          />
         </S.BarPlayerBlock>
       </S.BarContent>
     </S.Bar>

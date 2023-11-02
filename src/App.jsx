@@ -1,6 +1,6 @@
-import * as S from "./App.styled.js";
-import { GlobalStyles } from "./global.styled.js";
-import { AppRoutes } from "./routes.js";
+import * as S from "./App.styled";
+import { GlobalStyles } from "./global.styled";
+import { AppRoutes } from "./routes";
 
 function App() {
   return (

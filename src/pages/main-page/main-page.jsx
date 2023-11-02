@@ -1,10 +1,10 @@
 import * as S from "./main-page.styled";
 import { Navigation } from "../../components/navigation/navigation";
-import { MusicBar } from "../../components/bar/bar.js";
-import { SearchComponent } from "../../components/search/search.js";
-import { FilterTracks } from "../../components/filter-tracks/filter-tracks.js";
-import { GetPlaylist } from "../../components/playlist/playlist.js";
-import { Sidebar } from "../../components/sidebar/sidebar.js";
+import { MusicBar } from "../../components/bar/bar.jsx";
+import { SearchComponent } from "../../components/search/search.jsx";
+import { FilterTracks } from "../../components/filter-tracks/filter-tracks.jsx";
+import { GetPlaylist } from "../../components/playlist/playlist.jsx";
+import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { useState, useEffect } from "react";
 
 export const MainPage = ({

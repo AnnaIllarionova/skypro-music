@@ -1,6 +1,6 @@
-import * as S from "./playlist.styled.js";
-import { getOneTrack } from "../../Api.js";
-import { formatTime } from "../formated-time/formated-time.js";
+import * as S from "./playlist.styled";
+import { getOneTrack } from "../../Api";
+import { formatTime } from "../formated-time/formated-time.jsx";
 
 export function GetPlaylist({
   apiTracks,

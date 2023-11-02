@@ -1,7 +1,7 @@
-import { GetPersonalData } from "../personal-data/personal-data.js";
-import * as S from "./sidebar.styled.js";
+import { GetPersonalData } from "../personal-data/personal-data.jsx";
+import * as S from "./sidebar.styled";
 
-import { categories } from "./categories.js";
+import { categories } from "./categories.jsx";
 
 export function Sidebar({ isVisiable, user, setUser }) {
   return (

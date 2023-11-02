@@ -28,6 +28,9 @@ export const PlaylistItem = styled.div`
   width: 100%;
   display: block;
   margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
 `;
 
 export const PlaylistTrack = styled.div`
