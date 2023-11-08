@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { themes } from "../themes/theme-context";
 
 export const MainNav = styled.nav`
   width: 244px;
@@ -41,7 +42,7 @@ export const BurgerLine = styled.span`
   display: inline-block;
   width: 100%;
   height: 1px;
-  background-color: #d3d3d3;
+  background-color: ${themes.dark ? "#d3d3d3" : "#000000"};
 `;
 
 export const NavMenu = styled.div`

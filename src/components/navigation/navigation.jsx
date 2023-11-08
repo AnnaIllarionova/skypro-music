@@ -1,14 +1,16 @@
 import { useState } from "react";
 import * as S from "./navigation.styled";
+import { useThemeContext } from "../themes/theme-context";
 
 export function Navigation({ user, setUser }) {
   const [showMenu, setShowMenu] = useState(false);
+  const { theme } = useThemeContext();
 
   function handleShowMenu() {
     setShowMenu((prev) => !prev);
   }
   return (
-    <S.MainNav>
+    <S.MainNav style={{ backgroundColor: theme.background }}>
       <S.NavLogo>
         <S.LogoImage src="./img/logo.png" alt="logo" />
       </S.NavLogo>
@@ -23,30 +25,38 @@ export function Navigation({ user, setUser }) {
 }
 
 function PopUpMenu({ user, setUser }) {
+  const { toggleTheme } = useThemeContext();
+  const { theme } = useThemeContext();
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
   };
   console.log(user);
+
   return (
     <S.NavMenu>
       <S.MenuList>
         <S.MenuItem>
-          <S.MenuLink to="/">Главное</S.MenuLink>
+          <S.MenuLink style={{ color: theme.color }} to="/">
+            Главное
+          </S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink to="/myplaylist">Мой плейлист</S.MenuLink>
+          <S.MenuLink style={{ color: theme.color }} to="/myplaylist">
+            Мой плейлист
+          </S.MenuLink>
         </S.MenuItem>
         <S.MenuItem>
-          <S.MenuLink to="/signin" onClick={user !== null && handleLogout}>
+          <S.MenuLink
+            style={{ color: theme.color }}
+            to="/signin"
+            onClick={user !== null && handleLogout}
+          >
             Выйти
           </S.MenuLink>
         </S.MenuItem>
-        {/* <S.MenuItem>
-          <svg alt="dark-theme">
-            <use xlinkHref="img/icon/sprite.svg#icon-dark-theme"></use>
-          </svg>
-        </S.MenuItem> */}
+        <S.MenuItem onClick={toggleTheme}>{theme.icon}</S.MenuItem>
       </S.MenuList>
     </S.NavMenu>
   );
