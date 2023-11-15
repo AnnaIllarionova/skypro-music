@@ -6,24 +6,14 @@ import { FilterTracks } from "../../components/filter-tracks/filter-tracks.jsx";
 import { GetPlaylist } from "../../components/playlist/playlist.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { useState, useEffect } from "react";
-import { themes, ThemeContext } from "../../components/themes/theme-context";
+import { useThemeContext } from "../../components/context/theme-context.jsx";
 
 export const MainPage = ({
   user,
-  setUser,
   apiTracks,
   addTracksGottenError,
 }) => {
-  const [currentTheme, setCurrentTheme] = useState(themes.dark);
-
-  const toggleTheme = () => {
-    console.log("change theme");
-    if (currentTheme === themes.dark) {
-      setCurrentTheme(themes.light);
-      return;
-    }
-    setCurrentTheme(themes.dark);
-  };
+  const { theme } = useThemeContext();
 
   const [chosenTrack, setChosenTrack] = useState(null);
 
@@ -35,30 +25,30 @@ export const MainPage = ({
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
-      <S.Container>
-        <S.Main>
-          <Navigation user={user} setUser={setUser} />
-          <S.MainCenterblock>
-            <SearchComponent />
-            <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
-            <FilterTracks />
-            <GetPlaylist
-              apiTracks={apiTracks}
-              addTracksGottenError={addTracksGottenError}
-              isVisiable={isVisiable}
-              chosenTrack={chosenTrack}
-              setChosenTrack={setChosenTrack}
-            />
-          </S.MainCenterblock>
-          <Sidebar isVisiable={isVisiable} user={user} setUser={setUser} />
-        </S.Main>
-        {chosenTrack ? (
-          <MusicBar isVisiable={isVisiable} chosenTrack={chosenTrack} />
-        ) : null}
+    <S.Container
+      style={{ backgroundColor: theme.background, color: theme.color }}
+    >
+      <S.Main>
+        <Navigation user={user} />
+        <S.MainCenterblock>
+          <SearchComponent />
+          <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
+          <FilterTracks />
+          <GetPlaylist
+            apiTracks={apiTracks}
+            addTracksGottenError={addTracksGottenError}
+            isVisiable={isVisiable}
+            chosenTrack={chosenTrack}
+            setChosenTrack={setChosenTrack}
+          />
+        </S.MainCenterblock>
+        <Sidebar isVisiable={isVisiable} user={user} />
+      </S.Main>
+      {chosenTrack ? (
+        <MusicBar isVisiable={isVisiable} chosenTrack={chosenTrack} />
+      ) : null}
 
-        <footer className="footer"></footer>
-      </S.Container>
-    </ThemeContext.Provider>
+      <footer className="footer"></footer>
+    </S.Container>
   );
 };

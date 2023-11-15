@@ -3,10 +3,10 @@ import * as S from "./sidebar.styled";
 
 import { categories } from "./categories.jsx";
 
-export function Sidebar({ isVisiable, user, setUser }) {
+export function Sidebar({ isVisiable, user}) {
   return (
     <S.MainSidebar>
-      <GetPersonalData user={user} setUser={setUser} />
+      <GetPersonalData user={user} />
       <S.SidebarBlock>
         <S.SidebarList>
           <GetSidebarItems isVisiable={isVisiable} />

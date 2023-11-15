@@ -1,15 +1,15 @@
+import { useContext } from "react";
 import * as S from "./personal-data.styled";
+import { CurrentUserContext } from "../../routes";
 
-export function GetPersonalData({user, setUser}) {
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+export function GetPersonalData() {
+  const { handleLogout, user } = useContext(CurrentUserContext);
+
   return (
     <S.SidebarPersonal>
-      <S.SidebarPersonalName>Sergey.Ivanov</S.SidebarPersonalName>
+      <S.SidebarPersonalName>{user.username}</S.SidebarPersonalName>
       <S.SidebarIcon>
-        <svg alt="logout" onClick={user !== null && handleLogout}>
+        <svg alt="logout" onClick={handleLogout}>
           <use xlinkHref="./img/icon/sprite.svg#logout"></use>
         </svg>
       </S.SidebarIcon>

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import * as S from "./navigation.styled";
-import { useThemeContext } from "../themes/theme-context";
+import { useThemeContext } from "../context/theme-context";
+import { useContext } from "react";
+import { CurrentUserContext } from "../../routes";
 
-export function Navigation({ user, setUser }) {
+export function Navigation({ user }) {
   const [showMenu, setShowMenu] = useState(false);
   const { theme } = useThemeContext();
 
@@ -19,19 +21,16 @@ export function Navigation({ user, setUser }) {
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
       </S.NavBurger>
-      {showMenu && <PopUpMenu user={user} setUser={setUser} />}
+      {showMenu && <PopUpMenu user={user}  />}
     </S.MainNav>
   );
 }
 
-function PopUpMenu({ user, setUser }) {
+function PopUpMenu({ user }) {
   const { toggleTheme } = useThemeContext();
   const { theme } = useThemeContext();
+  const{handleLogout} = useContext(CurrentUserContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
   console.log(user);
 
   return (

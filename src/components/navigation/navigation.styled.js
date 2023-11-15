@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { themes } from "../themes/theme-context";
+import { themes } from "../context/theme-context";
 
 export const MainNav = styled.nav`
   width: 244px;

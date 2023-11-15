@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const ContainerEnter = styled.div`
   max-width: 100%;
@@ -19,7 +18,7 @@ export const ModalBlock = styled.div`
 
 export const ModalFormLogin = styled.form`
   width: 366px;
-  height: 439px;
+  min-height: 439px;
   background-color: #ffffff;
   border-radius: 12px;
   display: -webkit-box;
@@ -108,7 +107,7 @@ export const ModalInputSignup = styled(ModalInput)`
 export const ModalBtnEnter = styled.button`
   width: 278px;
   height: 52px;
-  background-color: #580ea2;
+  background-color: ${(props) => (props.isUserLoading ? "#1C1439" : "#580ea2")};
   border-radius: 6px;
   margin-top: 60px;
   margin-bottom: 20px;
@@ -124,33 +123,35 @@ export const ModalBtnEnter = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: #3f007d;
+    background-color: ${(props) =>
+      props.isUserLoading ? "#1C1439" : "#3f007d"};
   }
 
   &:active {
-    background-color: #271a58;
+    background-color: ${(props) =>
+      props.isUserLoading ? "#1C1439" : "#271a58"} ;
   }
 `;
 
-export const ModalBtnEnterLink = styled(Link)`
-width: 100%;
-height: 100%;
-font-style: normal;
-font-weight: 400;
-font-size: 18px;
-line-height: 24px;
-letter-spacing: -0.05px;
-color: #ffffff;
-display: -webkit-box;
-display: -ms-flexbox;
-display: flex;
--webkit-box-align: center;
--ms-flex-align: center;
-align-items: center;
--webkit-box-pack: center;
--ms-flex-pack: center;
-justify-content: center;
-`
+export const ModalBtnEnterLink = styled.p`
+  width: 100%;
+  height: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.05px;
+  color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+`;
 
 export const ModalBtnSignup = styled.button`
   width: 278px;
@@ -206,11 +207,11 @@ export const ModalBtnSignup = styled.button`
 export const ModalBtnSignupEnt = styled.button`
   width: 278px;
   height: 62px;
-  background-color: #580ea2;
+  background-color: ${(props) =>
+    props.isNewUserLoading ? "#1C1439" : "#580ea2"};
   border-radius: 6px;
   margin-left: 4px;
   border: none;
-  margin-top: 30px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -222,30 +223,32 @@ export const ModalBtnSignupEnt = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: #3f007d;
+    background-color: ${(props) =>
+      props.isNewUserLoading ? "#1C1439" : "#3f007d"};
   }
 
   &:active {
-    background-color: #271a58;
+    background-color: ${(props) =>
+      props.isNewUserLoading ? "#1C1439" : "#271a58"};
   }
+`;
 
-  & a {
-    width: 100%;
-    height: 100%;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.05px;
-    color: #ffffff;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-  }
+export const ModalBtnSignupEntLink = styled.p`
+  width: 100%;
+  height: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.05px;
+  color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 `;
