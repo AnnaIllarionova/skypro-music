@@ -4,7 +4,7 @@ import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
 import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
-import { MainPage } from "./pages/main-page/main-page.js";
+import { MainPage } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
 import { useEffect, useState } from "react";
 import { getAllTrackFromApi } from "./Api";

@@ -42,6 +42,11 @@ function PopUpMenu({ user, setUser }) {
             Выйти
           </S.MenuLink>
         </S.MenuItem>
+        {/* <S.MenuItem>
+          <svg alt="dark-theme">
+            <use xlinkHref="img/icon/sprite.svg#icon-dark-theme"></use>
+          </svg>
+        </S.MenuItem> */}
       </S.MenuList>
     </S.NavMenu>
   );

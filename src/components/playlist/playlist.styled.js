@@ -8,6 +8,8 @@ export const CenterblockContent = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  min-height: 0px;
+  height: 70vh;
 `;
 
 export const ContentPlaylist = styled.div`
@@ -19,12 +21,16 @@ export const ContentPlaylist = styled.div`
   -ms-flex-direction: column;
   flex-direction: column;
   overflow-y: auto;
+  padding-right: 10px;
 `;
 
 export const PlaylistItem = styled.div`
   width: 100%;
   display: block;
   margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
 `;
 
 export const PlaylistTrack = styled.div`
@@ -133,7 +139,7 @@ export const TrackAlbumLink = styled(TrackLink)`
 `;
 
 export const ErrorText = styled(TrackLink)`
-font-size: 18px;
+  font-size: 18px;
 `;
 
 export const TrackTime = styled.div`
@@ -175,6 +181,7 @@ export const ContentTitle = styled.div`
   -ms-flex-pack: justify;
   justify-content: space-between;
   margin-bottom: 24px;
+  padding-right: 10px;
 `;
 
 export const CommonStylesForTitles = styled.div`
@@ -201,7 +208,7 @@ export const PlaylistTitleCol03 = styled(CommonStylesForTitles)`
 
 export const PlaylistTitleCol04 = styled(CommonStylesForTitles)`
   width: 60px;
-  text-align: end;
+  text-align: center;
 `;
 export const PlaylistTitleSvg = styled.svg`
   width: 12px;

@@ -1,4 +1,4 @@
-import * as S from "./signin-signup.styled.js";
+import * as S from "./signin-signup.styled.jsx";
 import { Link } from "react-router-dom";
 
 export function SignIn({ user, setUser }) {

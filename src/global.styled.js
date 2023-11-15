@@ -61,5 +61,17 @@ body {
   height: 100%;
   font-family: "StratosSkyeng", sans-serif;
   color: #ffffff;
+
 }
+
+::-webkit-scrollbar { 
+  width: 4px; /* ширина для вертикального скролла */ 
+  height: 0px; /* высота для горизонтального скролла */ 
+  background-color: #4b4949; } /* ползунок скроллбара */ 
+  
+::-webkit-scrollbar-thumb { 
+    background-color: #4b4949; 
+    border-radius: 9em; 
+    box-shadow: inset 1px 1px 10px #ffffff; }
+
 `;

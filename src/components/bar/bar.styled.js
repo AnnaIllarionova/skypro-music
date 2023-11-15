@@ -19,10 +19,59 @@ export const BarContent = styled.div`
   flex-direction: column;
 `;
 
-export const BarPlayerProgress = styled.div`
+export const BarPlayerProgress = styled.input`
+  --progress-height: 8px;
+  --progress-color: #b672ff;
+  // --progress-color: ${(props) => props.$color ?? "#b672ff"};
+  --progress-color: #b672ff;
+  --progress-bg-color: #2e2e2e;
+
   width: 100%;
   height: 5px;
-  background: #2e2e2e;
+  height: var(--progress-height);
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+
+  &::-webkit-slider-runnable-track {
+    position: relative;
+    height: var(--progress-height);
+    background: var(--progress-bg-color);
+  }
+  &::-webkit-slider-thumb {
+    --thumb-height: 1px;
+    --thumb-width: 1px;
+    position: relative;
+    -webkit-appearance: none;
+    width: var(--thumb-width, var(--thumb-height));
+    box-shadow: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+      100vmax var(--progress-color);
+  }
+
+  &::-webkit-slider-runnable-track {
+    background: var(--progress-bg-color);
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: var(--progress-height);
+    background: var(--progress-bg-color);
+    border: none;
+    border-radius: 0px;
+  }
+  &::-moz-range-thumb {
+    border: none;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background: transparent;
+  }
+  &::-moz-range-progress {
+    background-color: var(--progress-color);
+    height: var(--progress-height);
+  }
 `;
 export const BarPlayerBlock = styled.div`
   height: 73px;
@@ -103,11 +152,12 @@ export const Button = styled.svg`
     stroke: #acacac;
     cursor: pointer;
   }
-  &:active {
-    fill: transparent;
-    stroke: #ffffff;
-    cursor: pointer;
-  }
+`;
+
+export const ButtonActive = styled(Button)`
+  fill: transparent;
+  stroke: #ffffff;
+  cursor: pointer;
 `;
 
 export const PlayerBtnPrevSvg = styled(Button)`
@@ -147,6 +197,11 @@ export const PlayerBtnRepeatSvg = styled(Button)`
   height: 12px;
   fill: transparent;
   stroke: #696969;
+`;
+
+export const PlayerBtnRepeatSvgActive = styled(ButtonActive)`
+  width: 18px;
+  height: 12px;
 `;
 
 export const PlayerBtnShuffle = styled(CommonStylesForBtn)`
@@ -325,4 +380,5 @@ export const VolumeProgress = styled.div`
 
 export const VolumeProgressLine = styled.input`
   width: 109px;
+  cursor: pointer;
 `;
