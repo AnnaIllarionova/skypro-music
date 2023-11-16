@@ -27,6 +27,7 @@ export const AppRoutes = () => {
   const [showError, setShowError] = useState("");
 
   useEffect(() => {
+    
     getAllTrackFromApi()
       .then((apiTracks) => {
         console.log(apiTracks);

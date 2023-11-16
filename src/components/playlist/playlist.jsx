@@ -1,6 +1,11 @@
 import * as S from "./playlist.styled";
 import { getOneTrack } from "../../Api";
 import { formatTime } from "../formated-time/formated-time.jsx";
+import {
+  SkeletonTrackImage,
+  SkeletonTrackTime,
+  SkeletonTrackTitleText,
+} from "../skeleton/skeleton.jsx";
 
 export function GetPlaylist({
   apiTracks,
@@ -38,37 +43,43 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
       onClick={() => handleChooseTrackClick({ track, id: track.id })}
       key={track.id}
     >
-      {/* {chosenTrack ? <p>Текущий трек: {chosenTrack.name}</p> : null} */}
-
       <S.TrackTitle>
         <S.TrackTitleImage>
-          {isVisiable && (
+          {isVisiable ? (
             <S.TrackTitleSvg alt="music">
               <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
             </S.TrackTitleSvg>
+          ) : (
+            <SkeletonTrackImage />
           )}
         </S.TrackTitleImage>
         <S.TrackTitleText isVisiable={!isVisiable}>
-          {isVisiable && (
+          {isVisiable ? (
             <S.TrackTitleLink href="#">
               {track.name}
               <S.TrackTitleSpan></S.TrackTitleSpan>
             </S.TrackTitleLink>
+          ) : (
+            <SkeletonTrackTitleText />
           )}
         </S.TrackTitleText>
       </S.TrackTitle>
       <S.TrackAuthor isVisiable={!isVisiable}>
-        {isVisiable && (
+        {isVisiable ? (
           <S.TrackAuthorLink href="#">{track.author}</S.TrackAuthorLink>
+        ) : (
+          <SkeletonTrackTitleText />
         )}
       </S.TrackAuthor>
       <S.TrackAlbum isVisiable={!isVisiable}>
-        {isVisiable && (
+        {isVisiable ? (
           <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
+        ) : (
+          <SkeletonTrackTitleText />
         )}
       </S.TrackAlbum>
       <S.TrackTime isVisiable={!isVisiable}>
-        {isVisiable && (
+        {isVisiable ? (
           <>
             <S.TrackTimeSvg alt="time">
               <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
@@ -77,6 +88,8 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
               {formatTime(track.duration_in_seconds)}
             </S.TrackTimeText>
           </>
+        ) : (
+          <SkeletonTrackTime />
         )}
       </S.TrackTime>
     </S.PlaylistTrack>
