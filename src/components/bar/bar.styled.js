@@ -6,7 +6,7 @@ export const Bar = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(28, 28, 28, 0.5);
+  background: ${(props) => props.theme.barBackground};
 `;
 
 export const BarContent = styled.div`
@@ -22,9 +22,7 @@ export const BarContent = styled.div`
 export const BarPlayerProgress = styled.input`
   --progress-height: 8px;
   --progress-color: #b672ff;
-  // --progress-color: ${(props) => props.$color ?? "#b672ff"};
-  --progress-color: #b672ff;
-  --progress-bg-color: #2e2e2e;
+  --progress-bg-color: ${props=>props.theme.progressColor};
 
   width: 100%;
   height: 5px;
@@ -277,7 +275,7 @@ export const TrackPlayContain = styled.div`
 export const TrackPlayImage = styled.div`
   width: 51px;
   height: 51px;
-  background-color: #313131;
+  background-color: ${(props) => props.theme.backgroundColor};
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -314,7 +312,7 @@ export const TrackPlayAuthorLink = styled.a`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #ffffff;
+  color: ${(props) => props.theme.color};
   white-space: nowrap;
 `;
 export const TrackPlayAlbum = styled.div`
@@ -331,7 +329,7 @@ export const TrackPlayAlbumLink = styled.a`
   font-weight: 400;
   font-size: 13px;
   line-height: 24px;
-  color: #ffffff;
+  color: ${(props) => props.theme.color};
 `;
 
 /* for CorrectVolume */

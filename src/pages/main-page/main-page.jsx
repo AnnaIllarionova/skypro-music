@@ -26,13 +26,14 @@ export const MainPage = ({
 
   return (
     <S.Container
-      style={{ backgroundColor: theme.background, color: theme.color }}
+    theme={theme}
+      // style={{ backgroundColor: theme.background, color: theme.color }}
     >
       <S.Main>
         <Navigation user={user} />
         <S.MainCenterblock>
           <SearchComponent />
-          <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
+          <S.MainCenterblockH2  theme={theme}>Треки</S.MainCenterblockH2>
           <FilterTracks />
           <GetPlaylist
             apiTracks={apiTracks}

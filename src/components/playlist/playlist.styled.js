@@ -49,7 +49,7 @@ export const PlaylistTrack = styled.div`
   align-items: center;
 
   &:hover {
-    background-color: #313131;
+    background-color: ${(props) => props.theme.backgroundColor};
   }
 `;
 
@@ -71,7 +71,7 @@ export const TrackTitleImage = styled.div`
   width: 51px;
   height: 51px;
   padding: 16px;
-  background: #313131;
+  background: ${(props) => props.theme.backgroundColor};
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -100,9 +100,10 @@ export const TrackLink = styled.a`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #ffffff;
 `;
-export const TrackTitleLink = styled(TrackLink)``;
+export const TrackTitleLink = styled(TrackLink)`
+  color: ${(props) => props.theme.color};
+`;
 
 export const TrackTitleSpan = styled.span`
   font-style: normal;
@@ -126,6 +127,7 @@ export const TrackAuthor = styled.div`
 
 export const TrackAuthorLink = styled(TrackLink)`
   text-align: left;
+  color: ${(props) => props.theme.color};
 `;
 
 export const TrackAlbum = styled.div`

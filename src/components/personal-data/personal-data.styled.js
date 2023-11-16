@@ -22,14 +22,14 @@ export const SidebarPersonalName = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #ffffff;
+  color: ${props => props.theme.color};
   margin-right: 16px;
 `;
 
 export const SidebarIcon = styled.div`
   width: 43px;
   height: 43px;
-  background-color: #313131;
+  background-color: ${props => props.theme.backgroundColor};
   border-radius: 50%;
   cursor: pointer;
 `;

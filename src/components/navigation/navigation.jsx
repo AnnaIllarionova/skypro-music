@@ -12,14 +12,14 @@ export function Navigation({ user }) {
     setShowMenu((prev) => !prev);
   }
   return (
-    <S.MainNav style={{ backgroundColor: theme.background }}>
+    <S.MainNav theme={theme}>
       <S.NavLogo>
-        <S.LogoImage src="./img/logo.png" alt="logo" />
+        <S.LogoImage src={theme.logoImg} alt="logo" />
       </S.NavLogo>
       <S.NavBurger onClick={handleShowMenu}>
-        <S.BurgerLine></S.BurgerLine>
-        <S.BurgerLine></S.BurgerLine>
-        <S.BurgerLine></S.BurgerLine>
+        <S.BurgerLine theme={theme}></S.BurgerLine>
+        <S.BurgerLine theme={theme}></S.BurgerLine>
+        <S.BurgerLine theme={theme}></S.BurgerLine>
       </S.NavBurger>
       {showMenu && <PopUpMenu user={user}  />}
     </S.MainNav>

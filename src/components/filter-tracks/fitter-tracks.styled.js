@@ -22,6 +22,7 @@ export const FilterTitle = styled.div`
   font-size: 16px;
   line-height: 24px;
   margin-right: 15px;
+  color: ${(props) => props.theme.color};
 `;
 
 // active?
@@ -30,17 +31,18 @@ export const FilterButton = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  border: 1px solid #ffffff;
+  border: 1px solid ${(props) => props.theme.color};
+  color: ${(props) => props.theme.color};
   border-radius: 60px;
   padding: 6px 20px;
   border-color: ${(props) =>
     props.isAuthorClicked || props.isYearClicked || props.isGenreClicked
       ? "#9A48F1"
-      : "inherit"};
+      : props.theme.color};
   color: ${(props) =>
     props.isAuthorClicked || props.isYearClicked || props.isGenreClicked
       ? "#B672FF"
-      : "inherit"};
+      : props.theme.color};
 
   &:hover {
     border-color: #d9b6ff;
@@ -60,7 +62,7 @@ export const FilterBox = styled.div`
   width: 248px;
   height: 305px;
   border-radius: 12px;
-  background-color: #313131;
+  background-color: ${(props) => props.theme.backgroundColor};
   border: none;
   margin: 10px;
   position: absolute;
@@ -81,7 +83,7 @@ export const FilterBoxLinks = styled.div`
 `;
 
 export const FilterBoxLinksItem = styled.a`
-  color: #fff;
+  color: ${(props) => props.theme.color};
   font-variant-numeric: lining-nums proportional-nums;
   font-size: 20px;
   font-style: normal;

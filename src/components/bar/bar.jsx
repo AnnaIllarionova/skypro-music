@@ -4,8 +4,10 @@ import { LikeOrDislikeCurrentTrack } from "./like-dislike-current-track";
 import { CorrectVolume, PlayerControls } from "./player-controls";
 import { TrackTimeText } from "../playlist/playlist.styled";
 import { formatTime } from "../formated-time/formated-time";
+import { useThemeContext } from "../context/theme-context";
 
 export const MusicBar = ({ chosenTrack }) => {
+  const { theme } = useThemeContext();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const [volume, setVolume] = useState(1);
@@ -94,8 +96,6 @@ export const MusicBar = ({ chosenTrack }) => {
     }
   }, [chosenTrack]);
 
-  
-
   const handleLoop = () => {
     audioRef.current.loop = true;
     setIsLooped(true);
@@ -111,13 +111,14 @@ export const MusicBar = ({ chosenTrack }) => {
   const toggleLoop = !isLooped ? handleLoop : handleCancelLoop;
 
   return (
-    <S.Bar>
+    <S.Bar theme={theme}>
       <S.BarContent>
         <TrackTimeText>
           {formatTime(currentTime)} / {formatTime(duration)}
         </TrackTimeText>
         <audio ref={audioRef} src={chosenTrack.track_file} loop={false}></audio>
         <S.BarPlayerProgress
+        theme={theme}
           type="range"
           min={0}
           max={duration}
@@ -135,7 +136,11 @@ export const MusicBar = ({ chosenTrack }) => {
               toggleLoop={toggleLoop}
             />
             <S.PlayerTrackPlay>
-              <SeeCurrentTrack chosenTrack={chosenTrack} onClick={togglePlay} />
+              <SeeCurrentTrack
+                theme={theme}
+                chosenTrack={chosenTrack}
+                onClick={togglePlay}
+              />
               <LikeOrDislikeCurrentTrack />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
@@ -151,21 +156,21 @@ export const MusicBar = ({ chosenTrack }) => {
   );
 };
 
-const SeeCurrentTrack = ({ chosenTrack }) => {
+const SeeCurrentTrack = ({ chosenTrack, theme }) => {
   return (
     <S.TrackPlayContain>
-      <S.TrackPlayImage>
+      <S.TrackPlayImage theme={theme}>
         <S.TrackPlaySvg alt="music">
           <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
         </S.TrackPlaySvg>
       </S.TrackPlayImage>
       <S.TrackPlayAuthor>
-        <S.TrackPlayAuthorLink href="http://">
+        <S.TrackPlayAuthorLink theme={theme} href="http://">
           {chosenTrack.name}
         </S.TrackPlayAuthorLink>
       </S.TrackPlayAuthor>
       <S.TrackPlayAlbum>
-        <S.TrackPlayAlbumLink href="http://">
+        <S.TrackPlayAlbumLink theme={theme} href="http://">
           {chosenTrack.author}
         </S.TrackPlayAlbumLink>
       </S.TrackPlayAlbum>

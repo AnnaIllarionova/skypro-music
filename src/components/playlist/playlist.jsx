@@ -6,6 +6,7 @@ import {
   SkeletonTrackTime,
   SkeletonTrackTitleText,
 } from "../skeleton/skeleton.jsx";
+import { useThemeContext } from "../context/theme-context.jsx";
 
 export function GetPlaylist({
   apiTracks,
@@ -34,17 +35,20 @@ export function GetPlaylist({
 }
 
 function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
+  const { theme } = useThemeContext();
+
   const handleChooseTrackClick = ({ track, id }) => {
     getOneTrack({ id });
     setChosenTrack(track);
   };
   const tracks = apiTracks.map((track) => (
     <S.PlaylistTrack
+      theme={theme}
       onClick={() => handleChooseTrackClick({ track, id: track.id })}
       key={track.id}
     >
       <S.TrackTitle>
-        <S.TrackTitleImage>
+        <S.TrackTitleImage theme={theme}>
           {isVisiable ? (
             <S.TrackTitleSvg alt="music">
               <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
@@ -55,7 +59,7 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
         </S.TrackTitleImage>
         <S.TrackTitleText isVisiable={!isVisiable}>
           {isVisiable ? (
-            <S.TrackTitleLink href="#">
+            <S.TrackTitleLink theme={theme} href="#">
               {track.name}
               <S.TrackTitleSpan></S.TrackTitleSpan>
             </S.TrackTitleLink>
@@ -66,7 +70,9 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
       </S.TrackTitle>
       <S.TrackAuthor isVisiable={!isVisiable}>
         {isVisiable ? (
-          <S.TrackAuthorLink href="#">{track.author}</S.TrackAuthorLink>
+          <S.TrackAuthorLink theme={theme} href="#">
+            {track.author}
+          </S.TrackAuthorLink>
         ) : (
           <SkeletonTrackTitleText />
         )}
