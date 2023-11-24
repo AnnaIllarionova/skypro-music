@@ -47,7 +47,7 @@ export function FilterTracks({ apiTracks }) {
         >
           году выпуска
         </S.FilterButton>
-        {isYearClicked && <ListOfYears theme={theme} />}
+        {isYearClicked && <ListOfYears theme={theme} apiTracks={apiTracks} />}
       </div>
 
       <div className="filter__list">
@@ -89,16 +89,33 @@ function ListOfAuthors({ apiTracks }) {
   );
 }
 
-function ListOfYears({ theme }) {
+function ListOfYears({ theme, apiTracks }) {
+  const dates = [];
+  apiTracks.forEach((track) => {
+    if (track.release_date !== null) {
+      dates.push(track.release_date);
+    }
+  });
+  const splitDates = dates.map((date) => date.split("-"));
+  const years = splitDates.map((date) => date[0]);
+  const fullYears = [];
+  years.forEach((year) => {
+    if (!fullYears.includes(year)) {
+      fullYears.push(year);
+    }
+  });
+  const datesOfRelease = fullYears.map((year) => (
+    <S.FilterBoxLinksItem theme={theme} key={year}>
+      {year}
+    </S.FilterBoxLinksItem>
+  ));
+
+  const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
+    a.key > b.key ? 1 : -1,
+  );
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks>
-        <S.FilterBoxLinksItem theme={theme}>По умолчанию</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Сначала новые</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>
-          Сначала старые
-        </S.FilterBoxLinksItem>
-      </S.FilterBoxLinks>
+      <S.FilterBoxLinks>{sortDatesOfRelease}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }
@@ -109,13 +126,13 @@ function ListOfGenre({ theme, apiTracks }) {
     if (!genres.includes(track.genre)) {
       genres.push(track.genre);
     }
- });
-    const listOfGenres = genres.map((genre) => (
-      <S.FilterBoxLinksItem theme={theme} key={genre}>
-        {genre}
-      </S.FilterBoxLinksItem>
-    ));
- 
+  });
+  const listOfGenres = genres.map((genre) => (
+    <S.FilterBoxLinksItem theme={theme} key={genre}>
+      {genre}
+    </S.FilterBoxLinksItem>
+  ));
+
   return (
     <S.FilterBox theme={theme}>
       <S.FilterBoxLinks>{listOfGenres}</S.FilterBoxLinks>

@@ -48,7 +48,7 @@ export const trackSlice = createSlice({
       state.shuffledTrackList = [...state.trackList].sort(
         () => Math.random() - 0.5,
       );
-      console.log(state.shuffledTrackList);
+      // console.log(state.shuffledTrackList);
       console.log(`Shuffled:  ${state.isShuffled}`);
     },
     playTrack: (state) => {
@@ -65,7 +65,8 @@ export const {
   playNextTrack,
   playPrevTrack,
   getShuffledTrackList,
-  playTrack, pauseTrack
+  playTrack,
+  pauseTrack,
 } = trackSlice.actions;
 export default trackSlice.reducer;
 
