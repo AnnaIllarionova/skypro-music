@@ -217,6 +217,11 @@ export const PlayerBtnShuffleSvg = styled(Button)`
   fill: transparent;
   stroke: #696969;
 `;
+export const PlayerBtnShuffleSvgActive = styled(ButtonActive)`
+  width: 19px;
+  height: 12px;
+
+`;
 
 /* for LikeOrDislikeCurrentTrack */
 export const TrackPlayLikeOrDislike = styled.div`

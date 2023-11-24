@@ -77,3 +77,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Фактическое время (Скелетоны):
 1 час 05 минут
+
+Фактическое время (доработка смены темы):
+3 час 25 минут

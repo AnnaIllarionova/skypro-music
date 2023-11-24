@@ -7,6 +7,7 @@ import { GetPlaylist } from "../../components/playlist/playlist.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { useState, useEffect } from "react";
 import { useThemeContext } from "../../components/context/theme-context.jsx";
+import { useSelector } from "react-redux";
 
 export const MainPage = ({
   user,
@@ -15,7 +16,12 @@ export const MainPage = ({
 }) => {
   const { theme } = useThemeContext();
 
-  const [chosenTrack, setChosenTrack] = useState(null);
+  const chosenTrack = useSelector(state => state.track.chosenTrack)
+
+  useEffect(() => {
+    console.log(chosenTrack);
+
+  }, [chosenTrack])
 
   const [isVisiable, setIsVisiable] = useState(false);
   useEffect(() => {
@@ -27,26 +33,25 @@ export const MainPage = ({
   return (
     <S.Container
     theme={theme}
-      // style={{ backgroundColor: theme.background, color: theme.color }}
     >
       <S.Main>
         <Navigation user={user} />
         <S.MainCenterblock>
           <SearchComponent />
           <S.MainCenterblockH2  theme={theme}>Треки</S.MainCenterblockH2>
-          <FilterTracks />
+          <FilterTracks apiTracks={apiTracks} />
           <GetPlaylist
             apiTracks={apiTracks}
             addTracksGottenError={addTracksGottenError}
             isVisiable={isVisiable}
-            chosenTrack={chosenTrack}
-            setChosenTrack={setChosenTrack}
           />
         </S.MainCenterblock>
         <Sidebar isVisiable={isVisiable} user={user} />
       </S.Main>
       {chosenTrack ? (
-        <MusicBar isVisiable={isVisiable} chosenTrack={chosenTrack} />
+        <MusicBar 
+        isVisiable={isVisiable} 
+         />
       ) : null}
 
       <footer className="footer"></footer>
