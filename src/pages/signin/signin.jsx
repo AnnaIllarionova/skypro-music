@@ -1,15 +1,18 @@
-import * as S from "./signin-signup.styled.jsx";
+import { useContext } from "react";
+import * as S from "./signin-signup.styled";
 import { Link } from "react-router-dom";
+import { CurrentUserContext } from "../../routes";
 
-export function SignIn({ user, setUser }) {
-  const handleLogin = () => {
-    localStorage.setItem("user", "test");
-    const userData = localStorage.getItem("user");
-    console.log(userData);
-    setUser(userData);
-  };
+export function SignIn({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  isUserLoading,
+  showError,
+}) {
+  const { handleLogin } = useContext(CurrentUserContext);
 
-  console.log(user);
   return (
     <S.ContainerEnter>
       <S.ModalBlock>
@@ -19,12 +22,31 @@ export function SignIn({ user, setUser }) {
               <img src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
           </a>
-          <S.ModalInputLogin type="text" name="login" placeholder="Почта" />
-          <S.ModalInput type="password" name="password" placeholder="Пароль" />
-          <S.ModalBtnEnter onClick={user === null && handleLogin}>
-            <S.ModalBtnEnterLink to="/">Войти</S.ModalBtnEnterLink>
+          <S.ModalInputLogin
+            type="text"
+            name="login"
+            placeholder="Почта"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <S.ModalInput
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <p style={{ color: "red", paddingTop: "15px" }}>{showError}</p>
+          <S.ModalBtnEnter
+            disabled={isUserLoading}
+            onClick={handleLogin}
+            isUserLoading={isUserLoading}
+          >
+            <S.ModalBtnEnterLink>
+              {isUserLoading ? "Входим..." : "Войти"}
+            </S.ModalBtnEnterLink>
           </S.ModalBtnEnter>
-          <S.ModalBtnSignup>
+          <S.ModalBtnSignup disabled={isUserLoading}>
             <Link to="/signup">Зарегистрироваться</Link>
           </S.ModalBtnSignup>
         </S.ModalFormLogin>

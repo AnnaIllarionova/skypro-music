@@ -6,13 +6,15 @@ import { FilterTracks } from "../../components/filter-tracks/filter-tracks.jsx";
 import { GetPlaylist } from "../../components/playlist/playlist.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { useState, useEffect } from "react";
+import { useThemeContext } from "../../components/context/theme-context.jsx";
 
 export const MainPage = ({
   user,
-  setUser,
   apiTracks,
   addTracksGottenError,
 }) => {
+  const { theme } = useThemeContext();
+
   const [chosenTrack, setChosenTrack] = useState(null);
 
   const [isVisiable, setIsVisiable] = useState(false);
@@ -23,12 +25,15 @@ export const MainPage = ({
   }, []);
 
   return (
-    <S.Container>
+    <S.Container
+    theme={theme}
+      // style={{ backgroundColor: theme.background, color: theme.color }}
+    >
       <S.Main>
-        <Navigation user={user} setUser={setUser} />
+        <Navigation user={user} />
         <S.MainCenterblock>
           <SearchComponent />
-          <S.MainCenterblockH2>Треки</S.MainCenterblockH2>
+          <S.MainCenterblockH2  theme={theme}>Треки</S.MainCenterblockH2>
           <FilterTracks />
           <GetPlaylist
             apiTracks={apiTracks}
@@ -38,7 +43,7 @@ export const MainPage = ({
             setChosenTrack={setChosenTrack}
           />
         </S.MainCenterblock>
-        <Sidebar isVisiable={isVisiable} user={user} setUser={setUser} />
+        <Sidebar isVisiable={isVisiable} user={user} />
       </S.Main>
       {chosenTrack ? (
         <MusicBar isVisiable={isVisiable} chosenTrack={chosenTrack} />

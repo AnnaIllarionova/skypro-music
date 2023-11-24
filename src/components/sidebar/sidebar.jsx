@@ -1,12 +1,12 @@
 import { GetPersonalData } from "../personal-data/personal-data.jsx";
 import * as S from "./sidebar.styled";
-
 import { categories } from "./categories.jsx";
+import { SkeletonSidebar } from "../skeleton/skeleton.jsx";
 
-export function Sidebar({ isVisiable, user, setUser }) {
+export function Sidebar({ isVisiable, user }) {
   return (
     <S.MainSidebar>
-      <GetPersonalData user={user} setUser={setUser} />
+      <GetPersonalData user={user} />
       <S.SidebarBlock>
         <S.SidebarList>
           <GetSidebarItems isVisiable={isVisiable} />
@@ -21,10 +21,12 @@ function GetSidebarItems({ isVisiable }) {
     <>
       {categories.map((category) => (
         <S.SidebarItem key={category.id}>
-          {isVisiable && (
+          {isVisiable ? (
             <S.SidebarLink to={`/categories-of-hits/${category.id}`}>
               <S.SidebarImage src={category.imgUrl} alt={category.label} />
             </S.SidebarLink>
+          ) : (
+            <SkeletonSidebar />
           )}
         </S.SidebarItem>
       ))}

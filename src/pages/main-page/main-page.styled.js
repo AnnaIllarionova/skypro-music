@@ -5,7 +5,7 @@ export const Container = styled.div`
   height: 100vh;
   margin: 0 auto;
   position: relative;
-  background-color: #181818;
+  background-color: ${props => props.theme.background};
 `;
 
 export const Main = styled.main`
@@ -37,4 +37,5 @@ export const MainCenterblockH2 = styled.h2`
   line-height: 72px;
   letter-spacing: -0.8px;
   margin-bottom: 45px;
+  color: ${props => props.theme.color}
 `;

@@ -49,7 +49,7 @@ export const PlaylistTrack = styled.div`
   align-items: center;
 
   &:hover {
-    background-color: #313131;
+    background-color: ${(props) => props.theme.backgroundColor};
   }
 `;
 
@@ -71,7 +71,7 @@ export const TrackTitleImage = styled.div`
   width: 51px;
   height: 51px;
   padding: 16px;
-  background: #313131;
+  background: ${(props) => props.theme.backgroundColor};
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -93,16 +93,17 @@ export const TrackTitleSvg = styled.svg`
 export const TrackTitleText = styled.div`
   min-height: 24px;
   min-width: 225px;
-  background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
+  background: inherit;
 `;
 export const TrackLink = styled.a`
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #ffffff;
 `;
-export const TrackTitleLink = styled(TrackLink)``;
+export const TrackTitleLink = styled(TrackLink)`
+  color: ${(props) => props.theme.color};
+`;
 
 export const TrackTitleSpan = styled.span`
   font-style: normal;
@@ -121,17 +122,18 @@ export const TrackAuthor = styled.div`
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-  background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
+  background: inherit;
 `;
 
 export const TrackAuthorLink = styled(TrackLink)`
   text-align: left;
+  color: ${(props) => props.theme.color};
 `;
 
 export const TrackAlbum = styled.div`
   width: 245px;
   height: 24px;
-  background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
+  background: inherit;
 `;
 
 export const TrackAlbumLink = styled(TrackLink)`
@@ -145,7 +147,7 @@ export const ErrorText = styled(TrackLink)`
 export const TrackTime = styled.div`
   height: 24px;
   min-width: 60px;
-  background: ${(props) => (props.isVisiable ? "#313131" : "inherit")};
+  background: inherit;
 `;
 
 export const TrackTimeSvg = styled.svg`

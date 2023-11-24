@@ -1,16 +1,18 @@
+import { useContext } from "react";
 import * as S from "./personal-data.styled";
+import { CurrentUserContext } from "../../routes";
+import { useThemeContext } from "../context/theme-context";
 
-export function GetPersonalData({user, setUser}) {
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+export function GetPersonalData() {
+  const { handleLogout, user } = useContext(CurrentUserContext);
+  const{theme} = useThemeContext();
+
   return (
     <S.SidebarPersonal>
-      <S.SidebarPersonalName>Sergey.Ivanov</S.SidebarPersonalName>
-      <S.SidebarIcon>
-        <svg alt="logout" onClick={user !== null && handleLogout}>
-          <use xlinkHref="./img/icon/sprite.svg#logout"></use>
+      <S.SidebarPersonalName theme={theme}>{user.username}</S.SidebarPersonalName>
+      <S.SidebarIcon theme={theme}>
+        <svg alt="logout" onClick={handleLogout}>
+          <use xlinkHref={theme.iconLogout}></use>
         </svg>
       </S.SidebarIcon>
     </S.SidebarPersonal>
