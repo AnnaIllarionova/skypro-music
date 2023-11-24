@@ -46,8 +46,11 @@ function TracksOfPlaylist({
   const dispatch = useDispatch();
 
   const handleChooseTrackClick = ({ track, id }) => {
-    getOneTrack({ id });
-    dispatch(chooseCurrentTrack({ track: track, playlist: apiTracks }));
+    if(isVisiable) {
+      getOneTrack({ id });
+      dispatch(chooseCurrentTrack({ track: track, playlist: apiTracks }));
+    }
+
   };
   const tracks = apiTracks.map((track) => (
     <S.PlaylistTrack
