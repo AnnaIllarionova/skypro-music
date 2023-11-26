@@ -1,6 +1,8 @@
+const baseURL = "https://skypro-music-api.skyeng.tech";
+
 export async function getAllTrackFromApi() {
   const response = await fetch(
-    "https://skypro-music-api.skyeng.tech/catalog/track/all/",
+    `${baseURL}/catalog/track/all/`,
   );
   if (!response.ok) {
     throw new Error("Произошла ошибка");
@@ -11,7 +13,7 @@ export async function getAllTrackFromApi() {
 
 export async function getOneTrack({ id }) {
   const response = await fetch(
-    `https://skypro-music-api.skyeng.tech/catalog/track/${id}`,
+    `${baseURL}/catalog/track/${id}`,
   );
   if (!response.ok) {
     throw new Error("Произошла ошибка");
@@ -22,7 +24,7 @@ export async function getOneTrack({ id }) {
 
 export async function authorizationForNewUser({ email, password, username }) {
   const response = await fetch(
-    "https://skypro-music-api.skyeng.tech/user/signup/",
+    `${baseURL}/user/signup/`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -63,7 +65,7 @@ export async function authorizationForNewUser({ email, password, username }) {
 
 export async function loginUser({ email, password }) {
   const response = await fetch(
-    "https://skypro-music-api.skyeng.tech/user/login/",
+    `${baseURL}/user/login/`,
     {
       method: "POST",
       body: JSON.stringify({

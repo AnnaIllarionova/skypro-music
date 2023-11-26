@@ -5,16 +5,25 @@ import { CorrectVolume, PlayerControls } from "./player-controls";
 import { TrackTimeText } from "../playlist/playlist.styled";
 import { formatTime } from "../formated-time/formated-time";
 import { useThemeContext } from "../context/theme-context";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  pauseTrack,
+  playNextTrack,
+  playTrack,
+} from "../../store/slices/slices";
 
-export const MusicBar = ({ chosenTrack }) => {
+export const MusicBar = () => {
   const { theme } = useThemeContext();
-  const [isPlaying, setIsPlaying] = useState(false);
+
   const audioRef = useRef(null);
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isLooped, setIsLooped] = useState(false);
+  const chosenTrack = useSelector((state) => state.track.chosenTrack);
+  const isPlaying = useSelector((state) => state.track.isPlaying);
+  const dispatch = useDispatch();
 
   const handleMute = () => {
     audioRef.current.muted = true;
@@ -28,34 +37,6 @@ export const MusicBar = ({ chosenTrack }) => {
   };
 
   const toggleMute = isMuted ? handleCancelMute : handleMute;
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    audioElement.volume = 0.3;
-    setVolume(audioElement.volume);
-
-    const handleTimeUpdateEvent = () => {
-      if (audioElement.currentTime && audioElement.duration) {
-        setCurrentTime(audioElement.currentTime);
-        setDuration(audioElement.duration);
-      } else {
-        setCurrentTime(0);
-        setDuration(0);
-      }
-    };
-    const timeEnded = () => {
-      if (!isLooped) {
-        pause();
-      }
-    };
-    audioElement.addEventListener("ended", timeEnded);
-    audioElement.addEventListener("timeupdate", handleTimeUpdateEvent);
-    return () => {
-      audioElement.removeEventListener("ended", timeEnded);
-      audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
-    };
-  }, [isLooped]);
-
   const changeVolume = (event) => {
     const newVolume = event.target.value;
     setVolume(newVolume);
@@ -74,11 +55,11 @@ export const MusicBar = ({ chosenTrack }) => {
 
   const play = () => {
     audioRef.current.play();
-    setIsPlaying(true);
+    dispatch(playTrack());
   };
   const pause = () => {
     audioRef.current.pause();
-    setIsPlaying(false);
+    dispatch(pauseTrack());
   };
   const togglePlay = () => {
     if (isPlaying) {
@@ -110,6 +91,39 @@ export const MusicBar = ({ chosenTrack }) => {
 
   const toggleLoop = !isLooped ? handleLoop : handleCancelLoop;
 
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    audioElement.volume = 0.3;
+    setVolume(audioElement.volume);
+
+    const handleTimeUpdateEvent = () => {
+      if (audioElement.currentTime && audioElement.duration) {
+        setCurrentTime(audioElement.currentTime);
+        setDuration(audioElement.duration);
+      } else {
+        setCurrentTime(0);
+        setDuration(0);
+      }
+    };
+    const handleEnded = () => {
+      dispatch(playNextTrack());
+    };
+    const onCanPlayThrough = () => {
+      audioElement.play();
+    };
+    //при быстром переключении не должны выскакивать ошибка. что данные не успели загрузиться
+    audioElement.addEventListener("canplaythrough", onCanPlayThrough);
+    //После окончания трека играет следующий
+    audioElement.addEventListener("ended", handleEnded);
+    //время обновляется каждую секунду
+    audioElement.addEventListener("timeupdate", handleTimeUpdateEvent);
+    return () => {
+      audioElement.removeEventListener("canplaythrough", onCanPlayThrough);
+      audioElement.removeEventListener("ended", handleEnded);
+      audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
+    };
+  }, [isLooped]);
+
   return (
     <S.Bar theme={theme}>
       <S.BarContent>
@@ -118,27 +132,25 @@ export const MusicBar = ({ chosenTrack }) => {
         </TrackTimeText>
         <audio ref={audioRef} src={chosenTrack.track_file} loop={false}></audio>
         <S.BarPlayerProgress
-        theme={theme}
+          theme={theme}
           type="range"
           min={0}
           max={duration}
           value={currentTime}
           step={0.01}
           onChange={changeCurrentTime}
-          // $color="#ff0000"
         ></S.BarPlayerProgress>
         <S.BarPlayerBlock>
           <S.BarPlayer>
             <PlayerControls
               togglePlay={togglePlay}
-              isPlaying={isPlaying}
               isLooped={isLooped}
               toggleLoop={toggleLoop}
             />
             <S.PlayerTrackPlay>
               <SeeCurrentTrack
                 theme={theme}
-                chosenTrack={chosenTrack}
+                // chosenTrack={chosenTrack}
                 onClick={togglePlay}
               />
               <LikeOrDislikeCurrentTrack />
@@ -156,7 +168,8 @@ export const MusicBar = ({ chosenTrack }) => {
   );
 };
 
-const SeeCurrentTrack = ({ chosenTrack, theme }) => {
+const SeeCurrentTrack = ({ theme }) => {
+  const chosenTrack = useSelector((state) => state.track.chosenTrack);
   return (
     <S.TrackPlayContain>
       <S.TrackPlayImage theme={theme}>

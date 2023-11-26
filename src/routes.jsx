@@ -26,6 +26,7 @@ export const AppRoutes = () => {
   const [addTracksGottenError, setAddTracksGottenError] = useState(null);
   const [showError, setShowError] = useState("");
 
+
   useEffect(() => {
     
     getAllTrackFromApi()
@@ -57,7 +58,6 @@ export const AppRoutes = () => {
   const [isUserLoading, setIsUserLoading] = useState(false);
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("click");
     try {
       setIsUserLoading(true);
       const userData = await loginUser({ email: email, password: password });
@@ -89,8 +89,6 @@ export const AppRoutes = () => {
                 value={{ theme: currentTheme, toggleTheme }}
               >
                 <MainPage
-                  user={user}
-                  setUser={setUser}
                   apiTracks={apiTracks}
                   addTracksGottenError={addTracksGottenError}
                 />
@@ -106,7 +104,6 @@ export const AppRoutes = () => {
         element={
           <CurrentUserContext.Provider value={{ handleLogin }}>
             <SignIn
-              user={user}
               email={email}
               setEmail={setEmail}
               password={password}
@@ -119,7 +116,7 @@ export const AppRoutes = () => {
       />
       <Route
         path="/signup"
-        element={<SignUp user={user} setUser={setUser} />}
+        element={<SignUp setUser={setUser} />}
       />
       <Route path="*" element={<ErrorPage />} />
     </Routes>

@@ -4,7 +4,7 @@ import { useThemeContext } from "../context/theme-context";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../routes";
 
-export function Navigation({ user }) {
+export function Navigation() {
   const [showMenu, setShowMenu] = useState(false);
   const { theme } = useThemeContext();
 
@@ -21,17 +21,14 @@ export function Navigation({ user }) {
         <S.BurgerLine theme={theme}></S.BurgerLine>
         <S.BurgerLine theme={theme}></S.BurgerLine>
       </S.NavBurger>
-      {showMenu && <PopUpMenu user={user}  />}
+      {showMenu && <PopUpMenu />}
     </S.MainNav>
   );
 }
 
-function PopUpMenu({ user }) {
-  const { toggleTheme } = useThemeContext();
-  const { theme } = useThemeContext();
-  const{handleLogout} = useContext(CurrentUserContext);
-
-  console.log(user);
+function PopUpMenu() {
+  const { toggleTheme, theme } = useThemeContext();
+  const {handleLogout, user} = useContext(CurrentUserContext);
 
   return (
     <S.NavMenu>

@@ -1,17 +1,31 @@
+import { useDispatch, useSelector } from "react-redux";
 import * as S from "./bar.styled";
+import {
+  getShuffledTrackList,
+  playNextTrack,
+  playPrevTrack,
+} from "../../store/slices/slices";
 
 export const PlayerControls = ({
   togglePlay,
-  isPlaying,
   isLooped,
   toggleLoop,
 }) => {
-  const handleClicked = () => {
-    alert("Функционал еще не реализован");
+  const isShuffled = useSelector((state) => state.track.isShuffled);
+  const isPlaying = useSelector((state) => state.track.isPlaying)
+  const dispatch = useDispatch();
+  const handleNextTrack = () => {
+    dispatch(playNextTrack());
+  };
+  const handlePrevTrack = () => {
+    dispatch(playPrevTrack());
+  };
+  const handleShuffleTracks = () => {
+    dispatch(getShuffledTrackList());
   };
   return (
     <S.PlayerControlsItems>
-      <S.PlayerBtnPrev onClick={handleClicked}>
+      <S.PlayerBtnPrev onClick={handlePrevTrack}>
         <S.PlayerBtnPrevSvg alt="prev">
           <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
         </S.PlayerBtnPrevSvg>
@@ -27,7 +41,7 @@ export const PlayerControls = ({
           ></use>
         </S.PlayerBtnPlaySvg>
       </S.PlayerBtnPlay>
-      <S.PlayerBtnNext onClick={handleClicked}>
+      <S.PlayerBtnNext onClick={handleNextTrack}>
         <S.PlayerBtnNextSvg alt="next">
           <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
         </S.PlayerBtnNextSvg>
@@ -43,10 +57,16 @@ export const PlayerControls = ({
           </S.PlayerBtnRepeatSvg>
         )}
       </S.PlayerBtnRepeat>
-      <S.PlayerBtnShuffle onClick={handleClicked}>
-        <S.PlayerBtnShuffleSvg alt="shuffle">
-          <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
-        </S.PlayerBtnShuffleSvg>
+      <S.PlayerBtnShuffle onClick={handleShuffleTracks}>
+        {isShuffled ? (
+          <S.PlayerBtnShuffleSvgActive>
+            <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
+          </S.PlayerBtnShuffleSvgActive>
+        ) : (
+          <S.PlayerBtnShuffleSvg alt="shuffle">
+            <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
+          </S.PlayerBtnShuffleSvg>
+        )}
       </S.PlayerBtnShuffle>
     </S.PlayerControlsItems>
   );

@@ -28,12 +28,11 @@ export const NavBurger = styled.div`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
+  box-orient: vertical;
+  box-direction: normal;
   flex-direction: column;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
+  box-pack: justify;
+  flex-pack: justify;
   justify-content: space-between;
 `;
 

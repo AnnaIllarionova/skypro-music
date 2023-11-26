@@ -7,12 +7,13 @@ import {
   SkeletonTrackTitleText,
 } from "../skeleton/skeleton.jsx";
 import { useThemeContext } from "../context/theme-context.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { chooseCurrentTrack } from "../../store/slices/slices.js";
 
 export function GetPlaylist({
   apiTracks,
   addTracksGottenError,
   isVisiable,
-  setChosenTrack,
 }) {
   return (
     <S.CenterblockContent>
@@ -27,19 +28,29 @@ export function GetPlaylist({
         <TracksOfPlaylist
           apiTracks={apiTracks}
           isVisiable={isVisiable}
-          setChosenTrack={setChosenTrack}
+          // setChosenTrack={setChosenTrack}
         />
       </S.ContentPlaylist>
     </S.CenterblockContent>
   );
 }
 
-function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
+function TracksOfPlaylist({
+  apiTracks,
+  isVisiable,
+}) {
   const { theme } = useThemeContext();
+  const chosenTrack = useSelector((state) => state.track.chosenTrack);
+  const isPlaying = useSelector((state) => state.track.isPlaying);
+
+  const dispatch = useDispatch();
 
   const handleChooseTrackClick = ({ track, id }) => {
-    getOneTrack({ id });
-    setChosenTrack(track);
+    if(isVisiable) {
+      getOneTrack({ id });
+      dispatch(chooseCurrentTrack({ track: track, playlist: apiTracks }));
+    }
+
   };
   const tracks = apiTracks.map((track) => (
     <S.PlaylistTrack
@@ -50,9 +61,15 @@ function TracksOfPlaylist({ apiTracks, isVisiable, setChosenTrack }) {
       <S.TrackTitle>
         <S.TrackTitleImage theme={theme}>
           {isVisiable ? (
-            <S.TrackTitleSvg alt="music">
-              <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
-            </S.TrackTitleSvg>
+            chosenTrack && chosenTrack.id === track.id ? (
+              <S.CurrentTrackPlayingDot
+                isPlaying={isPlaying}
+              ></S.CurrentTrackPlayingDot>
+            ) : (
+              <S.TrackTitleSvg alt="music">
+                <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
+              </S.TrackTitleSvg>
+            )
           ) : (
             <SkeletonTrackImage />
           )}

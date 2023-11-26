@@ -1,9 +1,8 @@
-import { tracksList } from "../playlist/tracklist";
 import { useState } from "react";
 import * as S from "./fitter-tracks.styled";
 import { useThemeContext } from "../context/theme-context";
 
-export function FilterTracks() {
+export function FilterTracks({ apiTracks }) {
   const { theme } = useThemeContext();
   const [isAuthorClicked, setIsAuthorClicked] = useState(false);
   const [isYearClicked, setIsYearClicked] = useState(false);
@@ -38,7 +37,7 @@ export function FilterTracks() {
         >
           исполнителю
         </S.FilterButton>
-        {isAuthorClicked && <ListOfAuthors />}
+        {isAuthorClicked && <ListOfAuthors apiTracks={apiTracks} />}
       </div>
       <div className="filter__list">
         <S.FilterButton
@@ -48,7 +47,7 @@ export function FilterTracks() {
         >
           году выпуска
         </S.FilterButton>
-        {isYearClicked && <ListOfYears theme={theme} />}
+        {isYearClicked && <ListOfYears theme={theme} apiTracks={apiTracks} />}
       </div>
 
       <div className="filter__list">
@@ -59,19 +58,19 @@ export function FilterTracks() {
         >
           жанру
         </S.FilterButton>
-        {isGenreClicked && <ListOfGenre theme={theme} />}
+        {isGenreClicked && <ListOfGenre theme={theme} apiTracks={apiTracks} />}
       </div>
     </S.CenterblockFilter>
   );
 }
 
-function ListOfAuthors() {
+function ListOfAuthors({ apiTracks }) {
   const { theme } = useThemeContext();
   const authors = [];
 
-  tracksList.forEach((track) => {
-    if (!authors.includes(track.singer)) {
-      authors.push(track.singer);
+  apiTracks.forEach((track) => {
+    if (!authors.includes(track.author)) {
+      authors.push(track.author);
     }
   });
 
@@ -81,39 +80,62 @@ function ListOfAuthors() {
     </S.FilterBoxLinksItem>
   ));
 
+  const sortAuthorsList = authorsList.sort((a, b) => (a.key > b.key ? 1 : -1));
+
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks theme={theme}>{authorsList}</S.FilterBoxLinks>
+      <S.FilterBoxLinks theme={theme}>{sortAuthorsList}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }
 
-function ListOfYears({ theme }) {
+function ListOfYears({ theme, apiTracks }) {
+  const dates = [];
+  apiTracks.forEach((track) => {
+    if (track.release_date !== null) {
+      dates.push(track.release_date);
+    }
+  });
+  const splitDates = dates.map((date) => date.split("-"));
+  const years = splitDates.map((date) => date[0]);
+  const fullYears = [];
+  years.forEach((year) => {
+    if (!fullYears.includes(year)) {
+      fullYears.push(year);
+    }
+  });
+  const datesOfRelease = fullYears.map((year) => (
+    <S.FilterBoxLinksItem theme={theme} key={year}>
+      {year}
+    </S.FilterBoxLinksItem>
+  ));
+
+  const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
+    a.key > b.key ? 1 : -1,
+  );
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks>
-        <S.FilterBoxLinksItem theme={theme}>По умолчанию</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Сначала новые</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>
-          Сначала старые
-        </S.FilterBoxLinksItem>
-      </S.FilterBoxLinks>
+      <S.FilterBoxLinks>{sortDatesOfRelease}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }
 
-function ListOfGenre({ theme }) {
+function ListOfGenre({ theme, apiTracks }) {
+  const genres = [];
+  apiTracks.forEach((track) => {
+    if (!genres.includes(track.genre)) {
+      genres.push(track.genre);
+    }
+  });
+  const listOfGenres = genres.map((genre) => (
+    <S.FilterBoxLinksItem theme={theme} key={genre}>
+      {genre}
+    </S.FilterBoxLinksItem>
+  ));
+
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks>
-        <S.FilterBoxLinksItem theme={theme}>Хип-хоп</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Поп</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Техно</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Инди</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Рок</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Шансон</S.FilterBoxLinksItem>
-        <S.FilterBoxLinksItem theme={theme}>Классика</S.FilterBoxLinksItem>
-      </S.FilterBoxLinks>
+      <S.FilterBoxLinks>{listOfGenres}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }

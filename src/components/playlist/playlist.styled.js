@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css, keyframes } from "styled-components";
 
 export const CenterblockContent = styled.div`
   display: -webkit-box;
@@ -88,6 +88,27 @@ export const TrackTitleSvg = styled.svg`
   height: 17px;
   fill: transparent;
   stroke: #4e4e4e;
+`;
+const bubble_out = keyframes`
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
+
+export const CurrentTrackPlayingDot = styled.div`
+  width: 16px;
+  height: 16px;
+  background-color: #b672ff;
+  border-radius: 8px;
+  display: block;
+  animation: ${(props) =>
+    props.isPlaying ? css`${bubble_out} 0.6s ease-in-out infinite both` : null};
 `;
 
 export const TrackTitleText = styled.div`
