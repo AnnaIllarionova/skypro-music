@@ -4,7 +4,7 @@ import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
 import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
-import { MainPage } from "./pages/main-page/main-page.jsx";
+import { MainPage, MainPageTrackList } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
 import React, { useEffect, useState } from "react";
 import { getAllTrackFromApi, loginUser } from "./Api";
@@ -25,10 +25,9 @@ export const AppRoutes = () => {
   const [apiTracks, setApiTracks] = useState([]);
   const [addTracksGottenError, setAddTracksGottenError] = useState(null);
   const [showError, setShowError] = useState("");
-
+  const [isVisiable, setIsVisiable] = useState(false);
 
   useEffect(() => {
-    
     getAllTrackFromApi()
       .then((apiTracks) => {
         console.log(apiTracks);
@@ -64,7 +63,7 @@ export const AppRoutes = () => {
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
       navigate("/");
-     } catch (error) {
+    } catch (error) {
       setShowError(error.message);
     } finally {
       setIsUserLoading(false);
@@ -91,12 +90,25 @@ export const AppRoutes = () => {
                 <MainPage
                   apiTracks={apiTracks}
                   addTracksGottenError={addTracksGottenError}
+                  isVisiable={isVisiable}
+                  setIsVisiable={setIsVisiable}
                 />
               </ThemeContext.Provider>
             </CurrentUserContext.Provider>
           }
-        />
-        <Route path="/myplaylist" element={<MyPlaylist />} />
+        >
+          <Route
+            path=""
+            element={
+              <MainPageTrackList
+                apiTracks={apiTracks}
+                addTracksGottenError={addTracksGottenError}
+                isVisiable={isVisiable}
+              />
+            }
+          />
+          <Route path="/myplaylist" element={<MyPlaylist />} />
+        </Route>
         <Route path="/categories-of-hits/:id" element={<CategoriesOfHits />} />
       </Route>
       <Route
@@ -114,10 +126,7 @@ export const AppRoutes = () => {
           </CurrentUserContext.Provider>
         }
       />
-      <Route
-        path="/signup"
-        element={<SignUp setUser={setUser} />}
-      />
+      <Route path="/signup" element={<SignUp setUser={setUser} />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );

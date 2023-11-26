@@ -10,11 +10,7 @@ import { useThemeContext } from "../context/theme-context.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { chooseCurrentTrack } from "../../store/slices/slices.js";
 
-export function GetPlaylist({
-  apiTracks,
-  addTracksGottenError,
-  isVisiable,
-}) {
+export function GetPlaylist({ apiTracks, addTracksGottenError, isVisiable }) {
   return (
     <S.CenterblockContent>
       <GetTitleOfPlaylist />
@@ -35,10 +31,7 @@ export function GetPlaylist({
   );
 }
 
-function TracksOfPlaylist({
-  apiTracks,
-  isVisiable,
-}) {
+function TracksOfPlaylist({ apiTracks, isVisiable }) {
   const { theme } = useThemeContext();
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
   const isPlaying = useSelector((state) => state.track.isPlaying);
@@ -46,11 +39,10 @@ function TracksOfPlaylist({
   const dispatch = useDispatch();
 
   const handleChooseTrackClick = ({ track, id }) => {
-    if(isVisiable) {
+    if (isVisiable) {
       getOneTrack({ id });
       dispatch(chooseCurrentTrack({ track: track, playlist: apiTracks }));
     }
-
   };
   const tracks = apiTracks.map((track) => (
     <S.PlaylistTrack
@@ -120,7 +112,7 @@ function TracksOfPlaylist({
   return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
 }
 
-function GetTitleOfPlaylist() {
+export function GetTitleOfPlaylist() {
   return (
     <S.ContentTitle>
       <S.PlaylistTitleCol01>Трек</S.PlaylistTitleCol01>

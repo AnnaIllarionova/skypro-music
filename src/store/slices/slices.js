@@ -7,6 +7,8 @@ const initialState = {
   isPlaying: false,
   isShuffled: false,
   shuffledTrackList: [],
+  myTrackList: [],
+  isLiked: false,
 };
 
 export const trackSlice = createSlice({
