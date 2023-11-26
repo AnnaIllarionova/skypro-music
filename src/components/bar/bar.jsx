@@ -37,33 +37,6 @@ export const MusicBar = () => {
   };
 
   const toggleMute = isMuted ? handleCancelMute : handleMute;
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    audioElement.volume = 0.3;
-    setVolume(audioElement.volume);
-
-    const handleTimeUpdateEvent = () => {
-      if (audioElement.currentTime && audioElement.duration) {
-        setCurrentTime(audioElement.currentTime);
-        setDuration(audioElement.duration);
-      } else {
-        setCurrentTime(0);
-        setDuration(0);
-      }
-    };
-    const handleEnded = () => {
-      dispatch(playNextTrack());
-    };
-
-    audioElement.addEventListener("ended", handleEnded);
-    audioElement.addEventListener("timeupdate", handleTimeUpdateEvent);
-    return () => {
-      audioElement.removeEventListener("ended", handleEnded);
-      audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
-    };
-  }, [isLooped]);
-
   const changeVolume = (event) => {
     const newVolume = event.target.value;
     setVolume(newVolume);
@@ -117,6 +90,39 @@ export const MusicBar = () => {
   };
 
   const toggleLoop = !isLooped ? handleLoop : handleCancelLoop;
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    audioElement.volume = 0.3;
+    setVolume(audioElement.volume);
+
+    const handleTimeUpdateEvent = () => {
+      if (audioElement.currentTime && audioElement.duration) {
+        setCurrentTime(audioElement.currentTime);
+        setDuration(audioElement.duration);
+      } else {
+        setCurrentTime(0);
+        setDuration(0);
+      }
+    };
+    const handleEnded = () => {
+      dispatch(playNextTrack());
+    };
+    const onCanPlayThrough = () => {
+      audioElement.play();
+    };
+    //при быстром переключении не должны выскакивать ошибка. что данные не успели загрузиться
+    audioElement.addEventListener("canplaythrough", onCanPlayThrough);
+    //После окончания трека играет следующий
+    audioElement.addEventListener("ended", handleEnded);
+    //время обновляется каждую секунду
+    audioElement.addEventListener("timeupdate", handleTimeUpdateEvent);
+    return () => {
+      audioElement.removeEventListener("canplaythrough", onCanPlayThrough);
+      audioElement.removeEventListener("ended", handleEnded);
+      audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
+    };
+  }, [isLooped]);
 
   return (
     <S.Bar theme={theme}>
