@@ -9,96 +9,156 @@ import {
 import { useThemeContext } from "../context/theme-context.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { chooseCurrentTrack } from "../../store/slices/slices.js";
+import {
+  useAddTrackInMyPlaylistMutation,
+  useGetAllTracksQuery,
+  useRemoveTrackFromMyPlaylistMutation,
+} from "../../services/api-services.js";
+import { useNavigate } from "react-router-dom";
 
-export function GetPlaylist({ apiTracks, addTracksGottenError, isVisiable }) {
+export function GetPlaylist({ isVisiable }) {
   return (
     <S.CenterblockContent>
       <GetTitleOfPlaylist />
       <S.ContentPlaylist>
-        {addTracksGottenError ? (
-          <S.ErrorText>
-            Не удалось загрузить плейлист, попробуйте позже:{" "}
-            {addTracksGottenError}
-          </S.ErrorText>
-        ) : null}
-        <TracksOfPlaylist
-          apiTracks={apiTracks}
-          isVisiable={isVisiable}
-          // setChosenTrack={setChosenTrack}
-        />
+        <TracksOfPlaylist isVisiable={isVisiable} />
       </S.ContentPlaylist>
     </S.CenterblockContent>
   );
 }
 
-function TracksOfPlaylist({ apiTracks, isVisiable }) {
+export function TracksOfPlaylist({ isVisiable }) {
+  const { data: trackList } = useGetAllTracksQuery();
+
+  const tracks =
+    trackList &&
+    trackList.map((track) => (
+      <CreateOneTrack key={track.id} isVisiable={isVisiable} track={track} />
+    ));
+  return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
+}
+
+export const CreateOneTrack = ({ isVisiable, track }) => {
+  const { data: trackList, error, isLoading } = useGetAllTracksQuery();
+  const [addTrackInMyPlaylist] = useAddTrackInMyPlaylistMutation();
+  const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
+
+  if (error) {
+    return (
+      <S.ErrorText>
+        Не удалось загрузить плейлист, попробуйте позже: {error.message}
+      </S.ErrorText>
+    );
+  }
+
+  const isEmptyList = !isLoading && (!trackList || trackList.length === 0);
+  if (isEmptyList) {
+    return <p>Ваш плейлист пока пуст</p>;
+  }
   const { theme } = useThemeContext();
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
   const isPlaying = useSelector((state) => state.track.isPlaying);
-
+  const isLiked = useSelector((state) => state.track.isLiked);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleChooseTrackClick = ({ track, id }) => {
     if (isVisiable) {
       getOneTrack({ id });
-      dispatch(chooseCurrentTrack({ track: track, playlist: apiTracks }));
+      dispatch(chooseCurrentTrack({ track: track, playlist: trackList }));
     }
   };
-  const tracks = apiTracks.map((track) => (
-    <S.PlaylistTrack
-      theme={theme}
-      onClick={() => handleChooseTrackClick({ track, id: track.id })}
-      key={track.id}
-    >
-      <S.TrackTitle>
-        <S.TrackTitleImage theme={theme}>
-          {isVisiable ? (
-            chosenTrack && chosenTrack.id === track.id ? (
-              <S.CurrentTrackPlayingDot
-                isPlaying={isPlaying}
-              ></S.CurrentTrackPlayingDot>
+
+  const handleAddLike = async ({ track }) => {
+    try {
+      addTrackInMyPlaylist({
+        id: track.id,
+      });
+    } catch (error) {
+      console.log(error);
+      if (error.status === 401) {
+        navigate("/signin");
+      }
+    }
+  };
+  const handleRemoveLike = ({ track }) => {
+    try {
+      removeTrackFromMyPlaylist({ id: track.id });
+    } catch (error) {
+      if (error.status === 401) {
+        navigate("/signin");
+      }
+    }
+  };
+  return (
+    <S.PlaylistTrack theme={theme} key={track.id}>
+      <S.PlaylistTrackName
+        onClick={() => handleChooseTrackClick({ track, id: track.id })}
+      >
+        <S.TrackTitle>
+          <S.TrackTitleImage theme={theme}>
+            {isVisiable ? (
+              chosenTrack && chosenTrack.id === track.id ? (
+                <S.CurrentTrackPlayingDot
+                  isPlaying={isPlaying}
+                ></S.CurrentTrackPlayingDot>
+              ) : (
+                <S.TrackTitleSvg alt="music">
+                  <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
+                </S.TrackTitleSvg>
+              )
             ) : (
-              <S.TrackTitleSvg alt="music">
-                <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
-              </S.TrackTitleSvg>
-            )
-          ) : (
-            <SkeletonTrackImage />
-          )}
-        </S.TrackTitleImage>
-        <S.TrackTitleText isVisiable={!isVisiable}>
+              <SkeletonTrackImage />
+            )}
+          </S.TrackTitleImage>
+          <S.TrackTitleText>
+            {isVisiable ? (
+              <S.TrackTitleLink theme={theme} href="#">
+                {track.name}
+                <S.TrackTitleSpan></S.TrackTitleSpan>
+              </S.TrackTitleLink>
+            ) : (
+              <SkeletonTrackTitleText />
+            )}
+          </S.TrackTitleText>
+        </S.TrackTitle>
+        <S.TrackAuthor>
           {isVisiable ? (
-            <S.TrackTitleLink theme={theme} href="#">
-              {track.name}
-              <S.TrackTitleSpan></S.TrackTitleSpan>
-            </S.TrackTitleLink>
+            <S.TrackAuthorLink theme={theme} href="#">
+              {track.author}
+            </S.TrackAuthorLink>
           ) : (
             <SkeletonTrackTitleText />
           )}
-        </S.TrackTitleText>
-      </S.TrackTitle>
-      <S.TrackAuthor isVisiable={!isVisiable}>
-        {isVisiable ? (
-          <S.TrackAuthorLink theme={theme} href="#">
-            {track.author}
-          </S.TrackAuthorLink>
-        ) : (
-          <SkeletonTrackTitleText />
-        )}
-      </S.TrackAuthor>
-      <S.TrackAlbum isVisiable={!isVisiable}>
-        {isVisiable ? (
-          <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
-        ) : (
-          <SkeletonTrackTitleText />
-        )}
-      </S.TrackAlbum>
-      <S.TrackTime isVisiable={!isVisiable}>
+        </S.TrackAuthor>
+        <S.TrackAlbum>
+          {isVisiable ? (
+            <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
+          ) : (
+            <SkeletonTrackTitleText />
+          )}
+        </S.TrackAlbum>
+      </S.PlaylistTrackName>
+
+      <S.TrackTime>
         {isVisiable ? (
           <>
-            <S.TrackTimeSvg alt="time">
-              <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
-            </S.TrackTimeSvg>
+            {isLiked ? (
+              <S.TrackTimeSvgActive
+                alt="time"
+                onClick={() => handleRemoveLike(track)}
+              >
+                <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+              </S.TrackTimeSvgActive>
+            ) : (
+              <S.TrackTimeSvg
+                alt="time"
+                onClick={() => handleAddLike({ track })}
+              >
+                <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+              </S.TrackTimeSvg>
+            )}
+
             <S.TrackTimeText>
               {formatTime(track.duration_in_seconds)}
             </S.TrackTimeText>
@@ -108,9 +168,8 @@ function TracksOfPlaylist({ apiTracks, isVisiable }) {
         )}
       </S.TrackTime>
     </S.PlaylistTrack>
-  ));
-  return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
-}
+  );
+};
 
 export function GetTitleOfPlaylist() {
   return (

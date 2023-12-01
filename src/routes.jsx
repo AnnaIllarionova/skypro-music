@@ -6,9 +6,12 @@ import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
 import { MainPage, MainPageTrackList } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
-import React, { useEffect, useState } from "react";
-import { getAllTrackFromApi, loginUser } from "./Api";
+import React, { useState } from "react";
+import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
+import {
+  useGetTokenMutation,
+} from "./services/api-services.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -22,22 +25,8 @@ export const AppRoutes = () => {
     }
   };
   const [user, setUser] = useState(getUserFromLS());
-  const [apiTracks, setApiTracks] = useState([]);
-  const [addTracksGottenError, setAddTracksGottenError] = useState(null);
   const [showError, setShowError] = useState("");
   const [isVisiable, setIsVisiable] = useState(false);
-
-  useEffect(() => {
-    getAllTrackFromApi()
-      .then((apiTracks) => {
-        console.log(apiTracks);
-        setApiTracks(apiTracks);
-      })
-      .catch((error) => {
-        console.log(error.message);
-        setAddTracksGottenError(error.message);
-      });
-  }, []);
 
   const [currentTheme, setCurrentTheme] = useState(themes.dark);
 
@@ -55,6 +44,8 @@ export const AppRoutes = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isUserLoading, setIsUserLoading] = useState(false);
+  const [getToken] = useGetTokenMutation();
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -62,6 +53,19 @@ export const AppRoutes = () => {
       const userData = await loginUser({ email: email, password: password });
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
+
+      const accessToken = await getToken({ email: email, password: password });
+      localStorage.setItem(
+        "accessToken",
+        JSON.stringify(accessToken.data.access),
+      );
+      console.log(localStorage.getItem("accessToken"));
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(accessToken.data.refresh),
+      );
+      console.log(localStorage.getItem("refreshToken"));
+
       navigate("/");
     } catch (error) {
       setShowError(error.message);
@@ -88,8 +92,6 @@ export const AppRoutes = () => {
                 value={{ theme: currentTheme, toggleTheme }}
               >
                 <MainPage
-                  apiTracks={apiTracks}
-                  addTracksGottenError={addTracksGottenError}
                   isVisiable={isVisiable}
                   setIsVisiable={setIsVisiable}
                 />
@@ -99,15 +101,12 @@ export const AppRoutes = () => {
         >
           <Route
             path=""
-            element={
-              <MainPageTrackList
-                apiTracks={apiTracks}
-                addTracksGottenError={addTracksGottenError}
-                isVisiable={isVisiable}
-              />
-            }
+            element={<MainPageTrackList isVisiable={isVisiable} />}
           />
-          <Route path="/myplaylist" element={<MyPlaylist />} />
+          <Route
+            path="/myplaylist"
+            element={<MyPlaylist isVisiable={isVisiable} />}
+          />
         </Route>
         <Route path="/categories-of-hits/:id" element={<CategoriesOfHits />} />
       </Route>

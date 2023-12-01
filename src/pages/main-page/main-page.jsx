@@ -42,21 +42,13 @@ export const MainPage = ({ isVisiable, setIsVisiable }) => {
   );
 };
 
-export const MainPageTrackList = ({
-  apiTracks,
-  addTracksGottenError,
-  isVisiable,
-}) => {
+export const MainPageTrackList = ({ isVisiable }) => {
   const { theme } = useThemeContext();
   return (
     <>
       <S.MainCenterblockH2 theme={theme}>Треки</S.MainCenterblockH2>
-      <FilterTracks apiTracks={apiTracks} />
-      <GetPlaylist
-        apiTracks={apiTracks}
-        addTracksGottenError={addTracksGottenError}
-        isVisiable={isVisiable}
-      />
+      <FilterTracks />
+      <GetPlaylist isVisiable={isVisiable} />
     </>
   );
 };
