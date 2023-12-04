@@ -7,8 +7,9 @@ import * as S from "../../components/playlist/playlist.styled";
 import { useGetMyTracksQuery } from "../../services/api-services";
 import * as Styled from "../main-page/main-page.styled";
 
-export const MyPlaylist = ({ isVisiable }) => {
+export const MyPlaylist = ({ isVisiable, isAllTracksLiked = false }) => {
   const { theme } = useThemeContext();
+  console.log(isAllTracksLiked);
   return (
     <>
       <Styled.MainCenterblockH2 theme={theme}>

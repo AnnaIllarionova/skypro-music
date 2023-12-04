@@ -9,9 +9,7 @@ import { ProtectedRoute } from "./components/protected-route/protected-route";
 import React, { useState } from "react";
 import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
-import {
-  useGetTokenMutation,
-} from "./services/api-services.js";
+import { useGetTokenMutation } from "./services/api-services.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -59,7 +57,7 @@ export const AppRoutes = () => {
         "accessToken",
         JSON.stringify(accessToken.data.access),
       );
-      console.log(localStorage.getItem("accessToken"));
+      console.log(JSON.parse(localStorage.getItem("accessToken")));
       localStorage.setItem(
         "refreshToken",
         JSON.stringify(accessToken.data.refresh),
@@ -79,6 +77,7 @@ export const AppRoutes = () => {
     setUser(null);
     setPassword("");
     setEmail("");
+    navigate("/signin");
   };
 
   return (

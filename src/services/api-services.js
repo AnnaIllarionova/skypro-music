@@ -2,14 +2,21 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://skypro-music-api.skyeng.tech",
+  prepareHeaders: (headers) => {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+    return headers;
+  },
 });
 
-const accessToken = localStorage.getItem("accessToken");
-const refreshSpoiltToken = localStorage.getItem("refreshToken");
+const refreshSpoiltToken = JSON.parse(localStorage.getItem("refreshToken"));
 
 export const allTracksApi = createApi({
   reducerPath: "allTracksApi",
   baseQuery,
+
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
@@ -19,12 +26,7 @@ export const allTracksApi = createApi({
       query: ({ body, id }) => ({
         url: `/catalog/track/${id}/favorite/`,
         method: "POST",
-        headers: (headers) =>  {
-          if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`);
-          }
-          return headers;
-        },
+
         body,
       }),
     }),
@@ -32,21 +34,16 @@ export const allTracksApi = createApi({
       query: ({ body, id }) => ({
         url: `/catalog/track/${id}/favorite/`,
         method: "DELETE",
-        headers: (headers) =>  {
-          if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`);
-          }
-          return headers;
-        },
         body,
       }),
     }),
     getMyTracks: builder.query({
       query: () => ({
         url: "/catalog/track/favorite/all/",
-        headers: (headers) =>  {
+        prepareHeaders: (headers) => {
+          const accessToken = JSON.parse(localStorage.getItem("accessToken"));
           if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`);
+            headers.set("Authorization", `Bearer ${accessToken}`);
           }
           return headers;
         },

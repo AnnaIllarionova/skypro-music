@@ -40,7 +40,7 @@ export function TracksOfPlaylist({ isVisiable }) {
 
 export const CreateOneTrack = ({ isVisiable, track }) => {
   const { data: trackList, error, isLoading } = useGetAllTracksQuery();
-  const [addTrackInMyPlaylist] = useAddTrackInMyPlaylistMutation();
+  const [addTrackInMyPlaylist, {error: addLikeError, isError: isAddLikeError}] = useAddTrackInMyPlaylistMutation();
   const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
 
   if (error) {
@@ -73,12 +73,10 @@ export const CreateOneTrack = ({ isVisiable, track }) => {
     try {
       addTrackInMyPlaylist({
         id: track.id,
-      });
+      }).unwrap
     } catch (error) {
       console.log(error);
-      if (error.status === 401) {
-        navigate("/signin");
-      }
+      
     }
   };
   const handleRemoveLike = ({ track }) => {
@@ -90,6 +88,10 @@ export const CreateOneTrack = ({ isVisiable, track }) => {
       }
     }
   };
+
+  if (isAddLikeError && addLikeError.status === 401) {
+    navigate("/signin");
+  }
   return (
     <S.PlaylistTrack theme={theme} key={track.id}>
       <S.PlaylistTrackName

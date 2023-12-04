@@ -44,6 +44,8 @@ export const MainPage = ({ isVisiable, setIsVisiable }) => {
 
 export const MainPageTrackList = ({ isVisiable }) => {
   const { theme } = useThemeContext();
+  //Все треки получить здесь use get all tracks, props в getplaylist
+  //data, error, isLoading
   return (
     <>
       <S.MainCenterblockH2 theme={theme}>Треки</S.MainCenterblockH2>
