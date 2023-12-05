@@ -1,43 +1,46 @@
-import { useThemeContext } from "../../components/context/theme-context";
-import {
-  CreateOneTrack,
-  GetTitleOfPlaylist,
-} from "../../components/playlist/playlist";
-import * as S from "../../components/playlist/playlist.styled";
 import { useGetMyTracksQuery } from "../../services/api-services";
-import * as Styled from "../main-page/main-page.styled";
+import { TrackListComponent } from "../main-page/main-page";
+import * as S from "../../components/playlist/playlist.styled";
+import { useEffect } from "react";
 
-export const MyPlaylist = ({ isVisiable, isAllTracksLiked = false }) => {
-  const { theme } = useThemeContext();
-  console.log(isAllTracksLiked);
-  return (
-    <>
-      <Styled.MainCenterblockH2 theme={theme}>
-        Мои треки
-      </Styled.MainCenterblockH2>
-      <S.CenterblockContent>
-        <GetTitleOfPlaylist />
-        <S.ContentPlaylist>
-          <TracksOfMyPlaylist isVisiable={isVisiable} />
-        </S.ContentPlaylist>
-      </S.CenterblockContent>
-    </>
-  );
-};
-
-export function TracksOfMyPlaylist({ isVisiable }) {
-  const { data: myTrackList, isLoading } = useGetMyTracksQuery();
-  console.log("myTrackList", myTrackList);
+export const MyPlaylist = ({
+  isVisiable,
   
-  const isEmptyList = !isLoading && (!myTrackList || myTrackList.length === 0);
+}) => {
+  // console.log(isAllTracksLiked);
+  const { data, error, isLoading, refetch } = useGetMyTracksQuery();
+
+  useEffect(() => {
+    // повторный запрос
+    if (data && !isLoading && !error) {
+      refetch();
+    }
+  }, [data, isLoading, error, refetch]);
+
+  const isEmptyList = !isLoading && (!data || data.length === 0);
   if (isEmptyList) {
     return <p>Ваш плейлист пока пуст</p>;
   }
 
-  const myTracks =
-    myTrackList &&
-    myTrackList.map((track) => (
-      <CreateOneTrack key={track.id} isVisiable={isVisiable} track={track} />
-    ));
-  return <S.PlaylistItem>{myTracks}</S.PlaylistItem>;
-}
+  if (error) {
+    return (
+      <S.ErrorText>Не удалось загрузить плейлист: {error.message}</S.ErrorText>
+    );
+  }
+
+  if (isLoading) {
+    return <S.ErrorText>Загрузка...</S.ErrorText>;
+  }
+
+  return (
+    <TrackListComponent
+      isVisiable={isVisiable}
+      title="Мои треки"
+      showFilterTracks={false}
+      trackList={data}
+      error={error}
+      isLoading={isLoading}
+      isAllTracksLiked={true}
+    />
+  );
+};

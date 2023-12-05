@@ -4,12 +4,12 @@ import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
 import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
-import { MainPage, MainPageTrackList } from "./pages/main-page/main-page.jsx";
+import { MainPage, TrackListComponent } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
 import React, { useState } from "react";
 import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
-import { useGetTokenMutation } from "./services/api-services.js";
+import { useGetAllTracksQuery, useGetTokenMutation } from "./services/api-services.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -79,6 +79,7 @@ export const AppRoutes = () => {
     setEmail("");
     navigate("/signin");
   };
+  const { data, error, isLoading } = useGetAllTracksQuery();
 
   return (
     <Routes>
@@ -100,7 +101,17 @@ export const AppRoutes = () => {
         >
           <Route
             path=""
-            element={<MainPageTrackList isVisiable={isVisiable} />}
+            element={
+              <TrackListComponent
+                isVisiable={isVisiable}
+                title="Треки"
+                showFilterTracks={true}
+                trackList={data}
+                error={error}
+                isLoading={isLoading}
+                isAllTracksLiked={false}
+              />
+            }
           />
           <Route
             path="/myplaylist"

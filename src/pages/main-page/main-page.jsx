@@ -42,15 +42,28 @@ export const MainPage = ({ isVisiable, setIsVisiable }) => {
   );
 };
 
-export const MainPageTrackList = ({ isVisiable }) => {
+export const TrackListComponent = ({
+  isVisiable,
+  title,
+  showFilterTracks,
+  trackList,
+  error,
+  isLoading,
+  isAllTracksLiked,
+}) => {
   const { theme } = useThemeContext();
-  //Все треки получить здесь use get all tracks, props в getplaylist
-  //data, error, isLoading
+
   return (
     <>
-      <S.MainCenterblockH2 theme={theme}>Треки</S.MainCenterblockH2>
-      <FilterTracks />
-      <GetPlaylist isVisiable={isVisiable} />
+      <S.MainCenterblockH2 theme={theme}>{title}</S.MainCenterblockH2>
+      {showFilterTracks ? <FilterTracks /> : null}
+      <GetPlaylist
+        isVisiable={isVisiable}
+        trackList={trackList}
+        error={error}
+        isLoading={isLoading}
+        isAllTracksLiked={isAllTracksLiked}
+      />
     </>
   );
 };

@@ -2,6 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://skypro-music-api.skyeng.tech",
+});
+
+const baseQueryWithPrepareHeaders = fetchBaseQuery({
+  baseUrl: "https://skypro-music-api.skyeng.tech",
   prepareHeaders: (headers) => {
     const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     if (accessToken) {
@@ -13,15 +17,10 @@ const baseQuery = fetchBaseQuery({
 
 const refreshSpoiltToken = JSON.parse(localStorage.getItem("refreshToken"));
 
-export const allTracksApi = createApi({
-  reducerPath: "allTracksApi",
-  baseQuery,
-
+export const myTracksApi = createApi({
+  reducerPath: "myTracksApi",
+  baseQuery: baseQueryWithPrepareHeaders,
   endpoints: (builder) => ({
-    getAllTracks: builder.query({
-      query: () => "/catalog/track/all/",
-    }),
-
     addTrackInMyPlaylist: builder.mutation({
       query: ({ body, id }) => ({
         url: `/catalog/track/${id}/favorite/`,
@@ -40,24 +39,28 @@ export const allTracksApi = createApi({
     getMyTracks: builder.query({
       query: () => ({
         url: "/catalog/track/favorite/all/",
-        prepareHeaders: (headers) => {
-          const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-          if (accessToken) {
-            headers.set("Authorization", `Bearer ${accessToken}`);
-          }
-          return headers;
-        },
       }),
     }),
   }),
 });
 
 export const {
-  useGetAllTracksQuery,
   useAddTrackInMyPlaylistMutation,
   useRemoveTrackFromMyPlaylistMutation,
   useGetMyTracksQuery,
-} = allTracksApi;
+} = myTracksApi;
+
+export const allTracksApi = createApi({
+  reducerPath: "allTracksApi",
+  baseQuery,
+  endpoints: (builder) => ({
+    getAllTracks: builder.query({
+      query: () => "/catalog/track/all/",
+    }),
+  }),
+});
+
+export const { useGetAllTracksQuery } = allTracksApi;
 
 export const token = createApi({
   reducerPath: "token",

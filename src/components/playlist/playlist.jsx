@@ -11,37 +11,74 @@ import { useDispatch, useSelector } from "react-redux";
 import { chooseCurrentTrack } from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
-  useGetAllTracksQuery,
   useRemoveTrackFromMyPlaylistMutation,
 } from "../../services/api-services.js";
 import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { CurrentUserContext } from "../../routes.jsx";
 
-export function GetPlaylist({ isVisiable }) {
+export function GetPlaylist({
+  isVisiable,
+  trackList,
+  error,
+  isLoading,
+  isAllTracksLiked,
+}) {
   return (
     <S.CenterblockContent>
       <GetTitleOfPlaylist />
       <S.ContentPlaylist>
-        <TracksOfPlaylist isVisiable={isVisiable} />
+        <TracksOfPlaylist
+          isVisiable={isVisiable}
+          trackList={trackList}
+          error={error}
+          isLoading={isLoading}
+          isAllTracksLiked={isAllTracksLiked}
+        />
       </S.ContentPlaylist>
     </S.CenterblockContent>
   );
 }
 
-export function TracksOfPlaylist({ isVisiable }) {
-  const { data: trackList } = useGetAllTracksQuery();
-
+export function TracksOfPlaylist({
+  isVisiable,
+  trackList,
+  error,
+  isLoading,
+  isAllTracksLiked,
+}) {
   const tracks =
     trackList &&
     trackList.map((track) => (
-      <CreateOneTrack key={track.id} isVisiable={isVisiable} track={track} />
+      <CreateOneTrack
+        key={track.id}
+        isVisiable={isVisiable}
+        track={track}
+        trackList={trackList}
+        error={error}
+        isLoading={isLoading}
+        isAllTracksLiked={isAllTracksLiked}
+      />
     ));
   return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
 }
 
-export const CreateOneTrack = ({ isVisiable, track }) => {
-  const { data: trackList, error, isLoading } = useGetAllTracksQuery();
-  const [addTrackInMyPlaylist, {error: addLikeError, isError: isAddLikeError}] = useAddTrackInMyPlaylistMutation();
-  const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
+export const CreateOneTrack = ({
+  isVisiable,
+  track,
+  trackList,
+  error,
+  isLoading,
+  isAllTracksLiked,
+}) => {
+  const [
+    addTrackInMyPlaylist,
+    { error: addLikeError, isError: isAddLikeError },
+  ] = useAddTrackInMyPlaylistMutation();
+  const [
+    removeTrackFromMyPlaylist,
+    { error: removeLikeError, isError: isRemoveLikeError },
+  ] = useRemoveTrackFromMyPlaylistMutation();
 
   if (error) {
     return (
@@ -58,9 +95,12 @@ export const CreateOneTrack = ({ isVisiable, track }) => {
   const { theme } = useThemeContext();
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
   const isPlaying = useSelector((state) => state.track.isPlaying);
-  const isLiked = useSelector((state) => state.track.isLiked);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useContext(CurrentUserContext);
+  const [isLiked, setIsLiked] = useState(
+    (track.stared_user ?? []).find(({ id }) => id === user.id),
+  );
 
   const handleChooseTrackClick = ({ track, id }) => {
     if (isVisiable) {
@@ -69,29 +109,28 @@ export const CreateOneTrack = ({ isVisiable, track }) => {
     }
   };
 
-  const handleAddLike = async ({ track }) => {
+  const handleAddOrRemoveLike = async ({ track }) => {
     try {
-      addTrackInMyPlaylist({
-        id: track.id,
-      }).unwrap
+      if (isLiked || isAllTracksLiked) {
+        await removeTrackFromMyPlaylist({ id: track.id }).unwrap;
+        if (isRemoveLikeError && removeLikeError.status === 401) {
+          navigate("/signin");
+        }
+      } else {
+        await addTrackInMyPlaylist({
+          id: track.id,
+        }).unwrap;
+        if (isAddLikeError && addLikeError.status === 401) {
+          navigate("/signin");
+        }
+      }
+      setIsLiked(!isLiked);
+      console.log(isLiked);
     } catch (error) {
       console.log(error);
-      
-    }
-  };
-  const handleRemoveLike = ({ track }) => {
-    try {
-      removeTrackFromMyPlaylist({ id: track.id });
-    } catch (error) {
-      if (error.status === 401) {
-        navigate("/signin");
-      }
     }
   };
 
-  if (isAddLikeError && addLikeError.status === 401) {
-    navigate("/signin");
-  }
   return (
     <S.PlaylistTrack theme={theme} key={track.id}>
       <S.PlaylistTrackName
@@ -142,21 +181,15 @@ export const CreateOneTrack = ({ isVisiable, track }) => {
         </S.TrackAlbum>
       </S.PlaylistTrackName>
 
-      <S.TrackTime>
+      <S.TrackTime onClick={() => handleAddOrRemoveLike({ track })}>
         {isVisiable ? (
           <>
-            {isLiked ? (
-              <S.TrackTimeSvgActive
-                alt="time"
-                onClick={() => handleRemoveLike(track)}
-              >
+            {isLiked || isAllTracksLiked ? (
+              <S.TrackTimeSvgActive alt="time">
                 <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
               </S.TrackTimeSvgActive>
             ) : (
-              <S.TrackTimeSvg
-                alt="time"
-                onClick={() => handleAddLike({ track })}
-              >
+              <S.TrackTimeSvg alt="time">
                 <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
               </S.TrackTimeSvg>
             )}

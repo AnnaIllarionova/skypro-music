@@ -1,14 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-
   trackList: [],
   chosenTrack: null,
   isPlaying: false,
   isShuffled: false,
   shuffledTrackList: [],
-  myTrackList: [],
-  isLiked: false,
+  showAllTracksAsLiked: false,
 };
 
 export const trackSlice = createSlice({
