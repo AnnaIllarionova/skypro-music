@@ -20,14 +20,15 @@ const refreshSpoiltToken = JSON.parse(localStorage.getItem("refreshToken"));
 export const myTracksApi = createApi({
   reducerPath: "myTracksApi",
   baseQuery: baseQueryWithPrepareHeaders,
+  tagTypes: ["Track"],
   endpoints: (builder) => ({
     addTrackInMyPlaylist: builder.mutation({
       query: ({ body, id }) => ({
         url: `/catalog/track/${id}/favorite/`,
         method: "POST",
-
         body,
       }),
+      invalidatesTags: ["Track"],
     }),
     removeTrackFromMyPlaylist: builder.mutation({
       query: ({ body, id }) => ({
@@ -35,11 +36,16 @@ export const myTracksApi = createApi({
         method: "DELETE",
         body,
       }),
+      invalidatesTags: (arg) => [
+        { type: "Track", id: arg.id },
+      ],
     }),
     getMyTracks: builder.query({
-      query: () => ({
-        url: "/catalog/track/favorite/all/",
-      }),
+      query: () => "/catalog/track/favorite/all/",
+      providesTags: (result) =>
+        result
+          ? [...result.map(({ id }) => ({ type: "Track", id })), "Track"]
+          : ["Track"],
     }),
   }),
 });
@@ -53,9 +59,11 @@ export const {
 export const allTracksApi = createApi({
   reducerPath: "allTracksApi",
   baseQuery,
+  tagTypes: ["AllTracks"],
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
+      providesTags:(result = []) => result ?? [{type:"AllTracks", id: 'LIST'}]
     }),
   }),
 });

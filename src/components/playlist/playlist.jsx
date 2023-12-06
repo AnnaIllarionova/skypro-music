@@ -112,20 +112,20 @@ export const CreateOneTrack = ({
   const handleAddOrRemoveLike = async ({ track }) => {
     try {
       if (isLiked || isAllTracksLiked) {
-        await removeTrackFromMyPlaylist({ id: track.id }).unwrap;
+        await removeTrackFromMyPlaylist({ id: track.id }).unwrap();
+        
         if (isRemoveLikeError && removeLikeError.status === 401) {
           navigate("/signin");
         }
       } else {
         await addTrackInMyPlaylist({
           id: track.id,
-        }).unwrap;
+        }).unwrap();
         if (isAddLikeError && addLikeError.status === 401) {
           navigate("/signin");
         }
       }
       setIsLiked(!isLiked);
-      console.log(isLiked);
     } catch (error) {
       console.log(error);
     }

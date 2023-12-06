@@ -1,21 +1,18 @@
 import { useGetMyTracksQuery } from "../../services/api-services";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
-export const MyPlaylist = ({
-  isVisiable,
-  
-}) => {
+export const MyPlaylist = ({ isVisiable }) => {
   // console.log(isAllTracksLiked);
-  const { data, error, isLoading, refetch } = useGetMyTracksQuery();
+  const { data, error, isLoading } = useGetMyTracksQuery();
 
-  useEffect(() => {
-    // повторный запрос
-    if (data && !isLoading && !error) {
-      refetch();
-    }
-  }, [data, isLoading, error, refetch]);
+  // useEffect(() => {
+  //   // повторный запрос
+  //   if (data && !isLoading && !error) {
+  //     refetch();
+  //   }
+  // }, [data, isLoading, error, refetch]);
 
   const isEmptyList = !isLoading && (!data || data.length === 0);
   if (isEmptyList) {
