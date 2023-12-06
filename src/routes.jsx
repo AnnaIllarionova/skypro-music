@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { SignIn } from "./pages/signin/signin";
 import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
@@ -6,10 +6,13 @@ import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
 import { MainPage, TrackListComponent } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
-import { useGetAllTracksQuery, useGetTokenMutation } from "./services/api-services.js";
+import {
+  useGetAllTracksQuery,
+  useGetTokenMutation,
+} from "./services/api-services.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -79,7 +82,12 @@ export const AppRoutes = () => {
     setEmail("");
     navigate("/signin");
   };
-  const { data, error, isLoading } = useGetAllTracksQuery();
+  const { data, error, isLoading, refetch } = useGetAllTracksQuery();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === "/") refetch();
+  }, [refetch]);
 
   return (
     <Routes>
@@ -117,8 +125,11 @@ export const AppRoutes = () => {
             path="/myplaylist"
             element={<MyPlaylist isVisiable={isVisiable} />}
           />
+          <Route
+            path="/categories-of-hits/:id"
+            element={<CategoriesOfHits />}
+          />
         </Route>
-        <Route path="/categories-of-hits/:id" element={<CategoriesOfHits />} />
       </Route>
       <Route
         path="/signin"

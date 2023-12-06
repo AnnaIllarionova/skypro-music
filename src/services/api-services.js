@@ -36,9 +36,7 @@ export const myTracksApi = createApi({
         method: "DELETE",
         body,
       }),
-      invalidatesTags: (arg) => [
-        { type: "Track", id: arg.id },
-      ],
+      invalidatesTags: (arg) => [{ type: "Track", id: arg.id }],
     }),
     getMyTracks: builder.query({
       query: () => "/catalog/track/favorite/all/",
@@ -63,12 +61,19 @@ export const allTracksApi = createApi({
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
-      providesTags:(result = []) => result ?? [{type:"AllTracks", id: 'LIST'}]
+      providesTags: (result = []) =>
+        result ?? [{ type: "AllTracks", id: "LIST" }],
+    }),
+    getSelections: builder.query({
+      query: () => "/catalog/selection/",
+    }),
+    getSelectionById: builder.query({
+      query: ({ id }) => `/catalog/selection/${id}/`,
     }),
   }),
 });
 
-export const { useGetAllTracksQuery } = allTracksApi;
+export const { useGetAllTracksQuery, useGetSelectionByIdQuery, useGetSelectionsQuery } = allTracksApi;
 
 export const token = createApi({
   reducerPath: "token",

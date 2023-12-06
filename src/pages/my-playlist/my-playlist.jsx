@@ -4,15 +4,8 @@ import * as S from "../../components/playlist/playlist.styled";
 // import { useEffect } from "react";
 
 export const MyPlaylist = ({ isVisiable }) => {
-  // console.log(isAllTracksLiked);
-  const { data, error, isLoading } = useGetMyTracksQuery();
 
-  // useEffect(() => {
-  //   // повторный запрос
-  //   if (data && !isLoading && !error) {
-  //     refetch();
-  //   }
-  // }, [data, isLoading, error, refetch]);
+  const { data, error, isLoading } = useGetMyTracksQuery();
 
   const isEmptyList = !isLoading && (!data || data.length === 0);
   if (isEmptyList) {

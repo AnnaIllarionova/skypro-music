@@ -3,7 +3,7 @@ import * as S from "./sidebar.styled";
 import { categories } from "./categories.jsx";
 import { SkeletonSidebar } from "../skeleton/skeleton.jsx";
 
-export function Sidebar({ isVisiable}) {
+export function Sidebar({ isVisiable }) {
   return (
     <S.MainSidebar>
       <GetPersonalData />

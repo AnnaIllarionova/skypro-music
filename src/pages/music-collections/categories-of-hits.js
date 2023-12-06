@@ -7,9 +7,10 @@ export const CategoriesOfHits = () => {
   const category = categories.find(
     (category) => category.id === Number(params.id),
   );
+
   return (
     <div>
-      <p>Хиты {category.id}</p>
+      <p>Категория {category.id}</p>
     </div>
   );
 };
