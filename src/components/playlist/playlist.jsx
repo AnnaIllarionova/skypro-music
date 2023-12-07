@@ -13,7 +13,7 @@ import {
   useAddTrackInMyPlaylistMutation,
   useRemoveTrackFromMyPlaylistMutation,
 } from "../../services/api-services.js";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { CurrentUserContext } from "../../routes.jsx";
 
@@ -73,11 +73,11 @@ export const CreateOneTrack = ({
 }) => {
   const [
     addTrackInMyPlaylist,
-    { error: addLikeError, isError: isAddLikeError },
+    // { error: addLikeError, isError: isAddLikeError },
   ] = useAddTrackInMyPlaylistMutation();
   const [
     removeTrackFromMyPlaylist,
-    { error: removeLikeError, isError: isRemoveLikeError },
+    // { error: removeLikeError, isError: isRemoveLikeError },
   ] = useRemoveTrackFromMyPlaylistMutation();
 
   if (error) {
@@ -95,7 +95,7 @@ export const CreateOneTrack = ({
   const { theme } = useThemeContext();
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
   const isPlaying = useSelector((state) => state.track.isPlaying);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useContext(CurrentUserContext);
   const [isLiked, setIsLiked] = useState(
@@ -114,16 +114,16 @@ export const CreateOneTrack = ({
       if (isLiked || isAllTracksLiked) {
         await removeTrackFromMyPlaylist({ id: track.id }).unwrap();
         
-        if (isRemoveLikeError && removeLikeError.status === 401) {
-          navigate("/signin");
-        }
+        // if (isRemoveLikeError && removeLikeError.status === 401) {
+        //   navigate("/signin");
+      //  }
       } else {
         await addTrackInMyPlaylist({
           id: track.id,
         }).unwrap();
-        if (isAddLikeError && addLikeError.status === 401) {
-          navigate("/signin");
-        }
+        // if (isAddLikeError && addLikeError.status === 401) {
+        //   navigate("/signin");
+        // }
       }
       setIsLiked(!isLiked);
     } catch (error) {

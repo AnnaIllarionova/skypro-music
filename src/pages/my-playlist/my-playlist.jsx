@@ -1,10 +1,8 @@
 import { useGetMyTracksQuery } from "../../services/api-services";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
-// import { useEffect } from "react";
 
 export const MyPlaylist = ({ isVisiable }) => {
-
   const { data, error, isLoading } = useGetMyTracksQuery();
 
   const isEmptyList = !isLoading && (!data || data.length === 0);

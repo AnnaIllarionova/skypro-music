@@ -1,18 +1,18 @@
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { SignIn } from "./pages/signin/signin";
 import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
 import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
-import { MainPage, TrackListComponent } from "./pages/main-page/main-page.jsx";
+import { MainPage } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
 import {
-  useGetAllTracksQuery,
   useGetTokenMutation,
 } from "./services/api-services.js";
+import { AllTracksComponent } from "./components/playlist/all-tracks-component.jsx";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -82,12 +82,6 @@ export const AppRoutes = () => {
     setEmail("");
     navigate("/signin");
   };
-  const { data, error, isLoading, refetch } = useGetAllTracksQuery();
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (pathname === "/") refetch();
-  }, [refetch]);
 
   return (
     <Routes>
@@ -108,18 +102,8 @@ export const AppRoutes = () => {
           }
         >
           <Route
-            path=""
-            element={
-              <TrackListComponent
-                isVisiable={isVisiable}
-                title="Треки"
-                showFilterTracks={true}
-                trackList={data}
-                error={error}
-                isLoading={isLoading}
-                isAllTracksLiked={false}
-              />
-            }
+            path="/"
+            element={<AllTracksComponent isVisiable={isVisiable} />}
           />
           <Route
             path="/myplaylist"

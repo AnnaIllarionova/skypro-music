@@ -61,8 +61,10 @@ export const allTracksApi = createApi({
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
-      providesTags: (result = []) =>
-        result ?? [{ type: "AllTracks", id: "LIST" }],
+      providesTags: (result) =>
+      result
+        ? [...result.map(({ id }) => ({ type: "AllTracks", id })), "AllTracks"]
+        : ["AllTracks"],
     }),
     getSelections: builder.query({
       query: () => "/catalog/selection/",
