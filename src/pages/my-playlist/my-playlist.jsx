@@ -1,19 +1,22 @@
 import { useGetMyTracksQuery } from "../../services/api-services";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
+import { CurrentUserContext } from "../../routes";
+import { useContext } from "react";
 
 export const MyPlaylist = ({ isVisiable }) => {
   const { data, error, isLoading } = useGetMyTracksQuery();
-
+  const { handleLogout } = useContext(CurrentUserContext);
+  
   const isEmptyList = !isLoading && (!data || data.length === 0);
   if (isEmptyList) {
     return <p>Ваш плейлист пока пуст</p>;
   }
 
   if (error) {
-    return (
-      <S.ErrorText>Не удалось загрузить плейлист: {error.message}</S.ErrorText>
-    );
+    if (error.status === 401) {
+      handleLogout();
+    }
   }
 
   if (isLoading) {
@@ -26,7 +29,7 @@ export const MyPlaylist = ({ isVisiable }) => {
       title="Мои треки"
       showFilterTracks={false}
       trackList={data}
-      error={error}
+      // error={error}
       isLoading={isLoading}
       isAllTracksLiked={true}
     />

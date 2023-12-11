@@ -11,16 +11,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { chooseCurrentTrack } from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
+  useGetAllTracksQuery,
   useRemoveTrackFromMyPlaylistMutation,
 } from "../../services/api-services.js";
-// import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { CurrentUserContext } from "../../routes.jsx";
 
 export function GetPlaylist({
   isVisiable,
   trackList,
-  error,
+  // error,
   isLoading,
   isAllTracksLiked,
 }) {
@@ -31,7 +31,7 @@ export function GetPlaylist({
         <TracksOfPlaylist
           isVisiable={isVisiable}
           trackList={trackList}
-          error={error}
+          // error={error}
           isLoading={isLoading}
           isAllTracksLiked={isAllTracksLiked}
         />
@@ -43,7 +43,7 @@ export function GetPlaylist({
 export function TracksOfPlaylist({
   isVisiable,
   trackList,
-  error,
+  // error,
   isLoading,
   isAllTracksLiked,
 }) {
@@ -55,7 +55,7 @@ export function TracksOfPlaylist({
         isVisiable={isVisiable}
         track={track}
         trackList={trackList}
-        error={error}
+        // error={error}
         isLoading={isLoading}
         isAllTracksLiked={isAllTracksLiked}
       />
@@ -67,25 +67,25 @@ export const CreateOneTrack = ({
   isVisiable,
   track,
   trackList,
-  error,
   isLoading,
   isAllTracksLiked,
 }) => {
+  const { handleLogout } = useContext(CurrentUserContext);
+  const { refetch } = useGetAllTracksQuery();
   const [
     addTrackInMyPlaylist,
-    // { error: addLikeError, isError: isAddLikeError },
+    { error: addLikeError, isError: isAddLikeError },
   ] = useAddTrackInMyPlaylistMutation();
   const [
     removeTrackFromMyPlaylist,
-    // { error: removeLikeError, isError: isRemoveLikeError },
+    { error: removeLikeError, isError: isRemoveLikeError },
   ] = useRemoveTrackFromMyPlaylistMutation();
 
-  if (error) {
-    return (
-      <S.ErrorText>
-        Не удалось загрузить плейлист, попробуйте позже: {error.message}
-      </S.ErrorText>
-    );
+  if (
+    (isRemoveLikeError && removeLikeError.status === 401) ||
+    (isAddLikeError && addLikeError.status === 401)
+  ) {
+    handleLogout();
   }
 
   const isEmptyList = !isLoading && (!trackList || trackList.length === 0);
@@ -95,7 +95,6 @@ export const CreateOneTrack = ({
   const { theme } = useThemeContext();
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
   const isPlaying = useSelector((state) => state.track.isPlaying);
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useContext(CurrentUserContext);
   const [isLiked, setIsLiked] = useState(
@@ -113,18 +112,14 @@ export const CreateOneTrack = ({
     try {
       if (isLiked || isAllTracksLiked) {
         await removeTrackFromMyPlaylist({ id: track.id }).unwrap();
-        
-        // if (isRemoveLikeError && removeLikeError.status === 401) {
-        //   navigate("/signin");
-      //  }
+        refetch();
       } else {
         await addTrackInMyPlaylist({
           id: track.id,
         }).unwrap();
-        // if (isAddLikeError && addLikeError.status === 401) {
-        //   navigate("/signin");
-        // }
+        refetch();
       }
+
       setIsLiked(!isLiked);
     } catch (error) {
       console.log(error);

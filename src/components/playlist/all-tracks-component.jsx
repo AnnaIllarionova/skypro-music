@@ -1,29 +1,36 @@
-// import { useLocation } from "react-router-dom";
 import { TrackListComponent } from "../../pages/main-page/main-page";
 import { useGetAllTracksQuery } from "../../services/api-services";
 // import { useEffect } from "react";
 import * as S from "./playlist.styled";
 
 export const AllTracksComponent = ({ isVisiable }) => {
-//   const { path } = useLocation();
   const { data, error, isLoading } = useGetAllTracksQuery();
-
+  console.log(data);
   const isEmptyList = !isLoading && (!data || data.length === 0);
 
-//   useEffect(() => {
-//     if (path === "/") {
-//       refetch();
-//     }
-//   }, [refetch, error, isLoading, data]);
+  // useEffect(() => {
+  //   const updateData = async () => {
+  //     try {
+  //       await refetch();
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   updateData();
+  //   return () => {
+  //     updateData();
+  //   };
+  // }, [refetch]);
+
   if (isEmptyList) {
     return <p>Плейлист пуст</p>;
   }
 
   if (error) {
+    console.log(error);
+
     return (
-      <S.ErrorText>
-        Не удалось загрузить плейлист: {error.message}
-      </S.ErrorText>
+      <S.ErrorText>Не удалось загрузить плейлист: {error.message}</S.ErrorText>
     );
   }
 
@@ -37,7 +44,7 @@ export const AllTracksComponent = ({ isVisiable }) => {
       title="Треки"
       showFilterTracks={true}
       trackList={data}
-      error={error}
+      //   error={error}
       isLoading={isLoading}
       isAllTracksLiked={false}
     />

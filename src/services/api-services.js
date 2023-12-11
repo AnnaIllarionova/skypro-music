@@ -57,14 +57,9 @@ export const {
 export const allTracksApi = createApi({
   reducerPath: "allTracksApi",
   baseQuery,
-  tagTypes: ["AllTracks"],
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
-      providesTags: (result) =>
-      result
-        ? [...result.map(({ id }) => ({ type: "AllTracks", id })), "AllTracks"]
-        : ["AllTracks"],
     }),
     getSelections: builder.query({
       query: () => "/catalog/selection/",
@@ -75,7 +70,11 @@ export const allTracksApi = createApi({
   }),
 });
 
-export const { useGetAllTracksQuery, useGetSelectionByIdQuery, useGetSelectionsQuery } = allTracksApi;
+export const {
+  useGetAllTracksQuery,
+  useGetSelectionByIdQuery,
+  useGetSelectionsQuery,
+} = allTracksApi;
 
 export const token = createApi({
   reducerPath: "token",
