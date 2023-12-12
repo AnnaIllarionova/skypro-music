@@ -85,5 +85,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 8 часов 20 минут
 
 Фактическое время (RTK Query, добавление треков в мой плейлист, лайки):
-72+30+26+40+60+21+20+43
 22 часов 41 минута
+
+Фактическое время (RTK Query, подборки):
+2 часа 24 минуты

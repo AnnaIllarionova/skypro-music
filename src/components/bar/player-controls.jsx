@@ -23,7 +23,7 @@ export const PlayerControls = ({ togglePlay, isLooped, toggleLoop }) => {
     <S.PlayerControlsItems>
       <S.PlayerBtnPrev onClick={handlePrevTrack}>
         <S.PlayerBtnPrevSvg alt="prev">
-          <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
+          <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
         </S.PlayerBtnPrevSvg>
       </S.PlayerBtnPrev>
       <S.PlayerBtnPlay onClick={togglePlay}>
@@ -31,36 +31,36 @@ export const PlayerControls = ({ togglePlay, isLooped, toggleLoop }) => {
           <use
             xlinkHref={
               isPlaying
-                ? "img/icon/sprite.svg#icon-pause"
-                : "img/icon/sprite.svg#icon-play"
+                ? "/img/icon/sprite.svg#icon-pause"
+                : "/img/icon/sprite.svg#icon-play"
             }
           ></use>
         </S.PlayerBtnPlaySvg>
       </S.PlayerBtnPlay>
       <S.PlayerBtnNext onClick={handleNextTrack}>
         <S.PlayerBtnNextSvg alt="next">
-          <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
+          <use xlinkHref="/img/icon/sprite.svg#icon-next"></use>
         </S.PlayerBtnNextSvg>
       </S.PlayerBtnNext>
       <S.PlayerBtnRepeat onClick={toggleLoop}>
         {isLooped ? (
           <S.PlayerBtnRepeatSvgActive alt="repeat">
-            <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
+            <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
           </S.PlayerBtnRepeatSvgActive>
         ) : (
           <S.PlayerBtnRepeatSvg alt="repeat">
-            <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
+            <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
           </S.PlayerBtnRepeatSvg>
         )}
       </S.PlayerBtnRepeat>
       <S.PlayerBtnShuffle onClick={handleShuffleTracks}>
         {isShuffled ? (
           <S.PlayerBtnShuffleSvgActive>
-            <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
+            <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"></use>
           </S.PlayerBtnShuffleSvgActive>
         ) : (
           <S.PlayerBtnShuffleSvg alt="shuffle">
-            <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
+            <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"></use>
           </S.PlayerBtnShuffleSvg>
         )}
       </S.PlayerBtnShuffle>
@@ -82,8 +82,8 @@ export const CorrectVolume = ({
             <use
               xlinkHref={
                 isMuted
-                  ? "img/icon/sprite.svg#icon-volume-muted"
-                  : "img/icon/sprite.svg#icon-volume"
+                  ? "/img/icon/sprite.svg#icon-volume-muted"
+                  : "/img/icon/sprite.svg#icon-volume"
               }
             ></use>
           </S.VolumeSvg>

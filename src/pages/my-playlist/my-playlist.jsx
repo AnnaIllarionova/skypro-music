@@ -26,10 +26,8 @@ export const MyPlaylist = ({ isVisiable }) => {
   return (
     <TrackListComponent
       isVisiable={isVisiable}
-      title="Мои треки"
-      showFilterTracks={false}
       trackList={data}
-      // error={error}
+      error={error}
       isLoading={isLoading}
       isAllTracksLiked={true}
     />

@@ -20,7 +20,7 @@ import { CurrentUserContext } from "../../routes.jsx";
 export function GetPlaylist({
   isVisiable,
   trackList,
-  // error,
+  error,
   isLoading,
   isAllTracksLiked,
 }) {
@@ -31,7 +31,7 @@ export function GetPlaylist({
         <TracksOfPlaylist
           isVisiable={isVisiable}
           trackList={trackList}
-          // error={error}
+          error={error}
           isLoading={isLoading}
           isAllTracksLiked={isAllTracksLiked}
         />
@@ -43,7 +43,7 @@ export function GetPlaylist({
 export function TracksOfPlaylist({
   isVisiable,
   trackList,
-  // error,
+  error,
   isLoading,
   isAllTracksLiked,
 }) {
@@ -55,7 +55,7 @@ export function TracksOfPlaylist({
         isVisiable={isVisiable}
         track={track}
         trackList={trackList}
-        // error={error}
+        error={error}
         isLoading={isLoading}
         isAllTracksLiked={isAllTracksLiked}
       />
@@ -128,10 +128,10 @@ export const CreateOneTrack = ({
 
   return (
     <S.PlaylistTrack theme={theme} key={track.id}>
-      <S.PlaylistTrackName
+      {/* <S.PlaylistTrackName
         onClick={() => handleChooseTrackClick({ track, id: track.id })}
-      >
-        <S.TrackTitle>
+      > */}
+        <S.TrackTitle onClick={() => handleChooseTrackClick({ track, id: track.id })}>
           <S.TrackTitleImage theme={theme}>
             {isVisiable ? (
               chosenTrack && chosenTrack.id === track.id ? (
@@ -140,7 +140,7 @@ export const CreateOneTrack = ({
                 ></S.CurrentTrackPlayingDot>
               ) : (
                 <S.TrackTitleSvg alt="music">
-                  <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
+                  <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
                 </S.TrackTitleSvg>
               )
             ) : (
@@ -158,7 +158,7 @@ export const CreateOneTrack = ({
             )}
           </S.TrackTitleText>
         </S.TrackTitle>
-        <S.TrackAuthor>
+        <S.TrackAuthor  onClick={() => handleChooseTrackClick({ track, id: track.id })}>
           {isVisiable ? (
             <S.TrackAuthorLink theme={theme} href="#">
               {track.author}
@@ -167,25 +167,25 @@ export const CreateOneTrack = ({
             <SkeletonTrackTitleText />
           )}
         </S.TrackAuthor>
-        <S.TrackAlbum>
+        <S.TrackAlbum onClick={() => handleChooseTrackClick({ track, id: track.id })}>
           {isVisiable ? (
             <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
           ) : (
             <SkeletonTrackTitleText />
           )}
         </S.TrackAlbum>
-      </S.PlaylistTrackName>
+      {/* </S.PlaylistTrackName> */}
 
       <S.TrackTime onClick={() => handleAddOrRemoveLike({ track })}>
         {isVisiable ? (
           <>
             {isLiked || isAllTracksLiked ? (
-              <S.TrackTimeSvgActive alt="time">
-                <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+              <S.TrackTimeSvgActive alt="time" >
+                <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
               </S.TrackTimeSvgActive>
             ) : (
               <S.TrackTimeSvg alt="time">
-                <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+                <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
               </S.TrackTimeSvg>
             )}
 
@@ -209,7 +209,7 @@ export function GetTitleOfPlaylist() {
       <S.PlaylistTitleCol03>АЛЬБОМ</S.PlaylistTitleCol03>
       <S.PlaylistTitleCol04>
         <S.PlaylistTitleSvg alt="time">
-          <use xlinkHref="img/icon/sprite.svg#icon-watch"></use>
+          <use xlinkHref="/img/icon/sprite.svg#icon-watch"></use>
         </S.PlaylistTitleSvg>
       </S.PlaylistTitleCol04>
     </S.ContentTitle>
