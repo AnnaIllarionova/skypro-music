@@ -16,6 +16,7 @@ export const MainPage = ({
   title,
   showFilterTracks,
   showSidebar,
+  setSearchText,
 }) => {
   const { theme } = useThemeContext();
 
@@ -36,10 +37,10 @@ export const MainPage = ({
       <S.Main>
         <Navigation />
         <S.MainCenterblock>
-          <SearchComponent />
+          <SearchComponent setSearchText={setSearchText} />
           <S.MainCenterblockH2 theme={theme}>{title}</S.MainCenterblockH2>
           {showFilterTracks ? <FilterTracks /> : null}
-          <Outlet  />
+          <Outlet />
         </S.MainCenterblock>
         {showSidebar ? <Sidebar isVisiable={isVisiable} /> : null}
       </S.Main>
@@ -55,10 +56,12 @@ export const TrackListComponent = ({
   error,
   isLoading,
   isAllTracksLiked,
+  searchText,
 }) => {
   return (
     <>
       <GetPlaylist
+        searchText={searchText}
         isVisiable={isVisiable}
         trackList={trackList}
         error={error}

@@ -104,6 +104,8 @@ export const AppRoutes = () => {
     }
   }, [location.pathname]);
 
+  const [searchText, setSearchText] = useState("");
+
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
@@ -115,6 +117,7 @@ export const AppRoutes = () => {
                 value={{ theme: currentTheme, toggleTheme }}
               >
                 <MainPage
+                  setSearchText={setSearchText}
                   isVisiable={isVisiable}
                   setIsVisiable={setIsVisiable}
                   showSidebar={showSidebar}
@@ -127,15 +130,24 @@ export const AppRoutes = () => {
         >
           <Route
             path="/"
-            element={<AllTracksComponent isVisiable={isVisiable} />}
+            element={
+              <AllTracksComponent
+                isVisiable={isVisiable}
+                searchText={searchText}
+              />
+            }
           />
           <Route
             path="/myplaylist"
-            element={<MyPlaylist isVisiable={isVisiable} />}
+            element={
+              <MyPlaylist isVisiable={isVisiable} searchText={searchText} />
+            }
           />
           <Route
             path="/categories-of-hits/:id"
-            element={<CategoriesOfHits setTitle={setTitle} />}
+            element={
+              <CategoriesOfHits setTitle={setTitle} searchText={searchText} />
+            }
           />
         </Route>
       </Route>

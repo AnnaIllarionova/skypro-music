@@ -89,3 +89,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Фактическое время (RTK Query, подборки):
 2 часа 24 минуты
+
+Фактическое время (Поиск):
+1 час

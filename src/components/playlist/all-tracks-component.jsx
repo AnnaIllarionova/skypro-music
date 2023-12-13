@@ -2,9 +2,9 @@ import { TrackListComponent } from "../../pages/main-page/main-page";
 import { useGetAllTracksQuery } from "../../services/api-services";
 import * as S from "./playlist.styled";
 
-export const AllTracksComponent = ({ isVisiable }) => {
+export const AllTracksComponent = ({ isVisiable, searchText }) => {
   const { data, error, isLoading } = useGetAllTracksQuery();
-  console.log(data);
+  // console.log(data);
   const isEmptyList = !isLoading && (!data || data.length === 0);
 
   if (isEmptyList) {
@@ -25,6 +25,7 @@ export const AllTracksComponent = ({ isVisiable }) => {
 
   return (
     <TrackListComponent
+      searchText={searchText}
       isVisiable={isVisiable}
       trackList={data}
       isLoading={isLoading}

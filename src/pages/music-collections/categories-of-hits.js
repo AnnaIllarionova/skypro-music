@@ -4,14 +4,14 @@ import { useGetSelectionByIdQuery } from "../../services/api-services";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
 
-export const CategoriesOfHits = ({ setTitle }) => {
+export const CategoriesOfHits = ({ setTitle, searchText }) => {
   const params = useParams();
   const selectionId = parseInt(params.id);
-  console.log("-->", params);
-  console.log(typeof selectionId);
-  console.log(selectionId);
+  // console.log("-->", params);
+  // console.log(typeof selectionId);
+  // console.log(selectionId);
   const category = categories.find((category) => category.id === selectionId);
-  console.log(category);
+  // console.log(category);
 
   setTitle(category.selection_title);
 
@@ -31,6 +31,7 @@ export const CategoriesOfHits = ({ setTitle }) => {
 
   return (
     <TrackListComponent
+      searchText={searchText}
       isVisiable={true}
       trackList={data.items}
       error={error}

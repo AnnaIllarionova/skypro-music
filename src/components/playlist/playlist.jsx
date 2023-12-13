@@ -16,6 +16,7 @@ import {
 } from "../../services/api-services.js";
 import { useContext, useState } from "react";
 import { CurrentUserContext } from "../../routes.jsx";
+import { useEffect } from "react";
 
 export function GetPlaylist({
   isVisiable,
@@ -23,12 +24,14 @@ export function GetPlaylist({
   error,
   isLoading,
   isAllTracksLiked,
+  searchText,
 }) {
   return (
     <S.CenterblockContent>
       <GetTitleOfPlaylist />
       <S.ContentPlaylist>
         <TracksOfPlaylist
+          searchText={searchText}
           isVisiable={isVisiable}
           trackList={trackList}
           error={error}
@@ -41,12 +44,22 @@ export function GetPlaylist({
 }
 
 export function TracksOfPlaylist({
+  searchText,
   isVisiable,
   trackList,
   error,
   isLoading,
   isAllTracksLiked,
 }) {
+  const [filterResults, setFilterResults] = useState([]);
+  const filterTracks =
+    trackList &&
+    trackList.filter((track) =>
+      Object.values(track)
+        .join("")
+        .toLowerCase()
+        .includes(searchText.toLowerCase()),
+    );
   const tracks =
     trackList &&
     trackList.map((track) => (
@@ -60,7 +73,37 @@ export function TracksOfPlaylist({
         isAllTracksLiked={isAllTracksLiked}
       />
     ));
-  return <S.PlaylistItem>{tracks}</S.PlaylistItem>;
+  useEffect(() => {
+    if (searchText !== "") {
+      setFilterResults(filterTracks);
+    } else {
+      setFilterResults(tracks);
+    }
+  }, [searchText]);
+
+  return (
+    <S.PlaylistItem>
+      {searchText.length > 1 ? (
+        filterResults.length > 0 ? (
+          filterResults.map((track) => (
+            <CreateOneTrack
+              key={track.id}
+              isVisiable={isVisiable}
+              track={track}
+              trackList={trackList}
+              error={error}
+              isLoading={isLoading}
+              isAllTracksLiked={isAllTracksLiked}
+            />
+          ))
+        ) : (
+          <p>По вашему запросу ничего не найдено.</p>
+        )
+      ) : (
+        tracks
+      )}
+    </S.PlaylistItem>
+  );
 }
 
 export const CreateOneTrack = ({
@@ -131,56 +174,62 @@ export const CreateOneTrack = ({
       {/* <S.PlaylistTrackName
         onClick={() => handleChooseTrackClick({ track, id: track.id })}
       > */}
-        <S.TrackTitle onClick={() => handleChooseTrackClick({ track, id: track.id })}>
-          <S.TrackTitleImage theme={theme}>
-            {isVisiable ? (
-              chosenTrack && chosenTrack.id === track.id ? (
-                <S.CurrentTrackPlayingDot
-                  isPlaying={isPlaying}
-                ></S.CurrentTrackPlayingDot>
-              ) : (
-                <S.TrackTitleSvg alt="music">
-                  <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
-                </S.TrackTitleSvg>
-              )
-            ) : (
-              <SkeletonTrackImage />
-            )}
-          </S.TrackTitleImage>
-          <S.TrackTitleText>
-            {isVisiable ? (
-              <S.TrackTitleLink theme={theme} href="#">
-                {track.name}
-                <S.TrackTitleSpan></S.TrackTitleSpan>
-              </S.TrackTitleLink>
-            ) : (
-              <SkeletonTrackTitleText />
-            )}
-          </S.TrackTitleText>
-        </S.TrackTitle>
-        <S.TrackAuthor  onClick={() => handleChooseTrackClick({ track, id: track.id })}>
+      <S.TrackTitle
+        onClick={() => handleChooseTrackClick({ track, id: track.id })}
+      >
+        <S.TrackTitleImage theme={theme}>
           {isVisiable ? (
-            <S.TrackAuthorLink theme={theme} href="#">
-              {track.author}
-            </S.TrackAuthorLink>
+            chosenTrack && chosenTrack.id === track.id ? (
+              <S.CurrentTrackPlayingDot
+                isPlaying={isPlaying}
+              ></S.CurrentTrackPlayingDot>
+            ) : (
+              <S.TrackTitleSvg alt="music">
+                <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
+              </S.TrackTitleSvg>
+            )
+          ) : (
+            <SkeletonTrackImage />
+          )}
+        </S.TrackTitleImage>
+        <S.TrackTitleText>
+          {isVisiable ? (
+            <S.TrackTitleLink theme={theme} href="#">
+              {track.name}
+              <S.TrackTitleSpan></S.TrackTitleSpan>
+            </S.TrackTitleLink>
           ) : (
             <SkeletonTrackTitleText />
           )}
-        </S.TrackAuthor>
-        <S.TrackAlbum onClick={() => handleChooseTrackClick({ track, id: track.id })}>
-          {isVisiable ? (
-            <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
-          ) : (
-            <SkeletonTrackTitleText />
-          )}
-        </S.TrackAlbum>
+        </S.TrackTitleText>
+      </S.TrackTitle>
+      <S.TrackAuthor
+        onClick={() => handleChooseTrackClick({ track, id: track.id })}
+      >
+        {isVisiable ? (
+          <S.TrackAuthorLink theme={theme} href="#">
+            {track.author}
+          </S.TrackAuthorLink>
+        ) : (
+          <SkeletonTrackTitleText />
+        )}
+      </S.TrackAuthor>
+      <S.TrackAlbum
+        onClick={() => handleChooseTrackClick({ track, id: track.id })}
+      >
+        {isVisiable ? (
+          <S.TrackAlbumLink href="#">{track.album}</S.TrackAlbumLink>
+        ) : (
+          <SkeletonTrackTitleText />
+        )}
+      </S.TrackAlbum>
       {/* </S.PlaylistTrackName> */}
 
       <S.TrackTime onClick={() => handleAddOrRemoveLike({ track })}>
         {isVisiable ? (
           <>
             {isLiked || isAllTracksLiked ? (
-              <S.TrackTimeSvgActive alt="time" >
+              <S.TrackTimeSvgActive alt="time">
                 <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
               </S.TrackTimeSvgActive>
             ) : (
