@@ -9,6 +9,7 @@ const initialState = {
   showAllTracksAsLiked: false,
   filteredTracklist: [],
   isAuthor: false,
+  isDateOfRelease: false,
 };
 
 export const trackSlice = createSlice({
@@ -18,6 +19,7 @@ export const trackSlice = createSlice({
     chooseCurrentTrack: (state, action) => {
       state.chosenTrack = action.payload.track;
       state.trackList = action.payload.playlist;
+      // console.log(state.trackList);
     },
     playNextTrack: (state) => {
       //в массиве треков найти этот индекс
@@ -60,16 +62,43 @@ export const trackSlice = createSlice({
       state.isPlaying = false;
     },
     getFilteredTracklist: (state, action) => {
-      state.isAuthor = !state.isAuthor;
-      const {author} = action.payload;y
-      state.filteredTracklist = state.trackList.filter(
-        (track) => track.author === author,
-      );
+      const { author } = action.payload;
+      state.trackList = action.payload.playlist;
 
+      if (!state.isAuthor) {
+        state.isAuthor = true;
+        state.filteredTracklist = state.trackList.filter(
+          (track) => track.author === author,
+        );
+      } else {
+        state.isAuthor = false;
+        state.filteredTracklist = state.trackList;
+      }
       console.log(author);
       console.log(state.isAuthor);
       console.log(state.filteredTracklist);
       console.log(state.trackList);
+    },
+    getSortedTracklistOldNew: (state, action) => {
+      state.isDateOfRelease = true;
+      state.trackList = action.payload.playlist;
+      state.filteredTracklist = [...state.trackList].slice().sort(
+        (a, b) => new Date(a.release_date) - new Date(b.release_date),
+      );
+      // console.log(state.filteredTracklist);
+    },
+    getSortedTracklistNewOld: (state, action) => {
+      state.isDateOfRelease = true;
+      state.trackList = action.payload.playlist;
+      state.filteredTracklist = [...state.trackList].slice().sort(
+        (a, b) => new Date(b.release_date) - new Date(a.release_date),
+      );
+      // console.log(state.filteredTracklist);
+    },
+    getSortedTracklistDefault: (state) => {
+      state.isDateOfRelease = true;
+      state.filteredTracklist = state.trackList;
+      // console.log(state.filteredTracklist);
     },
   },
 });
@@ -82,5 +111,8 @@ export const {
   playTrack,
   pauseTrack,
   getFilteredTracklist,
+  getSortedTracklistOldNew,
+  getSortedTracklistNewOld,
+  getSortedTracklistDefault,
 } = trackSlice.actions;
 export default trackSlice.reducer;

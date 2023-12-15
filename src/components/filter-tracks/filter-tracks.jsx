@@ -3,7 +3,12 @@ import * as S from "./fitter-tracks.styled";
 import { useThemeContext } from "../context/theme-context";
 import { useGetAllTracksQuery } from "../../services/api-services";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilteredTracklist } from "../../store/slices/slices";
+import {
+  getFilteredTracklist,
+  getSortedTracklistDefault,
+  getSortedTracklistNewOld,
+  getSortedTracklistOldNew,
+} from "../../store/slices/slices";
 
 export function FilterTracks() {
   const { theme } = useThemeContext();
@@ -73,10 +78,12 @@ function ListOfAuthors() {
   const { data: trackList } = useGetAllTracksQuery();
   const dispatch = useDispatch();
   const isAuthor = useSelector((state) => state.track.isAuthor);
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
 
   const handleFilter = ({ author }) => {
-    dispatch(getFilteredTracklist({ author }));
+    dispatch(getFilteredTracklist({ author, playlist: trackList }));
     console.log(author);
+    setSelectedAuthor(author);
   };
 
   trackList.forEach((track) => {
@@ -90,6 +97,7 @@ function ListOfAuthors() {
       theme={theme}
       key={author}
       isAuthor={isAuthor}
+      isAuthorSelected = {selectedAuthor === author}
       onClick={() => handleFilter({ author })}
     >
       {author}
@@ -107,32 +115,63 @@ function ListOfAuthors() {
 
 function ListOfYears({ theme }) {
   const { data: trackList } = useGetAllTracksQuery();
-  const dates = [];
-  trackList.forEach((track) => {
-    if (track.release_date !== null) {
-      dates.push(track.release_date);
+  const dispatch = useDispatch();
+  const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
+  const [selectedFilter, setSelectedFilter] = useState("По умолчанию");
+
+  // const dates = [];
+  // trackList.forEach((track) => {
+  //   if (track.release_date !== null) {
+  //     dates.push(track.release_date);
+  //   }
+  // });
+  // const splitDates = dates.map((date) => date.split("-"));
+  // const years = splitDates.map((date) => date[0]);
+  // const fullYears = [];
+  // years.forEach((year) => {
+  //   if (!fullYears.includes(year)) {
+  //     fullYears.push(year);
+  //   }
+  // });
+  // const datesOfRelease = fullYears.map((year) => (
+  //   <S.FilterBoxLinksItem theme={theme} key={year}>
+  //     {year}
+  //   </S.FilterBoxLinksItem>
+  // ));
+
+  // const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
+  //   a.key > b.key ? 1 : -1,
+  // );
+  const filters = ["По умолчанию", "Сначала новые", "Сначала старые"];
+
+  const handleFilterByReleaseDate = ({ filter }) => {
+  
+    if (filter === "Сначала старые") {
+      dispatch(getSortedTracklistOldNew({ playlist: trackList }));
     }
-  });
-  const splitDates = dates.map((date) => date.split("-"));
-  const years = splitDates.map((date) => date[0]);
-  const fullYears = [];
-  years.forEach((year) => {
-    if (!fullYears.includes(year)) {
-      fullYears.push(year);
+    if (filter === "Сначала новые") {
+      dispatch(getSortedTracklistNewOld({ playlist: trackList }));
     }
-  });
-  const datesOfRelease = fullYears.map((year) => (
-    <S.FilterBoxLinksItem theme={theme} key={year}>
-      {year}
+    if (filter === "По умолчанию") {
+      dispatch(getSortedTracklistDefault({ playlist: trackList }));
+    }
+    setSelectedFilter(filter);
+  };
+
+  const filtersByDate = filters.map((filter) => (
+    <S.FilterBoxLinksItem
+      theme={theme}
+      key={filter}
+      onClick={() => handleFilterByReleaseDate({ filter })}
+      isDateOfRelease={isDateOfRelease}
+      isSelected={selectedFilter === filter}
+    >
+      {filter}
     </S.FilterBoxLinksItem>
   ));
-
-  const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
-    a.key > b.key ? 1 : -1,
-  );
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks>{sortDatesOfRelease}</S.FilterBoxLinks>
+      <S.FilterBoxLinks>{filtersByDate}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }
