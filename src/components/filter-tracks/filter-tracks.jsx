@@ -1,8 +1,9 @@
 import { useState } from "react";
 import * as S from "./fitter-tracks.styled";
 import { useThemeContext } from "../context/theme-context";
+import { useGetAllTracksQuery } from "../../services/api-services";
 
-export function FilterTracks({ apiTracks }) {
+export function FilterTracks() {
   const { theme } = useThemeContext();
   const [isAuthorClicked, setIsAuthorClicked] = useState(false);
   const [isYearClicked, setIsYearClicked] = useState(false);
@@ -37,7 +38,7 @@ export function FilterTracks({ apiTracks }) {
         >
           исполнителю
         </S.FilterButton>
-        {isAuthorClicked && <ListOfAuthors apiTracks={apiTracks} />}
+        {isAuthorClicked && <ListOfAuthors />}
       </div>
       <div className="filter__list">
         <S.FilterButton
@@ -47,7 +48,7 @@ export function FilterTracks({ apiTracks }) {
         >
           году выпуска
         </S.FilterButton>
-        {isYearClicked && <ListOfYears theme={theme} apiTracks={apiTracks} />}
+        {isYearClicked && <ListOfYears theme={theme} />}
       </div>
 
       <div className="filter__list">
@@ -58,17 +59,18 @@ export function FilterTracks({ apiTracks }) {
         >
           жанру
         </S.FilterButton>
-        {isGenreClicked && <ListOfGenre theme={theme} apiTracks={apiTracks} />}
+        {isGenreClicked && <ListOfGenre theme={theme} />}
       </div>
     </S.CenterblockFilter>
   );
 }
 
-function ListOfAuthors({ apiTracks }) {
+function ListOfAuthors() {
   const { theme } = useThemeContext();
   const authors = [];
+  const { data: trackList } = useGetAllTracksQuery();
 
-  apiTracks.forEach((track) => {
+  trackList.forEach((track) => {
     if (!authors.includes(track.author)) {
       authors.push(track.author);
     }
@@ -89,9 +91,10 @@ function ListOfAuthors({ apiTracks }) {
   );
 }
 
-function ListOfYears({ theme, apiTracks }) {
+function ListOfYears({ theme }) {
+  const { data: trackList } = useGetAllTracksQuery();
   const dates = [];
-  apiTracks.forEach((track) => {
+  trackList.forEach((track) => {
     if (track.release_date !== null) {
       dates.push(track.release_date);
     }
@@ -120,9 +123,10 @@ function ListOfYears({ theme, apiTracks }) {
   );
 }
 
-function ListOfGenre({ theme, apiTracks }) {
+function ListOfGenre({ theme }) {
+  const { data: trackList } = useGetAllTracksQuery();
   const genres = [];
-  apiTracks.forEach((track) => {
+  trackList.forEach((track) => {
     if (!genres.includes(track.genre)) {
       genres.push(track.genre);
     }

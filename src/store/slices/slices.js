@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  //массив самих треков?
   trackList: [],
   chosenTrack: null,
   isPlaying: false,
   isShuffled: false,
   shuffledTrackList: [],
+  showAllTracksAsLiked: false,
 };
 
 export const trackSlice = createSlice({
@@ -69,5 +69,3 @@ export const {
   pauseTrack,
 } = trackSlice.actions;
 export default trackSlice.reducer;
-
-// const { data: apiTracks, error, isLoading } = useGetMainPlaylistQuery()

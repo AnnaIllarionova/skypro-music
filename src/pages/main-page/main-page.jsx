@@ -5,11 +5,12 @@ import { SearchComponent } from "../../components/search/search.jsx";
 import { FilterTracks } from "../../components/filter-tracks/filter-tracks.jsx";
 import { GetPlaylist } from "../../components/playlist/playlist.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useThemeContext } from "../../components/context/theme-context.jsx";
 import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 
-export const MainPage = ({ apiTracks, addTracksGottenError }) => {
+export const MainPage = ({ isVisiable, setIsVisiable }) => {
   const { theme } = useThemeContext();
 
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
@@ -18,7 +19,6 @@ export const MainPage = ({ apiTracks, addTracksGottenError }) => {
     console.log(chosenTrack);
   }, [chosenTrack]);
 
-  const [isVisiable, setIsVisiable] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setIsVisiable(true);
@@ -31,13 +31,7 @@ export const MainPage = ({ apiTracks, addTracksGottenError }) => {
         <Navigation />
         <S.MainCenterblock>
           <SearchComponent />
-          <S.MainCenterblockH2 theme={theme}>Треки</S.MainCenterblockH2>
-          <FilterTracks apiTracks={apiTracks} />
-          <GetPlaylist
-            apiTracks={apiTracks}
-            addTracksGottenError={addTracksGottenError}
-            isVisiable={isVisiable}
-          />
+          <Outlet />
         </S.MainCenterblock>
         <Sidebar isVisiable={isVisiable} />
       </S.Main>
@@ -45,5 +39,31 @@ export const MainPage = ({ apiTracks, addTracksGottenError }) => {
 
       <footer className="footer"></footer>
     </S.Container>
+  );
+};
+
+export const TrackListComponent = ({
+  isVisiable,
+  title,
+  showFilterTracks,
+  trackList,
+  error,
+  isLoading,
+  isAllTracksLiked,
+}) => {
+  const { theme } = useThemeContext();
+
+  return (
+    <>
+      <S.MainCenterblockH2 theme={theme}>{title}</S.MainCenterblockH2>
+      {showFilterTracks ? <FilterTracks /> : null}
+      <GetPlaylist
+        isVisiable={isVisiable}
+        trackList={trackList}
+        error={error}
+        isLoading={isLoading}
+        isAllTracksLiked={isAllTracksLiked}
+      />
+    </>
   );
 };

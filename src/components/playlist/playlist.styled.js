@@ -1,4 +1,4 @@
-import styled, {css, keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 export const CenterblockContent = styled.div`
   display: -webkit-box;
@@ -47,10 +47,19 @@ export const PlaylistTrack = styled.div`
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  column-gap: 6px;
 
   &:hover {
     background-color: ${(props) => props.theme.backgroundColor};
   }
+`;
+
+export const PlaylistTrackName = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 6px;
 `;
 
 export const TrackTitle = styled.div`
@@ -108,7 +117,11 @@ export const CurrentTrackPlayingDot = styled.div`
   border-radius: 8px;
   display: block;
   animation: ${(props) =>
-    props.isPlaying ? css`${bubble_out} 0.6s ease-in-out infinite both` : null};
+    props.isPlaying
+      ? css`
+          ${bubble_out} 0.6s ease-in-out infinite both
+        `
+      : null};
 `;
 
 export const TrackTitleText = styled.div`
@@ -177,6 +190,15 @@ export const TrackTimeSvg = styled.svg`
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
+`;
+
+export const TrackTimeSvgActive = styled.svg`
+  width: 14px;
+  height: 12px;
+  margin-right: 17px;
+  fill: #b672ff;
+  stroke-width: 1px;
+  stroke: #b672ff;
 `;
 
 export const TrackTimeText = styled.span`
