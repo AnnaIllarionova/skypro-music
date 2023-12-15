@@ -57,10 +57,12 @@ export const TrackListComponent = ({
   isLoading,
   isAllTracksLiked,
   searchText,
+
 }) => {
   return (
     <>
       <GetPlaylist
+     
         searchText={searchText}
         isVisiable={isVisiable}
         trackList={trackList}

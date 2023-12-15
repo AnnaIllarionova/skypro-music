@@ -52,6 +52,11 @@ export function TracksOfPlaylist({
   isAllTracksLiked,
 }) {
   const [filterResults, setFilterResults] = useState([]);
+  const isAuthor = useSelector((state) => state.track.isAuthor);
+  const filteredTracklist = useSelector(
+    (state) => state.track.filteredTracklist,
+  );
+
   const filterTracks =
     trackList &&
     trackList.filter((track) =>
@@ -99,6 +104,18 @@ export function TracksOfPlaylist({
         ) : (
           <p>По вашему запросу ничего не найдено.</p>
         )
+      ) : isAuthor ? (
+        filteredTracklist.map((track) => (
+          <CreateOneTrack
+              key={track.id}
+              isVisiable={isVisiable}
+              track={track}
+              trackList={trackList}
+              error={error}
+              isLoading={isLoading}
+              isAllTracksLiked={isAllTracksLiked}
+            />
+        ))
       ) : (
         tracks
       )}

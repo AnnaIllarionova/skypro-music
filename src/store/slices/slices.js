@@ -7,6 +7,8 @@ const initialState = {
   isShuffled: false,
   shuffledTrackList: [],
   showAllTracksAsLiked: false,
+  filteredTracklist: [],
+  isAuthor: false,
 };
 
 export const trackSlice = createSlice({
@@ -57,6 +59,18 @@ export const trackSlice = createSlice({
     pauseTrack: (state) => {
       state.isPlaying = false;
     },
+    getFilteredTracklist: (state, action) => {
+      state.isAuthor = !state.isAuthor;
+      const {author} = action.payload;y
+      state.filteredTracklist = state.trackList.filter(
+        (track) => track.author === author,
+      );
+
+      console.log(author);
+      console.log(state.isAuthor);
+      console.log(state.filteredTracklist);
+      console.log(state.trackList);
+    },
   },
 });
 
@@ -67,5 +81,6 @@ export const {
   getShuffledTrackList,
   playTrack,
   pauseTrack,
+  getFilteredTracklist,
 } = trackSlice.actions;
 export default trackSlice.reducer;

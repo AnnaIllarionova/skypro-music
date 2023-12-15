@@ -134,13 +134,13 @@ export const AppRoutes = () => {
               <AllTracksComponent
                 isVisiable={isVisiable}
                 searchText={searchText}
-              />
+               />
             }
           />
           <Route
             path="/myplaylist"
             element={
-              <MyPlaylist isVisiable={isVisiable} searchText={searchText} />
+              <MyPlaylist isVisiable={isVisiable} searchText={searchText}  />
             }
           />
           <Route

@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { useThemeContext } from "../context/theme-context";
 import * as S from "./search.styled";
 

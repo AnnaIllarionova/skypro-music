@@ -83,12 +83,13 @@ export const FilterBoxLinks = styled.div`
 `;
 
 export const FilterBoxLinksItem = styled.a`
-  color: ${(props) => props.theme.color};
+  // color: ${(props) => props.theme.color};
   font-variant-numeric: lining-nums proportional-nums;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
+  color: ${(props) => (props.isAuthor ? "#b672ff" : props.theme.color)};
   &:hover {
     color: #b672ff;
     text-decoration-line: underline;

@@ -2,6 +2,8 @@ import { useState } from "react";
 import * as S from "./fitter-tracks.styled";
 import { useThemeContext } from "../context/theme-context";
 import { useGetAllTracksQuery } from "../../services/api-services";
+import { useDispatch, useSelector } from "react-redux";
+import { getFilteredTracklist } from "../../store/slices/slices";
 
 export function FilterTracks() {
   const { theme } = useThemeContext();
@@ -69,6 +71,13 @@ function ListOfAuthors() {
   const { theme } = useThemeContext();
   const authors = [];
   const { data: trackList } = useGetAllTracksQuery();
+  const dispatch = useDispatch();
+  const isAuthor = useSelector((state) => state.track.isAuthor);
+
+  const handleFilter = ({ author }) => {
+    dispatch(getFilteredTracklist({ author }));
+    console.log(author);
+  };
 
   trackList.forEach((track) => {
     if (!authors.includes(track.author)) {
@@ -77,7 +86,12 @@ function ListOfAuthors() {
   });
 
   const authorsList = authors.map((author) => (
-    <S.FilterBoxLinksItem theme={theme} key={author}>
+    <S.FilterBoxLinksItem
+      theme={theme}
+      key={author}
+      isAuthor={isAuthor}
+      onClick={() => handleFilter({ author })}
+    >
       {author}
     </S.FilterBoxLinksItem>
   ));
