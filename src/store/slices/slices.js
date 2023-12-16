@@ -10,6 +10,11 @@ const initialState = {
   filteredTracklist: [],
   isAuthor: false,
   isDateOfRelease: false,
+  authorsFilter: [],
+  selectedAuthorsFilter: [],
+
+  genreFilter: [],
+
 };
 
 export const trackSlice = createSlice({
@@ -67,8 +72,10 @@ export const trackSlice = createSlice({
 
       if (!state.isAuthor) {
         state.isAuthor = true;
+  
         state.filteredTracklist = state.trackList.filter(
           (track) => track.author === author,
+    
         );
       } else {
         state.isAuthor = false;
@@ -78,6 +85,12 @@ export const trackSlice = createSlice({
       console.log(state.isAuthor);
       console.log(state.filteredTracklist);
       console.log(state.trackList);
+    },
+    setAuthorsFilter:(state, action) => {
+      state.authorsFilter.push(action.payload)
+    },
+    setAuthorsFilterArr:(state, action) => {
+       state.selectedAuthorsFilter.push(action.payload)
     },
     getSortedTracklistOldNew: (state, action) => {
       state.isDateOfRelease = true;
@@ -114,5 +127,7 @@ export const {
   getSortedTracklistOldNew,
   getSortedTracklistNewOld,
   getSortedTracklistDefault,
+  setAuthorsFilter,
+  setAuthorsFilterArr,
 } = trackSlice.actions;
 export default trackSlice.reducer;

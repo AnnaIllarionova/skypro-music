@@ -8,6 +8,8 @@ import {
   getSortedTracklistDefault,
   getSortedTracklistNewOld,
   getSortedTracklistOldNew,
+  setAuthorsFilter,
+  setAuthorsFilterArr,
 } from "../../store/slices/slices";
 
 export function FilterTracks() {
@@ -74,35 +76,42 @@ export function FilterTracks() {
 
 function ListOfAuthors() {
   const { theme } = useThemeContext();
-  const authors = [];
+  // const authors = [];
   const { data: trackList } = useGetAllTracksQuery();
   const dispatch = useDispatch();
   const isAuthor = useSelector((state) => state.track.isAuthor);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const authorsFilter = useSelector((state) => state.track.authorsFilter);
 
   const handleFilter = ({ author }) => {
     dispatch(getFilteredTracklist({ author, playlist: trackList }));
     console.log(author);
     setSelectedAuthor(author);
+    dispatch(setAuthorsFilterArr(author));
   };
 
   trackList.forEach((track) => {
-    if (!authors.includes(track.author)) {
-      authors.push(track.author);
-    }
+    // if (!authorsFilter.includes(track.author)) {
+    dispatch(setAuthorsFilter(track.author));
+    // }
   });
 
-  const authorsList = authors.map((author) => (
-    <S.FilterBoxLinksItem
-      theme={theme}
-      key={author}
-      isAuthor={isAuthor}
-      isAuthorSelected = {selectedAuthor === author}
-      onClick={() => handleFilter({ author })}
-    >
-      {author}
-    </S.FilterBoxLinksItem>
-  ));
+  console.log(authorsFilter);
+  const authorsList = authorsFilter
+    .filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    })
+    .map((author) => (
+      <S.FilterBoxLinksItem
+        theme={theme}
+        key={author}
+        isAuthor={isAuthor}
+        isAuthorSelected={selectedAuthor === author}
+        onClick={() => handleFilter({ author })}
+      >
+        {author}
+      </S.FilterBoxLinksItem>
+    ));
 
   const sortAuthorsList = authorsList.sort((a, b) => (a.key > b.key ? 1 : -1));
 
@@ -117,7 +126,7 @@ function ListOfYears({ theme }) {
   const { data: trackList } = useGetAllTracksQuery();
   const dispatch = useDispatch();
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
-  const [selectedFilter, setSelectedFilter] = useState("По умолчанию");
+  const [selectedFilter, setSelectedFilter] = useState(null);
 
   // const dates = [];
   // trackList.forEach((track) => {
@@ -145,7 +154,6 @@ function ListOfYears({ theme }) {
   const filters = ["По умолчанию", "Сначала новые", "Сначала старые"];
 
   const handleFilterByReleaseDate = ({ filter }) => {
-  
     if (filter === "Сначала старые") {
       dispatch(getSortedTracklistOldNew({ playlist: trackList }));
     }
