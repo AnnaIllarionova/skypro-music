@@ -105,7 +105,7 @@ export function TracksOfPlaylist({
         ) : (
           <p>По вашему запросу ничего не найдено.</p>
         )
-      ) : isAuthor || isDateOfRelease ? (
+      ) :  (isAuthor || isDateOfRelease) ? (
         filteredTracklist.map((track) => (
           <CreateOneTrack
             key={track.id}

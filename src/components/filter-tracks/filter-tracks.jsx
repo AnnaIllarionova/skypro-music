@@ -11,6 +11,7 @@ import {
   setAuthorsFilter,
   setAuthorsFilterArr,
 } from "../../store/slices/slices";
+import { useEffect } from "react";
 
 export function FilterTracks() {
   const { theme } = useThemeContext();
@@ -76,27 +77,31 @@ export function FilterTracks() {
 
 function ListOfAuthors() {
   const { theme } = useThemeContext();
-  // const authors = [];
   const { data: trackList } = useGetAllTracksQuery();
   const dispatch = useDispatch();
   const isAuthor = useSelector((state) => state.track.isAuthor);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const authorsFilter = useSelector((state) => state.track.authorsFilter);
+  const selectedAuthorsFilter = useSelector(
+    (state) => state.track.selectedAuthorsFilter,
+  );
 
   const handleFilter = ({ author }) => {
     dispatch(getFilteredTracklist({ author, playlist: trackList }));
     console.log(author);
-    setSelectedAuthor(author);
-    dispatch(setAuthorsFilterArr(author));
+    if (selectedAuthorsFilter.includes(author)) {
+      setSelectedAuthor(author);
+    }
+
+    dispatch(setAuthorsFilterArr({ author }));
   };
 
-  trackList.forEach((track) => {
-    // if (!authorsFilter.includes(track.author)) {
-    dispatch(setAuthorsFilter(track.author));
-    // }
-  });
+  useEffect(() => {
+    trackList.forEach((track) => {
+      dispatch(setAuthorsFilter(track.author));
+    });
+  }, []);
 
-  console.log(authorsFilter);
   const authorsList = authorsFilter
     .filter((value, index, self) => {
       return self.indexOf(value) === index;
