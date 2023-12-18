@@ -12,8 +12,9 @@ const initialState = {
   isDateOfRelease: false,
   authorsFilter: [],
   selectedAuthorsFilter: [],
-
+  isGenre: false,
   genreFilter: [],
+  selectedGenreFilter: [],
 };
 
 export const trackSlice = createSlice({
@@ -65,44 +66,64 @@ export const trackSlice = createSlice({
     pauseTrack: (state) => {
       state.isPlaying = false;
     },
-    setAuthorsFilterArr: (state, action) => {
-      const { author } = action.payload;
-      if (!state.selectedAuthorsFilter.includes(author)) {
-        state.selectedAuthorsFilter = [...state.selectedAuthorsFilter, author];
-      } else {
-        state.selectedAuthorsFilter = state.selectedAuthorsFilter.filter(
-          (selectedAuthor) => selectedAuthor !== author,
-        );
-      }
-      console.log(state.selectedAuthorsFilter);
-    },
     getFilteredTracklist: (state, action) => {
-      // const { author } = action.payload;
       state.trackList = action.payload.playlist;
 
       if (state.selectedAuthorsFilter.length > 0) {
         state.isAuthor = true;
 
         state.filteredTracklist = state.trackList.filter((track) =>
-          state.selectedAuthorsFilter.every((author) =>
-            track.author.includes(author),
-          ),
+          state.selectedAuthorsFilter.includes(track.author),
         );
       } else {
         state.isAuthor = false;
         state.filteredTracklist = state.trackList;
       }
-      // console.log(author);
-      console.log(state.selectedAuthorsFilter.length );
-      console.log(state.isAuthor);
-      console.log(state.filteredTracklist);
-      console.log(state.trackList);
-      console.log(state.selectedAuthorsFilter);
+
+      // console.log(state.selectedAuthorsFilter.length);
+      // console.log(state.isAuthor);
+      // console.log(state.filteredTracklist);
+      // console.log(state.trackList);
+      // console.log(state.selectedAuthorsFilter);
     },
     setAuthorsFilter: (state, action) => {
-      state.authorsFilter.push(action.payload);
+      state.authorsFilter = action.payload;
+      // console.log(state.authorsFilter);
     },
-   
+    setAuthorsFilterArr: (state, action) => {
+      state.selectedAuthorsFilter.push(action.payload);
+    },
+    removeAuthorsFilterArr: (state, action) => {
+      state.selectedAuthorsFilter = state.selectedAuthorsFilter.filter(
+        (author) => author !== action.payload,
+      );
+    },
+    getFilteredTracklistByGenre: (state, action) => {
+      state.trackList = action.payload.playlist;
+      if (state.selectedGenreFilter.length > 0) {
+        state.isGenre = true;
+        state.filteredTracklist = state.trackList.filter((track) =>
+          state.selectedGenreFilter.includes(track.genre),
+        );
+      } else {
+        state.isGenre = false;
+        state.filteredTracklist = state.trackList;
+      }
+      console.log(state.selectedGenreFilter);
+      console.log(state.filteredTracklist);
+    },
+    setGenreFilter: (state, action) => {
+      state.genreFilter = action.payload;
+      // console.log(action.payload);
+    },
+    setGenreFilterArr: (state, action) => {
+      state.selectedGenreFilter.push(action.payload);
+    },
+    removeGenreFilterArr: (state, action) => {
+      state.selectedGenreFilter = state.selectedGenreFilter.filter(
+        (genre) => genre !== action.payload,
+      );
+    },
     getSortedTracklistOldNew: (state, action) => {
       state.isDateOfRelease = true;
       state.trackList = action.payload.playlist;
@@ -140,5 +161,10 @@ export const {
   getSortedTracklistDefault,
   setAuthorsFilter,
   setAuthorsFilterArr,
+  removeAuthorsFilterArr,
+  setGenreFilter,
+  setGenreFilterArr,
+  removeGenreFilterArr,
+  getFilteredTracklistByGenre,
 } = trackSlice.actions;
 export default trackSlice.reducer;

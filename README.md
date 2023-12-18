@@ -92,3 +92,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Фактическое время (Поиск):
 1 час
+
+Фактическое время (сортировка по дате выпуска, фильтрация по авторам и жанрам):
+12 часов 

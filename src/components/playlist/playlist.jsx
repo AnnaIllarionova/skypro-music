@@ -54,6 +54,7 @@ export function TracksOfPlaylist({
   const [filterResults, setFilterResults] = useState([]);
   const isAuthor = useSelector((state) => state.track.isAuthor);
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
+  const isGenre = useSelector(state => state.track.isGenre)
   const filteredTracklist = useSelector(
     (state) => state.track.filteredTracklist,
   );
@@ -105,7 +106,7 @@ export function TracksOfPlaylist({
         ) : (
           <p>По вашему запросу ничего не найдено.</p>
         )
-      ) :  (isAuthor || isDateOfRelease) ? (
+      ) :  (isAuthor || isGenre || isDateOfRelease) ? (
         filteredTracklist.map((track) => (
           <CreateOneTrack
             key={track.id}

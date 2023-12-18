@@ -5,11 +5,16 @@ import { useGetAllTracksQuery } from "../../services/api-services";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFilteredTracklist,
+  getFilteredTracklistByGenre,
   getSortedTracklistDefault,
   getSortedTracklistNewOld,
   getSortedTracklistOldNew,
+  removeAuthorsFilterArr,
+  removeGenreFilterArr,
   setAuthorsFilter,
   setAuthorsFilterArr,
+  setGenreFilter,
+  setGenreFilterArr,
 } from "../../store/slices/slices";
 import { useEffect } from "react";
 
@@ -18,6 +23,25 @@ export function FilterTracks() {
   const [isAuthorClicked, setIsAuthorClicked] = useState(false);
   const [isYearClicked, setIsYearClicked] = useState(false);
   const [isGenreClicked, setIsGenreClicked] = useState(false);
+  const dispatch = useDispatch();
+  const { data: trackList, isLoading } = useGetAllTracksQuery();
+  const selectedAuthorsFilter = useSelector(
+    (state) => state.track.selectedAuthorsFilter,
+  );
+  const selectedGenreFilter = useSelector(
+    (state) => state.track.selectedGenreFilter,
+  );
+  const authors = !isLoading
+    ? [...new Set(trackList.map((track) => track.author))]
+    : [];
+
+  const genres = !isLoading
+    ? [...new Set(trackList.map((track) => track.genre))]
+    : [];
+  useEffect(() => {
+    dispatch(setAuthorsFilter(authors));
+    dispatch(setGenreFilter(genres));
+  }, [trackList]);
 
   function handleIsAuthorClicked() {
     setIsAuthorClicked(!isAuthorClicked);
@@ -40,7 +64,13 @@ export function FilterTracks() {
   return (
     <S.CenterblockFilter>
       <S.FilterTitle theme={theme}>Искать по:</S.FilterTitle>
-      <div className="filter__list">
+      <S.FilterList>
+        {selectedAuthorsFilter.length > 0 ? (
+          <S.FilterButtonNumber>
+            {selectedAuthorsFilter.length}
+          </S.FilterButtonNumber>
+        ) : null}
+
         <S.FilterButton
           theme={theme}
           onClick={handleIsAuthorClicked}
@@ -48,9 +78,16 @@ export function FilterTracks() {
         >
           исполнителю
         </S.FilterButton>
-        {isAuthorClicked && <ListOfAuthors />}
-      </div>
-      <div className="filter__list">
+
+        {isAuthorClicked && (
+          <ListOfAuthors
+            theme={theme}
+            selectedAuthorsFilter={selectedAuthorsFilter}
+            tracksData={isLoading ? ["Загрузка треков..."] : [...trackList]}
+          />
+        )}
+      </S.FilterList>
+      <S.FilterList>
         <S.FilterButton
           theme={theme}
           onClick={handleIsYearClicked}
@@ -59,9 +96,14 @@ export function FilterTracks() {
           году выпуска
         </S.FilterButton>
         {isYearClicked && <ListOfYears theme={theme} />}
-      </div>
+      </S.FilterList>
 
-      <div className="filter__list">
+      <S.FilterList>
+        {selectedGenreFilter.length > 0 ? (
+          <S.FilterButtonNumber>
+            {selectedGenreFilter.length}
+          </S.FilterButtonNumber>
+        ) : null}
         <S.FilterButton
           theme={theme}
           onClick={handleIsGenreClicked}
@@ -69,39 +111,39 @@ export function FilterTracks() {
         >
           жанру
         </S.FilterButton>
-        {isGenreClicked && <ListOfGenre theme={theme} />}
-      </div>
+        {isGenreClicked && (
+          <ListOfGenre
+            selectedGenreFilter={selectedGenreFilter}
+            theme={theme}
+            tracksData={isLoading ? ["Загрузка треков..."] : [...trackList]}
+          />
+        )}
+      </S.FilterList>
     </S.CenterblockFilter>
   );
 }
 
-function ListOfAuthors() {
+function ListOfAuthors({ tracksData, selectedAuthorsFilter }) {
   const { theme } = useThemeContext();
-  const { data: trackList } = useGetAllTracksQuery();
+
   const dispatch = useDispatch();
   const isAuthor = useSelector((state) => state.track.isAuthor);
-  const [selectedAuthor, setSelectedAuthor] = useState(null);
   const authorsFilter = useSelector((state) => state.track.authorsFilter);
-  const selectedAuthorsFilter = useSelector(
-    (state) => state.track.selectedAuthorsFilter,
-  );
 
   const handleFilter = ({ author }) => {
-    dispatch(getFilteredTracklist({ author, playlist: trackList }));
-    console.log(author);
     if (selectedAuthorsFilter.includes(author)) {
-      setSelectedAuthor(author);
+      dispatch(removeAuthorsFilterArr(author));
+    } else {
+      dispatch(setAuthorsFilterArr(author));
     }
-
-    dispatch(setAuthorsFilterArr({ author }));
+    dispatch(
+      getFilteredTracklist({
+        author: selectedAuthorsFilter,
+        playlist: tracksData,
+      }),
+    );
   };
-
-  useEffect(() => {
-    trackList.forEach((track) => {
-      dispatch(setAuthorsFilter(track.author));
-    });
-  }, []);
-
+  // console.log(selectedAuthorsFilter.length);
   const authorsList = authorsFilter
     .filter((value, index, self) => {
       return self.indexOf(value) === index;
@@ -111,7 +153,7 @@ function ListOfAuthors() {
         theme={theme}
         key={author}
         isAuthor={isAuthor}
-        isAuthorSelected={selectedAuthor === author}
+        isAuthorSelected={selectedAuthorsFilter.includes(author)}
         onClick={() => handleFilter({ author })}
       >
         {author}
@@ -189,19 +231,40 @@ function ListOfYears({ theme }) {
   );
 }
 
-function ListOfGenre({ theme }) {
-  const { data: trackList } = useGetAllTracksQuery();
-  const genres = [];
-  trackList.forEach((track) => {
-    if (!genres.includes(track.genre)) {
-      genres.push(track.genre);
+function ListOfGenre({ theme, tracksData, selectedGenreFilter }) {
+  const genreFilter = useSelector((state) => state.track.genreFilter);
+  const isGenre = useSelector((state) => state.track.isGenre);
+  const dispatch = useDispatch();
+
+  const handleGenreFilter = ({ genre }) => {
+    if (selectedGenreFilter.includes(genre)) {
+      dispatch(removeGenreFilterArr(genre));
+    } else {
+      dispatch(setGenreFilterArr(genre));
     }
-  });
-  const listOfGenres = genres.map((genre) => (
-    <S.FilterBoxLinksItem theme={theme} key={genre}>
-      {genre}
-    </S.FilterBoxLinksItem>
-  ));
+    dispatch(
+      getFilteredTracklistByGenre({
+        genre: selectedGenreFilter,
+        playlist: tracksData,
+      }),
+    );
+  };
+  console.log(selectedGenreFilter);
+  const listOfGenres = genreFilter
+    .filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    })
+    .map((genre) => (
+      <S.FilterBoxLinksItem
+        onClick={() => handleGenreFilter({ genre })}
+        isGenre={isGenre}
+        isGenreSelected={selectedGenreFilter.includes(genre)}
+        theme={theme}
+        key={genre}
+      >
+        {genre}
+      </S.FilterBoxLinksItem>
+    ));
 
   return (
     <S.FilterBox theme={theme}>
