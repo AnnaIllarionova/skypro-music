@@ -23,6 +23,7 @@ export function FilterTracks() {
   const [isAuthorClicked, setIsAuthorClicked] = useState(false);
   const [isYearClicked, setIsYearClicked] = useState(false);
   const [isGenreClicked, setIsGenreClicked] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState(null);
   const dispatch = useDispatch();
   const { data: trackList, isLoading } = useGetAllTracksQuery();
   const selectedAuthorsFilter = useSelector(
@@ -95,7 +96,13 @@ export function FilterTracks() {
         >
           году выпуска
         </S.FilterButton>
-        {isYearClicked && <ListOfYears theme={theme} />}
+        {isYearClicked && (
+          <ListOfYears
+            theme={theme}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+          />
+        )}
       </S.FilterList>
 
       <S.FilterList>
@@ -169,11 +176,10 @@ function ListOfAuthors({ tracksData, selectedAuthorsFilter }) {
   );
 }
 
-function ListOfYears({ theme }) {
+function ListOfYears({ theme, selectedFilter, setSelectedFilter }) {
   const { data: trackList } = useGetAllTracksQuery();
   const dispatch = useDispatch();
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
-  const [selectedFilter, setSelectedFilter] = useState(null);
 
   // const dates = [];
   // trackList.forEach((track) => {
@@ -199,7 +205,8 @@ function ListOfYears({ theme }) {
   //   a.key > b.key ? 1 : -1,
   // );
   const filters = ["По умолчанию", "Сначала новые", "Сначала старые"];
-
+  // const years = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE]
+  // const DEFAULT_SORT_VALUE = 'По умолчанию' const ASC_SORT_VALUE = 'Сначала старые' const DESC_SORT_VALUE = 'Сначала новые'
   const handleFilterByReleaseDate = ({ filter }) => {
     if (filter === "Сначала старые") {
       dispatch(getSortedTracklistOldNew({ playlist: trackList }));
@@ -249,7 +256,7 @@ function ListOfGenre({ theme, tracksData, selectedGenreFilter }) {
       }),
     );
   };
-  console.log(selectedGenreFilter);
+  // console.log(selectedGenreFilter);
   const listOfGenres = genreFilter
     .filter((value, index, self) => {
       return self.indexOf(value) === index;

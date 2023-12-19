@@ -109,8 +109,8 @@ export const trackSlice = createSlice({
         state.isGenre = false;
         state.filteredTracklist = state.trackList;
       }
-      console.log(state.selectedGenreFilter);
-      console.log(state.filteredTracklist);
+      // console.log(state.selectedGenreFilter);
+      // console.log(state.filteredTracklist);
     },
     setGenreFilter: (state, action) => {
       state.genreFilter = action.payload;

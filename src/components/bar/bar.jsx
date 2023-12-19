@@ -11,6 +11,9 @@ import {
   playNextTrack,
   playTrack,
 } from "../../store/slices/slices";
+import { useGetTrackByIdQuery } from "../../services/api-services";
+import { useContext } from "react";
+import { CurrentUserContext } from "../../routes";
 
 export const MusicBar = () => {
   const { theme } = useThemeContext();
@@ -69,13 +72,13 @@ export const MusicBar = () => {
     }
   };
 
-  useEffect(() => {
-    if (chosenTrack) {
-      play();
-    } else {
-      pause();
-    }
-  }, [chosenTrack]);
+  // useEffect(() => {
+  //   if (chosenTrack) {
+  //     play();
+  //   } else {
+  //     pause();
+  //   }
+  // }, [chosenTrack]);
 
   const handleLoop = () => {
     audioRef.current.loop = true;
@@ -110,6 +113,7 @@ export const MusicBar = () => {
     };
     const onCanPlayThrough = () => {
       audioElement.play();
+      dispatch(playTrack());
     };
     //при быстром переключении не должны выскакивать ошибка. что данные не успели загрузиться
     audioElement.addEventListener("canplaythrough", onCanPlayThrough);
@@ -124,6 +128,12 @@ export const MusicBar = () => {
     };
   }, [isLooped]);
 
+  const { data } = useGetTrackByIdQuery({
+    id: chosenTrack.id
+  });
+  console.log(data);
+  const { user } = useContext(CurrentUserContext);
+  const isLikedData=(data.stared_user ?? []).find(({ id }) => id === user.id)
   return (
     <S.Bar theme={theme}>
       <S.BarContent>
@@ -153,7 +163,7 @@ export const MusicBar = () => {
                 // chosenTrack={chosenTrack}
                 onClick={togglePlay}
               />
-              <LikeOrDislikeCurrentTrack />
+              <LikeOrDislikeCurrentTrack data={data} isLikedData={isLikedData} />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
           <CorrectVolume
@@ -170,6 +180,7 @@ export const MusicBar = () => {
 
 const SeeCurrentTrack = ({ theme }) => {
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
+
   return (
     <S.TrackPlayContain>
       <S.TrackPlayImage theme={theme}>

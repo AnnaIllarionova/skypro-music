@@ -19,7 +19,7 @@ export function Sidebar({ isVisiable }) {
 
 function GetSidebarItems({ isVisiable }) {
   const { data } = useGetSelectionsQuery();
-  console.log(data);
+  // console.log(data);
 
   return (
     <>

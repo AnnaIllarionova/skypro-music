@@ -45,6 +45,11 @@ export const myTracksApi = createApi({
           ? [...result.map(({ id }) => ({ type: "Track", id })), "Track"]
           : ["Track"],
     }),
+    getTrackById: builder.query({
+      query: ({ id }) =>
+     ({ url:  `/catalog/track/${id}`}),
+      providesTags: ["Track"],
+    }),
   }),
 });
 
@@ -52,15 +57,18 @@ export const {
   useAddTrackInMyPlaylistMutation,
   useRemoveTrackFromMyPlaylistMutation,
   useGetMyTracksQuery,
+  useGetTrackByIdQuery,
 } = myTracksApi;
 
 export const allTracksApi = createApi({
   reducerPath: "allTracksApi",
   baseQuery,
+
   endpoints: (builder) => ({
     getAllTracks: builder.query({
       query: () => "/catalog/track/all/",
     }),
+
     getSelections: builder.query({
       query: () => "/catalog/selection/",
     }),

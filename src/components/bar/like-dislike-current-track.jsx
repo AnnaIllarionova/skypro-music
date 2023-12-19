@@ -1,6 +1,10 @@
+// import { useSelector } from "react-redux";
 import * as S from "./bar.styled";
 
-export function LikeOrDislikeCurrentTrack() {
+export function LikeOrDislikeCurrentTrack({isLikedData}) {
+  // const chosenTrack = useSelector((state) => state.track.chosenTrack);
+  console.log(isLikedData)
+
   return (
     <S.TrackPlayLikeOrDislike>
       <S.TrackPlayLike>
