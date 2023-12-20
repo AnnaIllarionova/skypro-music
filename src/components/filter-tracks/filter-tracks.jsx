@@ -5,7 +5,7 @@ import { useGetAllTracksQuery } from "../../services/api-services";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFilteredTracklist,
-  getFilteredTracklistByGenre,
+  // getFilteredTracklistByGenre,
   getSortedTracklistDefault,
   getSortedTracklistNewOld,
   getSortedTracklistOldNew,
@@ -181,40 +181,20 @@ function ListOfYears({ theme, selectedFilter, setSelectedFilter }) {
   const dispatch = useDispatch();
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
 
-  // const dates = [];
-  // trackList.forEach((track) => {
-  //   if (track.release_date !== null) {
-  //     dates.push(track.release_date);
-  //   }
-  // });
-  // const splitDates = dates.map((date) => date.split("-"));
-  // const years = splitDates.map((date) => date[0]);
-  // const fullYears = [];
-  // years.forEach((year) => {
-  //   if (!fullYears.includes(year)) {
-  //     fullYears.push(year);
-  //   }
-  // });
-  // const datesOfRelease = fullYears.map((year) => (
-  //   <S.FilterBoxLinksItem theme={theme} key={year}>
-  //     {year}
-  //   </S.FilterBoxLinksItem>
-  // ));
+  const filters = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE];
 
-  // const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
-  //   a.key > b.key ? 1 : -1,
-  // );
-  const filters = ["По умолчанию", "Сначала новые", "Сначала старые"];
-  // const years = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE]
-  // const DEFAULT_SORT_VALUE = 'По умолчанию' const ASC_SORT_VALUE = 'Сначала старые' const DESC_SORT_VALUE = 'Сначала новые'
+  const DEFAULT_SORT_VALUE = "По умолчанию";
+  const ASC_SORT_VALUE = "Сначала старые";
+  const DESC_SORT_VALUE = "Сначала новые";
+
   const handleFilterByReleaseDate = ({ filter }) => {
-    if (filter === "Сначала старые") {
+    if (filter === ASC_SORT_VALUE) {
       dispatch(getSortedTracklistOldNew({ playlist: trackList }));
     }
-    if (filter === "Сначала новые") {
+    if (filter === DESC_SORT_VALUE) {
       dispatch(getSortedTracklistNewOld({ playlist: trackList }));
     }
-    if (filter === "По умолчанию") {
+    if (filter === DEFAULT_SORT_VALUE) {
       dispatch(getSortedTracklistDefault({ playlist: trackList }));
     }
     setSelectedFilter(filter);
@@ -250,7 +230,7 @@ function ListOfGenre({ theme, tracksData, selectedGenreFilter }) {
       dispatch(setGenreFilterArr(genre));
     }
     dispatch(
-      getFilteredTracklistByGenre({
+      getFilteredTracklist({
         genre: selectedGenreFilter,
         playlist: tracksData,
       }),

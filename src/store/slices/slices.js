@@ -68,8 +68,23 @@ export const trackSlice = createSlice({
     },
     getFilteredTracklist: (state, action) => {
       state.trackList = action.payload.playlist;
-
-      if (state.selectedAuthorsFilter.length > 0) {
+      if (
+        state.selectedAuthorsFilter.length > 0 &&
+        state.selectedGenreFilter.length > 0
+      ) {
+        state.isAuthor = true;
+        state.isGenre = true;
+        state.filteredTracklist = state.trackList.filter(
+          (track) =>
+            state.selectedGenreFilter.includes(track.genre) &&
+            state.selectedAuthorsFilter.includes(track.author),
+        );
+      } else if (state.selectedGenreFilter.length > 0) {
+        state.isGenre = true;
+        state.filteredTracklist = state.trackList.filter((track) =>
+          state.selectedGenreFilter.includes(track.genre),
+        );
+      } else if (state.selectedAuthorsFilter.length > 0) {
         state.isAuthor = true;
 
         state.filteredTracklist = state.trackList.filter((track) =>
@@ -77,6 +92,7 @@ export const trackSlice = createSlice({
         );
       } else {
         state.isAuthor = false;
+        state.isGenre = false;
         state.filteredTracklist = state.trackList;
       }
 
@@ -97,20 +113,6 @@ export const trackSlice = createSlice({
       state.selectedAuthorsFilter = state.selectedAuthorsFilter.filter(
         (author) => author !== action.payload,
       );
-    },
-    getFilteredTracklistByGenre: (state, action) => {
-      state.trackList = action.payload.playlist;
-      if (state.selectedGenreFilter.length > 0) {
-        state.isGenre = true;
-        state.filteredTracklist = state.trackList.filter((track) =>
-          state.selectedGenreFilter.includes(track.genre),
-        );
-      } else {
-        state.isGenre = false;
-        state.filteredTracklist = state.trackList;
-      }
-      // console.log(state.selectedGenreFilter);
-      // console.log(state.filteredTracklist);
     },
     setGenreFilter: (state, action) => {
       state.genreFilter = action.payload;
@@ -165,6 +167,6 @@ export const {
   setGenreFilter,
   setGenreFilterArr,
   removeGenreFilterArr,
-  getFilteredTracklistByGenre,
+  // getFilteredTracklistByGenre,
 } = trackSlice.actions;
 export default trackSlice.reducer;

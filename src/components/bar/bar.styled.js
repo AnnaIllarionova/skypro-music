@@ -109,6 +109,7 @@ export const PlayerTrackPlay = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
+  gap: 15px;
 `;
 
 /* for PlayerControls */
@@ -240,6 +241,14 @@ export const TrackPlayLikeOrDislike = styled.div`
 
 export const SvgActive = styled.svg`
   cursor: pointer;
+`;
+export const TrackPlayLikeSvgActive = styled(SvgActive)`
+  width: 14px;
+  height: 12px;
+  // margin-left: 10px;
+  fill: #b672ff;
+  stroke-width: 1px;
+  stroke: #b672ff;
 `;
 
 export const TrackPlayLikeSvg = styled(SvgActive)`

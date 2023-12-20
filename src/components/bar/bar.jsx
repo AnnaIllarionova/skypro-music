@@ -11,7 +11,11 @@ import {
   playNextTrack,
   playTrack,
 } from "../../store/slices/slices";
-import { useGetTrackByIdQuery } from "../../services/api-services";
+import {
+  useAddTrackInMyPlaylistMutation,
+  useGetTrackByIdQuery,
+  useRemoveTrackFromMyPlaylistMutation,
+} from "../../services/api-services";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../routes";
 
@@ -129,11 +133,28 @@ export const MusicBar = () => {
   }, [isLooped]);
 
   const { data } = useGetTrackByIdQuery({
-    id: chosenTrack.id
+    id: chosenTrack.id,
   });
-  console.log(data);
+  // console.log(data);
   const { user } = useContext(CurrentUserContext);
-  const isLikedData=(data.stared_user ?? []).find(({ id }) => id === user.id)
+  const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
+  const [addTrackInMyPlaylist] = useAddTrackInMyPlaylistMutation();
+
+  const isLikedData = (data?.stared_user ?? []).find(
+    ({ id }) => id === user.id,
+  );
+  const isCurrentTrackLiked = data?.stared_user.includes(isLikedData);
+  
+  const changeLike = async () => {
+    if (isCurrentTrackLiked) {
+      await removeTrackFromMyPlaylist({ id: data.id }).unwrap();
+    } else {
+      await addTrackInMyPlaylist({
+        id: data.id,
+      }).unwrap();
+    }
+  };
+
   return (
     <S.Bar theme={theme}>
       <S.BarContent>
@@ -163,7 +184,10 @@ export const MusicBar = () => {
                 // chosenTrack={chosenTrack}
                 onClick={togglePlay}
               />
-              <LikeOrDislikeCurrentTrack data={data} isLikedData={isLikedData} />
+              <LikeOrDislikeCurrentTrack
+                isCurrentTrackLiked={isCurrentTrackLiked}
+                changeLike={changeLike}
+              />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
           <CorrectVolume

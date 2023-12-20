@@ -1,5 +1,5 @@
 import * as S from "./playlist.styled";
-import { getOneTrack } from "../../Api";
+// import { getOneTrack } from "../../Api";
 import { formatTime } from "../formated-time/formated-time.jsx";
 import {
   SkeletonTrackImage,
@@ -12,6 +12,7 @@ import { chooseCurrentTrack } from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
   useGetAllTracksQuery,
+  useGetTrackByIdQuery,
   useRemoveTrackFromMyPlaylistMutation,
 } from "../../services/api-services.js";
 import { useContext, useState } from "react";
@@ -54,7 +55,7 @@ export function TracksOfPlaylist({
   const [filterResults, setFilterResults] = useState([]);
   const isAuthor = useSelector((state) => state.track.isAuthor);
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
-  const isGenre = useSelector(state => state.track.isGenre)
+  const isGenre = useSelector((state) => state.track.isGenre);
   const filteredTracklist = useSelector(
     (state) => state.track.filteredTracklist,
   );
@@ -106,7 +107,7 @@ export function TracksOfPlaylist({
         ) : (
           <p>По вашему запросу ничего не найдено.</p>
         )
-      ) :  (isAuthor || isGenre || isDateOfRelease) ? (
+      ) : (isAuthor && isGenre) || isAuthor || isGenre || isDateOfRelease ? (
         filteredTracklist.map((track) => (
           <CreateOneTrack
             key={track.id}
@@ -159,13 +160,19 @@ export const CreateOneTrack = ({
   const isPlaying = useSelector((state) => state.track.isPlaying);
   const dispatch = useDispatch();
   const { user } = useContext(CurrentUserContext);
-  const [isLiked, setIsLiked] = useState(
-    (track.stared_user ?? []).find(({ id }) => id === user.id),
+  // const [isLiked, setIsLiked] = useState(
+  //   (track.stared_user ?? []).find(({ id }) => id === user.id),
+  // );
+  const { data } = useGetTrackByIdQuery({
+    id: track.id,
+  });
+  const isLikedData = (data?.stared_user ?? []).find(
+    ({ id }) => id === user.id,
   );
-
-  const handleChooseTrackClick = ({ track, id }) => {
+  const isLiked = data?.stared_user.includes(isLikedData);
+  // console.log(isLiked);
+  const handleChooseTrackClick = ({ track }) => {
     if (isVisiable) {
-      getOneTrack({ id });
       dispatch(chooseCurrentTrack({ track: track, playlist: trackList }));
     }
   };
@@ -181,8 +188,6 @@ export const CreateOneTrack = ({
         }).unwrap();
         refetch();
       }
-
-      setIsLiked(!isLiked);
     } catch (error) {
       console.log(error);
     }

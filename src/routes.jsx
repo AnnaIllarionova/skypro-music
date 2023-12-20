@@ -106,6 +106,7 @@ export const AppRoutes = () => {
 
   const [searchText, setSearchText] = useState("");
 
+
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
