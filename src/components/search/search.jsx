@@ -4,8 +4,8 @@ import * as S from "./search.styled";
 export function SearchComponent({setSearchText}) {
   const { theme } = useThemeContext();
 
-  const handleSearchText = (searchValue) => {
-    setSearchText(searchValue);
+  const handleSearchText = (e) => {
+    setSearchText(e.target.value);
   };
 
   return (
@@ -18,7 +18,7 @@ export function SearchComponent({setSearchText}) {
         type="search"
         placeholder="Поиск"
         name="search"
-        onChange={(e) => handleSearchText(e.target.value)}
+        onChange={handleSearchText}
       />
     </S.CenterblockSearch>
   );

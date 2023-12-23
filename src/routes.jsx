@@ -11,6 +11,8 @@ import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
 import { useGetTokenMutation } from "./services/api-services.js";
 import { AllTracksComponent } from "./components/playlist/all-tracks-component.jsx";
+import { useDispatch } from "react-redux";
+import { stopPlaying } from "./store/slices/slices.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -57,7 +59,10 @@ export const AppRoutes = () => {
         "accessToken",
         JSON.stringify(accessToken.data.access),
       );
-      console.log(JSON.parse(localStorage.getItem("accessToken")));
+      // console.log(JSON.parse(localStorage.getItem("accessToken")));
+      // console.log(localStorage
+      //   .getItem("accessToken")
+      //   .replace(/^"|"$/g, ""));
       localStorage.setItem(
         "refreshToken",
         JSON.stringify(accessToken.data.refresh),
@@ -72,7 +77,10 @@ export const AppRoutes = () => {
     }
   };
 
+  const dispatch = useDispatch();
+  
   const handleLogout = () => {
+    dispatch(stopPlaying());
     localStorage.removeItem("user");
     setUser(null);
     setPassword("");

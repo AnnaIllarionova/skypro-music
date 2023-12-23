@@ -66,6 +66,10 @@ export const trackSlice = createSlice({
     pauseTrack: (state) => {
       state.isPlaying = false;
     },
+    stopPlaying: (state) => {
+      state.isPlaying = false;
+      state.chosenTrack = null;
+    },
     getFilteredTracklist: (state, action) => {
       state.trackList = action.payload.playlist;
       if (
@@ -167,6 +171,7 @@ export const {
   setGenreFilter,
   setGenreFilterArr,
   removeGenreFilterArr,
+  stopPlaying,
   // getFilteredTracklistByGenre,
 } = trackSlice.actions;
 export default trackSlice.reducer;

@@ -181,11 +181,11 @@ function ListOfYears({ theme, selectedFilter, setSelectedFilter }) {
   const dispatch = useDispatch();
   const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
 
-  const filters = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE];
-
   const DEFAULT_SORT_VALUE = "По умолчанию";
   const ASC_SORT_VALUE = "Сначала старые";
   const DESC_SORT_VALUE = "Сначала новые";
+
+  const filters = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE];
 
   const handleFilterByReleaseDate = ({ filter }) => {
     if (filter === ASC_SORT_VALUE) {

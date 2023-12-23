@@ -8,7 +8,12 @@ const baseQueryWithPrepareHeaders = async (args, api, extraOptions) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://skypro-music-api.skyeng.tech",
     prepareHeaders: (headers) => {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const accessToken = localStorage
+        .getItem("accessToken")
+        .replace(/^"|"$/g, "");
+
+      // console.debug("Аксес", accessToken);
+
       if (accessToken) {
         headers.set("Authorization", `Bearer ${accessToken}`);
       }
@@ -23,13 +28,20 @@ const baseQueryWithPrepareHeaders = async (args, api, extraOptions) => {
     return result;
   }
 
-  const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
+  const refreshToken = localStorage
+    .getItem("refreshToken")
+    .replace(/^"|"$/g, "");
+
   console.debug("Рефреш", refreshToken);
+
   const forceLogOut = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     window.location.href = "/signin";
   };
-  if (refreshToken) {
+
+  if (!refreshToken) {
     return forceLogOut();
   }
 
@@ -37,9 +49,9 @@ const baseQueryWithPrepareHeaders = async (args, api, extraOptions) => {
     {
       url: "/user/token/refresh/",
       method: "POST",
-      body: JSON.stringify({
+      body: {
         refresh: refreshToken,
-      }),
+      },
     },
     api,
     extraOptions,
@@ -50,10 +62,7 @@ const baseQueryWithPrepareHeaders = async (args, api, extraOptions) => {
     return forceLogOut();
   }
 
-  localStorage.setItem(
-    "accessToken",
-    JSON.stringify(refreshResult.data.access),
-  );
+  localStorage.setItem("accessToken", refreshResult.data.access);
 
   const retryResult = await baseQuery(args, api, extraOptions);
 

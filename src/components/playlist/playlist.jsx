@@ -87,11 +87,13 @@ export function TracksOfPlaylist({
     } else {
       setFilterResults(tracks);
     }
+
+    console.log(searchText);
   }, [searchText]);
 
   return (
     <S.PlaylistItem>
-      {searchText.length > 1 ? (
+      {searchText.length > 0 ? (
         filterResults.length > 0 ? (
           filterResults.map((track) => (
             <CreateOneTrack
