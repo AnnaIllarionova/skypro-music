@@ -25,7 +25,6 @@ export const FilterTitle = styled.div`
   color: ${(props) => props.theme.color};
 `;
 
-// active?
 export const FilterButton = styled.div`
   font-style: normal;
   font-weight: 400;

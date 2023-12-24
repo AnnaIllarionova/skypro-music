@@ -12,7 +12,9 @@ export function SignUp({ setUser }) {
   const [showError, setShowError] = useState("");
   const navigate = useNavigate();
 
-  const handleAuthorizationNewUser = async () => {
+  const handleAuthorizationNewUser = async (e) => {
+    e.preventDefault();
+    
     try {
       if (password !== repeatPassword) {
         throw new Error("Пароли не совпадают!");
@@ -28,7 +30,6 @@ export function SignUp({ setUser }) {
       localStorage.setItem("user", JSON.stringify(dataNewUser));
     } catch (error) {
       setShowError(error.message);
-    } finally {
       setIsNewUserLoading(false);
     }
   };

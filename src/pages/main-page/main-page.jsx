@@ -22,9 +22,9 @@ export const MainPage = ({
 
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
 
-  useEffect(() => {
-    console.log(chosenTrack);
-  }, [chosenTrack]);
+  // useEffect(() => {
+  //   console.log(chosenTrack);
+  // }, [chosenTrack]);
 
   useEffect(() => {
     setTimeout(() => {

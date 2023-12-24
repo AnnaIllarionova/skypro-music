@@ -4,7 +4,7 @@ import * as S from "./playlist.styled";
 
 export const AllTracksComponent = ({ isVisiable, searchText }) => {
   const { data, error, isLoading } = useGetAllTracksQuery();
-  // console.log(data);
+
   const isEmptyList = !isLoading && (!data || data.length === 0);
 
   if (isEmptyList) {
@@ -30,6 +30,7 @@ export const AllTracksComponent = ({ isVisiable, searchText }) => {
       trackList={data}
       isLoading={isLoading}
       isAllTracksLiked={false}
+      error={error}
     />
   );
 };

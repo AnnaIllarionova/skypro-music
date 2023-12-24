@@ -55,7 +55,7 @@ function PopUpMenu() {
             Выйти
           </S.MenuLink>
         </S.MenuItem>
-        <S.MenuItem onClick={toggleTheme}>{theme.icon}</S.MenuItem>
+        <S.MenuItem onClick={toggleTheme}><img src={theme.icon} alt="switch theme"/></S.MenuItem>
       </S.MenuList>
     </S.NavMenu>
   );

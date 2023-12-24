@@ -9,7 +9,7 @@ export const CenterblockContent = styled.div`
   -ms-flex-direction: column;
   flex-direction: column;
   min-height: 0px;
-  height: 70vh;
+ 
 `;
 
 export const ContentPlaylist = styled.div`
@@ -22,6 +22,7 @@ export const ContentPlaylist = styled.div`
   flex-direction: column;
   overflow-y: auto;
   padding-right: 10px;
+  height: calc(70vh - 105px);
 `;
 
 export const PlaylistItem = styled.div`

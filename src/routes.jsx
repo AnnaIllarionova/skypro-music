@@ -59,10 +59,7 @@ export const AppRoutes = () => {
         "accessToken",
         JSON.stringify(accessToken.data.access),
       );
-      // console.log(JSON.parse(localStorage.getItem("accessToken")));
-      // console.log(localStorage
-      //   .getItem("accessToken")
-      //   .replace(/^"|"$/g, ""));
+     
       localStorage.setItem(
         "refreshToken",
         JSON.stringify(accessToken.data.refresh),

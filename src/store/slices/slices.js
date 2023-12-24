@@ -24,10 +24,10 @@ export const trackSlice = createSlice({
     chooseCurrentTrack: (state, action) => {
       state.chosenTrack = action.payload.track;
       state.trackList = action.payload.playlist;
-      // console.log(state.trackList);
+ 
     },
     playNextTrack: (state) => {
-      //в массиве треков найти этот индекс
+   
       const currentTrackList = state.isShuffled
         ? state.shuffledTrackList
         : state.trackList;
@@ -54,10 +54,12 @@ export const trackSlice = createSlice({
     },
     getShuffledTrackList: (state) => {
       state.isShuffled = !state.isShuffled;
-      state.shuffledTrackList = [...state.trackList].sort(
-        () => Math.random() - 0.5,
-      );
-      // console.log(state.shuffledTrackList);
+      if(state.isShuffled) {
+        state.shuffledTrackList = [...state.trackList].sort(
+          () => Math.random() - 0.5,
+        );
+      }
+      
       console.log(`Shuffled:  ${state.isShuffled}`);
     },
     playTrack: (state) => {
@@ -99,16 +101,9 @@ export const trackSlice = createSlice({
         state.isGenre = false;
         state.filteredTracklist = state.trackList;
       }
-
-      // console.log(state.selectedAuthorsFilter.length);
-      // console.log(state.isAuthor);
-      // console.log(state.filteredTracklist);
-      // console.log(state.trackList);
-      // console.log(state.selectedAuthorsFilter);
     },
     setAuthorsFilter: (state, action) => {
       state.authorsFilter = action.payload;
-      // console.log(state.authorsFilter);
     },
     setAuthorsFilterArr: (state, action) => {
       state.selectedAuthorsFilter.push(action.payload);
@@ -120,7 +115,6 @@ export const trackSlice = createSlice({
     },
     setGenreFilter: (state, action) => {
       state.genreFilter = action.payload;
-      // console.log(action.payload);
     },
     setGenreFilterArr: (state, action) => {
       state.selectedGenreFilter.push(action.payload);
@@ -136,7 +130,6 @@ export const trackSlice = createSlice({
       state.filteredTracklist = [...state.trackList]
         .slice()
         .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
-      // console.log(state.filteredTracklist);
     },
     getSortedTracklistNewOld: (state, action) => {
       state.isDateOfRelease = true;
@@ -144,12 +137,10 @@ export const trackSlice = createSlice({
       state.filteredTracklist = [...state.trackList]
         .slice()
         .sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-      // console.log(state.filteredTracklist);
     },
     getSortedTracklistDefault: (state) => {
       state.isDateOfRelease = true;
       state.filteredTracklist = state.trackList;
-      // console.log(state.filteredTracklist);
     },
   },
 });
@@ -172,6 +163,5 @@ export const {
   setGenreFilterArr,
   removeGenreFilterArr,
   stopPlaying,
-  // getFilteredTracklistByGenre,
 } = trackSlice.actions;
 export default trackSlice.reducer;

@@ -19,14 +19,13 @@ export function Sidebar({ isVisiable }) {
 
 function GetSidebarItems({ isVisiable }) {
   const { data } = useGetSelectionsQuery();
-  // console.log(data);
 
   return (
     <>
       {categories.map((category) => {
         const selection =
           data && data.find((selection) => selection.id === category.id);
-        // console.log(selection?.id);
+       
         return (
           <S.SidebarItem key={category.id}>
             {isVisiable ? (

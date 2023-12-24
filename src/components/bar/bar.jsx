@@ -15,7 +15,7 @@ import {
   useAddTrackInMyPlaylistMutation,
   useGetTrackByIdQuery,
   useRemoveTrackFromMyPlaylistMutation,
-} from "../../services/api-services";
+} from "../../services/api-services-reauth";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../routes";
 
@@ -76,14 +76,6 @@ export const MusicBar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (chosenTrack) {
-  //     play();
-  //   } else {
-  //     pause();
-  //   }
-  // }, [chosenTrack]);
-
   const handleLoop = () => {
     audioRef.current.loop = true;
     setIsLooped(true);
@@ -135,7 +127,6 @@ export const MusicBar = () => {
   const { data } = useGetTrackByIdQuery({
     id: chosenTrack.id,
   });
-  // console.log(data);
   const { user } = useContext(CurrentUserContext);
   const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
   const [addTrackInMyPlaylist] = useAddTrackInMyPlaylistMutation();
@@ -181,7 +172,6 @@ export const MusicBar = () => {
             <S.PlayerTrackPlay>
               <SeeCurrentTrack
                 theme={theme}
-                // chosenTrack={chosenTrack}
                 onClick={togglePlay}
               />
               <LikeOrDislikeCurrentTrack

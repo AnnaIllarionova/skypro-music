@@ -1,5 +1,4 @@
 import * as S from "./playlist.styled";
-// import { getOneTrack } from "../../Api";
 import { formatTime } from "../formated-time/formated-time.jsx";
 import {
   SkeletonTrackImage,
@@ -11,10 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { chooseCurrentTrack } from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
-  useGetAllTracksQuery,
   useGetTrackByIdQuery,
   useRemoveTrackFromMyPlaylistMutation,
-} from "../../services/api-services.js";
+} from "../../services/api-services-reauth.js";
+import { useGetAllTracksQuery } from "../../services/api-services.js";
 import { useContext, useState } from "react";
 import { CurrentUserContext } from "../../routes.jsx";
 import { useEffect } from "react";
@@ -62,11 +61,11 @@ export function TracksOfPlaylist({
 
   const filterTracks =
     trackList &&
-    trackList.filter((track) =>
-      Object.values(track)
-        .join("")
-        .toLowerCase()
-        .includes(searchText.toLowerCase()),
+    trackList.filter(
+      (track) =>
+        track.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        track.author.toLowerCase().includes(searchText.toLowerCase()) ||
+        track.album.toLowerCase().includes(searchText.toLowerCase()),
     );
   const tracks =
     trackList &&
@@ -87,8 +86,6 @@ export function TracksOfPlaylist({
     } else {
       setFilterResults(tracks);
     }
-
-    console.log(searchText);
   }, [searchText]);
 
   return (
@@ -162,9 +159,6 @@ export const CreateOneTrack = ({
   const isPlaying = useSelector((state) => state.track.isPlaying);
   const dispatch = useDispatch();
   const { user } = useContext(CurrentUserContext);
-  // const [isLiked, setIsLiked] = useState(
-  //   (track.stared_user ?? []).find(({ id }) => id === user.id),
-  // );
   const { data } = useGetTrackByIdQuery({
     id: track.id,
   });
@@ -172,7 +166,7 @@ export const CreateOneTrack = ({
     ({ id }) => id === user.id,
   );
   const isLiked = data?.stared_user.includes(isLikedData);
-  // console.log(isLiked);
+
   const handleChooseTrackClick = ({ track }) => {
     if (isVisiable) {
       dispatch(chooseCurrentTrack({ track: track, playlist: trackList }));
@@ -197,9 +191,6 @@ export const CreateOneTrack = ({
 
   return (
     <S.PlaylistTrack theme={theme} key={track.id}>
-      {/* <S.PlaylistTrackName
-        onClick={() => handleChooseTrackClick({ track, id: track.id })}
-      > */}
       <S.TrackTitle
         onClick={() => handleChooseTrackClick({ track, id: track.id })}
       >
@@ -249,7 +240,6 @@ export const CreateOneTrack = ({
           <SkeletonTrackTitleText />
         )}
       </S.TrackAlbum>
-      {/* </S.PlaylistTrackName> */}
 
       <S.TrackTime onClick={() => handleAddOrRemoveLike({ track })}>
         {isVisiable ? (

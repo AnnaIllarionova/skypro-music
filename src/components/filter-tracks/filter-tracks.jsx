@@ -1,11 +1,11 @@
 import { useState } from "react";
 import * as S from "./fitter-tracks.styled";
+import * as Style from "../playlist/playlist.styled";
 import { useThemeContext } from "../context/theme-context";
 import { useGetAllTracksQuery } from "../../services/api-services";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFilteredTracklist,
-  // getFilteredTracklistByGenre,
   getSortedTracklistDefault,
   getSortedTracklistNewOld,
   getSortedTracklistOldNew,
@@ -25,7 +25,16 @@ export function FilterTracks() {
   const [isGenreClicked, setIsGenreClicked] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const dispatch = useDispatch();
-  const { data: trackList, isLoading } = useGetAllTracksQuery();
+  const { data: trackList, isLoading, error } = useGetAllTracksQuery();
+
+  if (error) {
+    console.log(error);
+
+    return (
+      <Style.ErrorText>Не удалось загрузить плейлист: {error.message}</Style.ErrorText>
+    );
+  }
+
   const selectedAuthorsFilter = useSelector(
     (state) => state.track.selectedAuthorsFilter,
   );
@@ -150,7 +159,7 @@ function ListOfAuthors({ tracksData, selectedAuthorsFilter }) {
       }),
     );
   };
-  // console.log(selectedAuthorsFilter.length);
+
   const authorsList = authorsFilter
     .filter((value, index, self) => {
       return self.indexOf(value) === index;
@@ -236,7 +245,6 @@ function ListOfGenre({ theme, tracksData, selectedGenreFilter }) {
       }),
     );
   };
-  // console.log(selectedGenreFilter);
   const listOfGenres = genreFilter
     .filter((value, index, self) => {
       return self.indexOf(value) === index;
