@@ -15,6 +15,8 @@ const initialState = {
   isGenre: false,
   genreFilter: [],
   selectedGenreFilter: [],
+  currentPage: null,
+  currentPageTracks: null,
 };
 
 export const trackSlice = createSlice({
@@ -24,10 +26,8 @@ export const trackSlice = createSlice({
     chooseCurrentTrack: (state, action) => {
       state.chosenTrack = action.payload.track;
       state.trackList = action.payload.playlist;
- 
     },
     playNextTrack: (state) => {
-   
       const currentTrackList = state.isShuffled
         ? state.shuffledTrackList
         : state.trackList;
@@ -54,13 +54,32 @@ export const trackSlice = createSlice({
     },
     getShuffledTrackList: (state) => {
       state.isShuffled = !state.isShuffled;
-      if(state.isShuffled) {
+
+      if (state.isShuffled === true) {
         state.shuffledTrackList = [...state.trackList].sort(
           () => Math.random() - 0.5,
         );
+      } else {
+        state.shuffledTrackList = [];
       }
-      
+
       console.log(`Shuffled:  ${state.isShuffled}`);
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload.currentPage;
+    
+    },
+    setCurrentPageTracks: (state) => {
+      state.currentPageTracks = state.currentPage;
+   
+    },
+    removeIsShuffled: (state) => {
+      if(state.currentPage !== state.currentPageTracks) {
+        state.isShuffled = false;
+        state.shuffledTrackList = [];
+      }
+      console.log("currentPage", state.currentPage);
+      console.log("currentPageTracks", state.currentPageTracks);
     },
     playTrack: (state) => {
       state.isPlaying = true;
@@ -163,5 +182,8 @@ export const {
   setGenreFilterArr,
   removeGenreFilterArr,
   stopPlaying,
+  setCurrentPage,
+  setCurrentPageTracks,
+  removeIsShuffled,
 } = trackSlice.actions;
 export default trackSlice.reducer;

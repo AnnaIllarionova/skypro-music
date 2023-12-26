@@ -22,10 +22,6 @@ export const MainPage = ({
 
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
 
-  // useEffect(() => {
-  //   console.log(chosenTrack);
-  // }, [chosenTrack]);
-
   useEffect(() => {
     setTimeout(() => {
       setIsVisiable(true);
@@ -62,7 +58,6 @@ export const TrackListComponent = ({
   return (
     <>
       <GetPlaylist
-     
         searchText={searchText}
         isVisiable={isVisiable}
         trackList={trackList}

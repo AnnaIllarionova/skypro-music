@@ -4,11 +4,13 @@ import {
   getShuffledTrackList,
   playNextTrack,
   playPrevTrack,
+  setCurrentPageTracks,
 } from "../../store/slices/slices";
 
 export const PlayerControls = ({ togglePlay, isLooped, toggleLoop }) => {
   const isShuffled = useSelector((state) => state.track.isShuffled);
   const isPlaying = useSelector((state) => state.track.isPlaying);
+
   const dispatch = useDispatch();
   const handleNextTrack = () => {
     dispatch(playNextTrack());
@@ -18,6 +20,7 @@ export const PlayerControls = ({ togglePlay, isLooped, toggleLoop }) => {
   };
   const handleShuffleTracks = () => {
     dispatch(getShuffledTrackList());
+    dispatch(setCurrentPageTracks());
   };
   return (
     <S.PlayerControlsItems>

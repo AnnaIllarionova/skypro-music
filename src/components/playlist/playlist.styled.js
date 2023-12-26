@@ -22,7 +22,7 @@ export const ContentPlaylist = styled.div`
   flex-direction: column;
   overflow-y: auto;
   padding-right: 10px;
-  height: calc(70vh - 105px);
+  height: calc(67vh - 105px);
 `;
 
 export const PlaylistItem = styled.div`

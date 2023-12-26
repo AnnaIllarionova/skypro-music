@@ -7,7 +7,7 @@ import {
 } from "../skeleton/skeleton.jsx";
 import { useThemeContext } from "../context/theme-context.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { chooseCurrentTrack } from "../../store/slices/slices.js";
+import { chooseCurrentTrack, removeIsShuffled } from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
   useGetTrackByIdQuery,
@@ -171,6 +171,7 @@ export const CreateOneTrack = ({
     if (isVisiable) {
       dispatch(chooseCurrentTrack({ track: track, playlist: trackList }));
     }
+    dispatch(removeIsShuffled());
   };
 
   const handleAddOrRemoveLike = async ({ track }) => {

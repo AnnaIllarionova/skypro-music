@@ -1,9 +1,17 @@
+import { useDispatch } from "react-redux";
 import { TrackListComponent } from "../../pages/main-page/main-page";
 import { useGetAllTracksQuery } from "../../services/api-services";
 import * as S from "./playlist.styled";
+import { setCurrentPage } from "../../store/slices/slices";
+import { useEffect } from "react";
 
 export const AllTracksComponent = ({ isVisiable, searchText }) => {
   const { data, error, isLoading } = useGetAllTracksQuery();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCurrentPage({ currentPage: "Главная" }));
+  }, []);
 
   const isEmptyList = !isLoading && (!data || data.length === 0);
 

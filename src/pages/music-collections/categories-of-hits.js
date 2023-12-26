@@ -3,14 +3,21 @@ import { categories } from "../../components/sidebar/categories";
 import { useGetSelectionByIdQuery } from "../../services/api-services";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
+import { useDispatch } from "react-redux";
+import { setCurrentPage } from "../../store/slices/slices";
+import { useEffect } from "react";
 
 export const CategoriesOfHits = ({ setTitle, searchText }) => {
+  const dispatch = useDispatch();
   const params = useParams();
   const selectionId = parseInt(params.id);
-
   const category = categories.find((category) => category.id === selectionId);
 
-  setTitle(category.selection_title);
+  useEffect(() => {
+    setTitle(category.selection_title);
+    dispatch(setCurrentPage({ currentPage: "Подборки" }));
+  }, []);
+  
 
   const { data, error, isLoading } = useGetSelectionByIdQuery({
     id: selectionId,
@@ -24,6 +31,8 @@ export const CategoriesOfHits = ({ setTitle, searchText }) => {
   if (isLoading) {
     return <S.ErrorText>Загрузка...</S.ErrorText>;
   }
+
+  
 
   return (
     <TrackListComponent
