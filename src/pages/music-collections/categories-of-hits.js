@@ -14,10 +14,11 @@ export const CategoriesOfHits = ({ setTitle, searchText }) => {
   const category = categories.find((category) => category.id === selectionId);
 
   useEffect(() => {
-    setTitle(category.selection_title);
+    if (category) {
+      setTitle(category.selection_title);
+    }
     dispatch(setCurrentPage({ currentPage: "Подборки" }));
-  }, []);
-  
+  }, [category]);
 
   const { data, error, isLoading } = useGetSelectionByIdQuery({
     id: selectionId,
@@ -31,8 +32,6 @@ export const CategoriesOfHits = ({ setTitle, searchText }) => {
   if (isLoading) {
     return <S.ErrorText>Загрузка...</S.ErrorText>;
   }
-
-  
 
   return (
     <TrackListComponent

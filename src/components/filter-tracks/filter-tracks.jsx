@@ -27,25 +27,17 @@ export function FilterTracks() {
   const dispatch = useDispatch();
   const { data: trackList, isLoading, error } = useGetAllTracksQuery();
 
-  if (error) {
-    console.log(error);
-
-    return (
-      <Style.ErrorText>Не удалось загрузить плейлист: {error.message}</Style.ErrorText>
-    );
-  }
-
   const selectedAuthorsFilter = useSelector(
     (state) => state.track.selectedAuthorsFilter,
   );
   const selectedGenreFilter = useSelector(
     (state) => state.track.selectedGenreFilter,
   );
-  const authors = !isLoading
+  const authors = !isLoading && trackList
     ? [...new Set(trackList.map((track) => track.author))]
     : [];
 
-  const genres = !isLoading
+  const genres = !isLoading && trackList
     ? [...new Set(trackList.map((track) => track.genre))]
     : [];
   useEffect(() => {
@@ -69,6 +61,16 @@ export function FilterTracks() {
     setIsAuthorClicked(false);
     setIsYearClicked(false);
     setIsGenreClicked(!isGenreClicked);
+  }
+
+  if (error) {
+    console.log(error);
+
+    return (
+      <Style.ErrorText>
+        Не удалось загрузить плейлист: {error.message}
+      </Style.ErrorText>
+    );
   }
 
   return (

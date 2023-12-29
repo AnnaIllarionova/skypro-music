@@ -7,7 +7,10 @@ import {
 } from "../skeleton/skeleton.jsx";
 import { useThemeContext } from "../context/theme-context.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { chooseCurrentTrack, removeIsShuffled } from "../../store/slices/slices.js";
+import {
+  chooseCurrentTrack,
+  removeIsShuffled,
+} from "../../store/slices/slices.js";
 import {
   useAddTrackInMyPlaylistMutation,
   useGetTrackByIdQuery,
@@ -60,13 +63,14 @@ export function TracksOfPlaylist({
   );
 
   const filterTracks =
-    trackList &&
-    trackList.filter(
+  filteredTracklist &&
+    filteredTracklist.filter(
       (track) =>
         track.name.toLowerCase().includes(searchText.toLowerCase()) ||
         track.author.toLowerCase().includes(searchText.toLowerCase()) ||
         track.album.toLowerCase().includes(searchText.toLowerCase()),
     );
+
   const tracks =
     trackList &&
     trackList.map((track) => (
@@ -80,13 +84,14 @@ export function TracksOfPlaylist({
         isAllTracksLiked={isAllTracksLiked}
       />
     ));
+
   useEffect(() => {
     if (searchText !== "") {
       setFilterResults(filterTracks);
     } else {
-      setFilterResults(tracks);
+      setFilterResults(trackList);
     }
-  }, [searchText]);
+  }, [searchText, filterTracks, trackList]);
 
   return (
     <S.PlaylistItem>
