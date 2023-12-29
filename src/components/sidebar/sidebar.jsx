@@ -2,6 +2,7 @@ import { GetPersonalData } from "../personal-data/personal-data.jsx";
 import * as S from "./sidebar.styled";
 import { categories } from "./categories.jsx";
 import { SkeletonSidebar } from "../skeleton/skeleton.jsx";
+import { useGetSelectionsQuery } from "../../services/api-services.js";
 
 export function Sidebar({ isVisiable }) {
   return (
@@ -17,19 +18,26 @@ export function Sidebar({ isVisiable }) {
 }
 
 function GetSidebarItems({ isVisiable }) {
+  const { data } = useGetSelectionsQuery();
+
   return (
     <>
-      {categories.map((category) => (
-        <S.SidebarItem key={category.id}>
-          {isVisiable ? (
-            <S.SidebarLink to={`/categories-of-hits/${category.id}`}>
-              <S.SidebarImage src={category.imgUrl} alt={category.label} />
-            </S.SidebarLink>
-          ) : (
-            <SkeletonSidebar />
-          )}
-        </S.SidebarItem>
-      ))}
+      {categories.map((category) => {
+        const selection =
+          data && data.find((selection) => selection.id === category.id);
+       
+        return (
+          <S.SidebarItem key={category.id}>
+            {isVisiable ? (
+              <S.SidebarLink to={`/categories-of-hits/${selection?.id}`}>
+                <S.SidebarImage src={category.imgUrl} alt={category.label} />
+              </S.SidebarLink>
+            ) : (
+              <SkeletonSidebar />
+            )}
+          </S.SidebarItem>
+        );
+      })}
     </>
   );
 }

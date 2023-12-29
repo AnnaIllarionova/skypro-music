@@ -11,6 +11,13 @@ import {
   playNextTrack,
   playTrack,
 } from "../../store/slices/slices";
+import {
+  useAddTrackInMyPlaylistMutation,
+  useGetTrackByIdQuery,
+  useRemoveTrackFromMyPlaylistMutation,
+} from "../../services/api-services-reauth";
+import { useContext } from "react";
+import { CurrentUserContext } from "../../routes";
 
 export const MusicBar = () => {
   const { theme } = useThemeContext();
@@ -69,14 +76,6 @@ export const MusicBar = () => {
     }
   };
 
-  useEffect(() => {
-    if (chosenTrack) {
-      play();
-    } else {
-      pause();
-    }
-  }, [chosenTrack]);
-
   const handleLoop = () => {
     audioRef.current.loop = true;
     setIsLooped(true);
@@ -110,6 +109,7 @@ export const MusicBar = () => {
     };
     const onCanPlayThrough = () => {
       audioElement.play();
+      dispatch(playTrack());
     };
     //при быстром переключении не должны выскакивать ошибка. что данные не успели загрузиться
     audioElement.addEventListener("canplaythrough", onCanPlayThrough);
@@ -123,6 +123,28 @@ export const MusicBar = () => {
       audioElement.removeEventListener("timeupdate", handleTimeUpdateEvent);
     };
   }, [isLooped]);
+
+  const { data } = useGetTrackByIdQuery({
+    id: chosenTrack.id,
+  });
+  const { user } = useContext(CurrentUserContext);
+  const [removeTrackFromMyPlaylist] = useRemoveTrackFromMyPlaylistMutation();
+  const [addTrackInMyPlaylist] = useAddTrackInMyPlaylistMutation();
+
+  const isLikedData = (data?.stared_user ?? []).find(
+    ({ id }) => id === user.id,
+  );
+  const isCurrentTrackLiked = data?.stared_user.includes(isLikedData);
+  
+  const changeLike = async () => {
+    if (isCurrentTrackLiked) {
+      await removeTrackFromMyPlaylist({ id: data.id }).unwrap();
+    } else {
+      await addTrackInMyPlaylist({
+        id: data.id,
+      }).unwrap();
+    }
+  };
 
   return (
     <S.Bar theme={theme}>
@@ -150,10 +172,12 @@ export const MusicBar = () => {
             <S.PlayerTrackPlay>
               <SeeCurrentTrack
                 theme={theme}
-                // chosenTrack={chosenTrack}
                 onClick={togglePlay}
               />
-              <LikeOrDislikeCurrentTrack />
+              <LikeOrDislikeCurrentTrack
+                isCurrentTrackLiked={isCurrentTrackLiked}
+                changeLike={changeLike}
+              />
             </S.PlayerTrackPlay>
           </S.BarPlayer>
           <CorrectVolume
@@ -170,11 +194,12 @@ export const MusicBar = () => {
 
 const SeeCurrentTrack = ({ theme }) => {
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
+
   return (
     <S.TrackPlayContain>
       <S.TrackPlayImage theme={theme}>
         <S.TrackPlaySvg alt="music">
-          <use xlinkHref="img/icon/sprite.svg#icon-note"></use>
+          <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
         </S.TrackPlaySvg>
       </S.TrackPlayImage>
       <S.TrackPlayAuthor>

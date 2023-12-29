@@ -3,6 +3,7 @@ import * as S from "./navigation.styled";
 import { useThemeContext } from "../context/theme-context";
 import { useContext } from "react";
 import { CurrentUserContext } from "../../routes";
+import { Link } from "react-router-dom";
 
 export function Navigation() {
   const [showMenu, setShowMenu] = useState(false);
@@ -13,8 +14,10 @@ export function Navigation() {
   }
   return (
     <S.MainNav theme={theme}>
-      <S.NavLogo>
-        <S.LogoImage src={theme.logoImg} alt="logo" />
+      <S.NavLogo >
+        <Link to="/">
+          <S.LogoImage src={theme.logoImg} alt="logo" />
+        </Link>
       </S.NavLogo>
       <S.NavBurger onClick={handleShowMenu}>
         <S.BurgerLine theme={theme}></S.BurgerLine>
@@ -52,7 +55,7 @@ function PopUpMenu() {
             Выйти
           </S.MenuLink>
         </S.MenuItem>
-        <S.MenuItem onClick={toggleTheme}>{theme.icon}</S.MenuItem>
+        <S.MenuItem onClick={toggleTheme}><img src={theme.icon} alt="switch theme"/></S.MenuItem>
       </S.MenuList>
     </S.NavMenu>
   );

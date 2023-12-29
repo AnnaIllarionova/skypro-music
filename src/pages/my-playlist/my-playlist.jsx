@@ -1,13 +1,20 @@
-import { useGetMyTracksQuery } from "../../services/api-services";
+import { useGetMyTracksQuery } from "../../services/api-services-reauth";
 import { TrackListComponent } from "../main-page/main-page";
 import * as S from "../../components/playlist/playlist.styled";
 import { CurrentUserContext } from "../../routes";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentPage } from "../../store/slices/slices";
 
-export const MyPlaylist = ({ isVisiable }) => {
+export const MyPlaylist = ({ isVisiable, searchText }) => {
   const { data, error, isLoading } = useGetMyTracksQuery();
   const { handleLogout } = useContext(CurrentUserContext);
-  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCurrentPage({ currentPage: "Мои треки" }));
+  }, []);
+
   const isEmptyList = !isLoading && (!data || data.length === 0);
   if (isEmptyList) {
     return <p>Ваш плейлист пока пуст</p>;
@@ -25,11 +32,10 @@ export const MyPlaylist = ({ isVisiable }) => {
 
   return (
     <TrackListComponent
+      searchText={searchText}
       isVisiable={isVisiable}
-      title="Мои треки"
-      showFilterTracks={false}
       trackList={data}
-      // error={error}
+      error={error}
       isLoading={isLoading}
       isAllTracksLiked={true}
     />

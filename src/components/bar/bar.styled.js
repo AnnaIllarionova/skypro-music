@@ -7,6 +7,7 @@ export const Bar = styled.div`
   left: 0;
   width: 100%;
   background: ${(props) => props.theme.barBackground};
+  z-index: 1;
 `;
 
 export const BarContent = styled.div`
@@ -22,7 +23,7 @@ export const BarContent = styled.div`
 export const BarPlayerProgress = styled.input`
   --progress-height: 8px;
   --progress-color: #b672ff;
-  --progress-bg-color: ${props=>props.theme.progressColor};
+  --progress-bg-color: ${(props) => props.theme.progressColor};
 
   width: 100%;
   height: 5px;
@@ -109,6 +110,7 @@ export const PlayerTrackPlay = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
+  gap: 15px;
 `;
 
 /* for PlayerControls */
@@ -220,7 +222,6 @@ export const PlayerBtnShuffleSvg = styled(Button)`
 export const PlayerBtnShuffleSvgActive = styled(ButtonActive)`
   width: 19px;
   height: 12px;
-
 `;
 
 /* for LikeOrDislikeCurrentTrack */
@@ -240,6 +241,13 @@ export const TrackPlayLikeOrDislike = styled.div`
 
 export const SvgActive = styled.svg`
   cursor: pointer;
+`;
+export const TrackPlayLikeSvgActive = styled(SvgActive)`
+  width: 14px;
+  height: 12px;
+  fill: #b672ff;
+  stroke-width: 1px;
+  stroke: #b672ff;
 `;
 
 export const TrackPlayLikeSvg = styled(SvgActive)`
@@ -335,6 +343,7 @@ export const TrackPlayAlbumLink = styled.a`
   font-size: 13px;
   line-height: 24px;
   color: ${(props) => props.theme.color};
+  white-space: nowrap;
 `;
 
 /* for CorrectVolume */

@@ -7,6 +7,16 @@ const initialState = {
   isShuffled: false,
   shuffledTrackList: [],
   showAllTracksAsLiked: false,
+  filteredTracklist: [],
+  isAuthor: false,
+  isDateOfRelease: false,
+  authorsFilter: [],
+  selectedAuthorsFilter: [],
+  isGenre: false,
+  genreFilter: [],
+  selectedGenreFilter: [],
+  currentPage: null,
+  currentPageTracks: null,
 };
 
 export const trackSlice = createSlice({
@@ -18,7 +28,6 @@ export const trackSlice = createSlice({
       state.trackList = action.payload.playlist;
     },
     playNextTrack: (state) => {
-      //в массиве треков найти этот индекс
       const currentTrackList = state.isShuffled
         ? state.shuffledTrackList
         : state.trackList;
@@ -45,17 +54,112 @@ export const trackSlice = createSlice({
     },
     getShuffledTrackList: (state) => {
       state.isShuffled = !state.isShuffled;
-      state.shuffledTrackList = [...state.trackList].sort(
-        () => Math.random() - 0.5,
-      );
-      // console.log(state.shuffledTrackList);
+
+      if (state.isShuffled === true) {
+        state.shuffledTrackList = [...state.trackList].sort(
+          () => Math.random() - 0.5,
+        );
+      } else {
+        state.shuffledTrackList = [];
+      }
+
       console.log(`Shuffled:  ${state.isShuffled}`);
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload.currentPage;
+    
+    },
+    setCurrentPageTracks: (state) => {
+      state.currentPageTracks = state.currentPage;
+   
+    },
+    removeIsShuffled: (state) => {
+      if(state.currentPage !== state.currentPageTracks) {
+        state.isShuffled = false;
+        state.shuffledTrackList = [];
+      }
+      console.log("currentPage", state.currentPage);
+      console.log("currentPageTracks", state.currentPageTracks);
     },
     playTrack: (state) => {
       state.isPlaying = true;
     },
     pauseTrack: (state) => {
       state.isPlaying = false;
+    },
+    stopPlaying: (state) => {
+      state.isPlaying = false;
+      state.chosenTrack = null;
+    },
+    getFilteredTracklist: (state, action) => {
+      state.trackList = action.payload.playlist;
+      if (
+        state.selectedAuthorsFilter.length > 0 &&
+        state.selectedGenreFilter.length > 0
+      ) {
+        state.isAuthor = true;
+        state.isGenre = true;
+        state.filteredTracklist = state.trackList.filter(
+          (track) =>
+            state.selectedGenreFilter.includes(track.genre) &&
+            state.selectedAuthorsFilter.includes(track.author),
+        );
+      } else if (state.selectedGenreFilter.length > 0) {
+        state.isGenre = true;
+        state.filteredTracklist = state.trackList.filter((track) =>
+          state.selectedGenreFilter.includes(track.genre),
+        );
+      } else if (state.selectedAuthorsFilter.length > 0) {
+        state.isAuthor = true;
+
+        state.filteredTracklist = state.trackList.filter((track) =>
+          state.selectedAuthorsFilter.includes(track.author),
+        );
+      } else {
+        state.isAuthor = false;
+        state.isGenre = false;
+        state.filteredTracklist = state.trackList;
+      }
+    },
+    setAuthorsFilter: (state, action) => {
+      state.authorsFilter = action.payload;
+    },
+    setAuthorsFilterArr: (state, action) => {
+      state.selectedAuthorsFilter.push(action.payload);
+    },
+    removeAuthorsFilterArr: (state, action) => {
+      state.selectedAuthorsFilter = state.selectedAuthorsFilter.filter(
+        (author) => author !== action.payload,
+      );
+    },
+    setGenreFilter: (state, action) => {
+      state.genreFilter = action.payload;
+    },
+    setGenreFilterArr: (state, action) => {
+      state.selectedGenreFilter.push(action.payload);
+    },
+    removeGenreFilterArr: (state, action) => {
+      state.selectedGenreFilter = state.selectedGenreFilter.filter(
+        (genre) => genre !== action.payload,
+      );
+    },
+    getSortedTracklistOldNew: (state, action) => {
+      state.isDateOfRelease = true;
+      state.trackList = action.payload.playlist;
+      state.filteredTracklist = [...state.trackList]
+        .slice()
+        .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+    },
+    getSortedTracklistNewOld: (state, action) => {
+      state.isDateOfRelease = true;
+      state.trackList = action.payload.playlist;
+      state.filteredTracklist = [...state.trackList]
+        .slice()
+        .sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+    },
+    getSortedTracklistDefault: (state) => {
+      state.isDateOfRelease = true;
+      state.filteredTracklist = state.trackList;
     },
   },
 });
@@ -67,5 +171,19 @@ export const {
   getShuffledTrackList,
   playTrack,
   pauseTrack,
+  getFilteredTracklist,
+  getSortedTracklistOldNew,
+  getSortedTracklistNewOld,
+  getSortedTracklistDefault,
+  setAuthorsFilter,
+  setAuthorsFilterArr,
+  removeAuthorsFilterArr,
+  setGenreFilter,
+  setGenreFilterArr,
+  removeGenreFilterArr,
+  stopPlaying,
+  setCurrentPage,
+  setCurrentPageTracks,
+  removeIsShuffled,
 } = trackSlice.actions;
 export default trackSlice.reducer;

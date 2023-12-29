@@ -1,13 +1,49 @@
 import { useState } from "react";
 import * as S from "./fitter-tracks.styled";
+import * as Style from "../playlist/playlist.styled";
 import { useThemeContext } from "../context/theme-context";
 import { useGetAllTracksQuery } from "../../services/api-services";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getFilteredTracklist,
+  getSortedTracklistDefault,
+  getSortedTracklistNewOld,
+  getSortedTracklistOldNew,
+  removeAuthorsFilterArr,
+  removeGenreFilterArr,
+  setAuthorsFilter,
+  setAuthorsFilterArr,
+  setGenreFilter,
+  setGenreFilterArr,
+} from "../../store/slices/slices";
+import { useEffect } from "react";
 
 export function FilterTracks() {
   const { theme } = useThemeContext();
   const [isAuthorClicked, setIsAuthorClicked] = useState(false);
   const [isYearClicked, setIsYearClicked] = useState(false);
   const [isGenreClicked, setIsGenreClicked] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const dispatch = useDispatch();
+  const { data: trackList, isLoading, error } = useGetAllTracksQuery();
+
+  const selectedAuthorsFilter = useSelector(
+    (state) => state.track.selectedAuthorsFilter,
+  );
+  const selectedGenreFilter = useSelector(
+    (state) => state.track.selectedGenreFilter,
+  );
+  const authors = !isLoading && trackList
+    ? [...new Set(trackList.map((track) => track.author))]
+    : [];
+
+  const genres = !isLoading && trackList
+    ? [...new Set(trackList.map((track) => track.genre))]
+    : [];
+  useEffect(() => {
+    dispatch(setAuthorsFilter(authors));
+    dispatch(setGenreFilter(genres));
+  }, [trackList]);
 
   function handleIsAuthorClicked() {
     setIsAuthorClicked(!isAuthorClicked);
@@ -27,10 +63,26 @@ export function FilterTracks() {
     setIsGenreClicked(!isGenreClicked);
   }
 
+  if (error) {
+    console.log(error);
+
+    return (
+      <Style.ErrorText>
+        Не удалось загрузить плейлист: {error.message}
+      </Style.ErrorText>
+    );
+  }
+
   return (
     <S.CenterblockFilter>
       <S.FilterTitle theme={theme}>Искать по:</S.FilterTitle>
-      <div className="filter__list">
+      <S.FilterList>
+        {selectedAuthorsFilter.length > 0 ? (
+          <S.FilterButtonNumber>
+            {selectedAuthorsFilter.length}
+          </S.FilterButtonNumber>
+        ) : null}
+
         <S.FilterButton
           theme={theme}
           onClick={handleIsAuthorClicked}
@@ -38,9 +90,16 @@ export function FilterTracks() {
         >
           исполнителю
         </S.FilterButton>
-        {isAuthorClicked && <ListOfAuthors />}
-      </div>
-      <div className="filter__list">
+
+        {isAuthorClicked && (
+          <ListOfAuthors
+            theme={theme}
+            selectedAuthorsFilter={selectedAuthorsFilter}
+            tracksData={isLoading ? ["Загрузка треков..."] : [...trackList]}
+          />
+        )}
+      </S.FilterList>
+      <S.FilterList>
         <S.FilterButton
           theme={theme}
           onClick={handleIsYearClicked}
@@ -48,10 +107,21 @@ export function FilterTracks() {
         >
           году выпуска
         </S.FilterButton>
-        {isYearClicked && <ListOfYears theme={theme} />}
-      </div>
+        {isYearClicked && (
+          <ListOfYears
+            theme={theme}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+          />
+        )}
+      </S.FilterList>
 
-      <div className="filter__list">
+      <S.FilterList>
+        {selectedGenreFilter.length > 0 ? (
+          <S.FilterButtonNumber>
+            {selectedGenreFilter.length}
+          </S.FilterButtonNumber>
+        ) : null}
         <S.FilterButton
           theme={theme}
           onClick={handleIsGenreClicked}
@@ -59,28 +129,54 @@ export function FilterTracks() {
         >
           жанру
         </S.FilterButton>
-        {isGenreClicked && <ListOfGenre theme={theme} />}
-      </div>
+        {isGenreClicked && (
+          <ListOfGenre
+            selectedGenreFilter={selectedGenreFilter}
+            theme={theme}
+            tracksData={isLoading ? ["Загрузка треков..."] : [...trackList]}
+          />
+        )}
+      </S.FilterList>
     </S.CenterblockFilter>
   );
 }
 
-function ListOfAuthors() {
+function ListOfAuthors({ tracksData, selectedAuthorsFilter }) {
   const { theme } = useThemeContext();
-  const authors = [];
-  const { data: trackList } = useGetAllTracksQuery();
 
-  trackList.forEach((track) => {
-    if (!authors.includes(track.author)) {
-      authors.push(track.author);
+  const dispatch = useDispatch();
+  const isAuthor = useSelector((state) => state.track.isAuthor);
+  const authorsFilter = useSelector((state) => state.track.authorsFilter);
+
+  const handleFilter = ({ author }) => {
+    if (selectedAuthorsFilter.includes(author)) {
+      dispatch(removeAuthorsFilterArr(author));
+    } else {
+      dispatch(setAuthorsFilterArr(author));
     }
-  });
+    dispatch(
+      getFilteredTracklist({
+        author: selectedAuthorsFilter,
+        playlist: tracksData,
+      }),
+    );
+  };
 
-  const authorsList = authors.map((author) => (
-    <S.FilterBoxLinksItem theme={theme} key={author}>
-      {author}
-    </S.FilterBoxLinksItem>
-  ));
+  const authorsList = authorsFilter
+    .filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    })
+    .map((author) => (
+      <S.FilterBoxLinksItem
+        theme={theme}
+        key={author}
+        isAuthor={isAuthor}
+        isAuthorSelected={selectedAuthorsFilter.includes(author)}
+        onClick={() => handleFilter({ author })}
+      >
+        {author}
+      </S.FilterBoxLinksItem>
+    ));
 
   const sortAuthorsList = authorsList.sort((a, b) => (a.key > b.key ? 1 : -1));
 
@@ -91,51 +187,81 @@ function ListOfAuthors() {
   );
 }
 
-function ListOfYears({ theme }) {
+function ListOfYears({ theme, selectedFilter, setSelectedFilter }) {
   const { data: trackList } = useGetAllTracksQuery();
-  const dates = [];
-  trackList.forEach((track) => {
-    if (track.release_date !== null) {
-      dates.push(track.release_date);
+  const dispatch = useDispatch();
+  const isDateOfRelease = useSelector((state) => state.track.isDateOfRelease);
+
+  const DEFAULT_SORT_VALUE = "По умолчанию";
+  const ASC_SORT_VALUE = "Сначала старые";
+  const DESC_SORT_VALUE = "Сначала новые";
+
+  const filters = [DEFAULT_SORT_VALUE, ASC_SORT_VALUE, DESC_SORT_VALUE];
+
+  const handleFilterByReleaseDate = ({ filter }) => {
+    if (filter === ASC_SORT_VALUE) {
+      dispatch(getSortedTracklistOldNew({ playlist: trackList }));
     }
-  });
-  const splitDates = dates.map((date) => date.split("-"));
-  const years = splitDates.map((date) => date[0]);
-  const fullYears = [];
-  years.forEach((year) => {
-    if (!fullYears.includes(year)) {
-      fullYears.push(year);
+    if (filter === DESC_SORT_VALUE) {
+      dispatch(getSortedTracklistNewOld({ playlist: trackList }));
     }
-  });
-  const datesOfRelease = fullYears.map((year) => (
-    <S.FilterBoxLinksItem theme={theme} key={year}>
-      {year}
+    if (filter === DEFAULT_SORT_VALUE) {
+      dispatch(getSortedTracklistDefault({ playlist: trackList }));
+    }
+    setSelectedFilter(filter);
+  };
+
+  const filtersByDate = filters.map((filter) => (
+    <S.FilterBoxLinksItem
+      theme={theme}
+      key={filter}
+      onClick={() => handleFilterByReleaseDate({ filter })}
+      isDateOfRelease={isDateOfRelease}
+      isSelected={selectedFilter === filter}
+    >
+      {filter}
     </S.FilterBoxLinksItem>
   ));
-
-  const sortDatesOfRelease = datesOfRelease.sort((a, b) =>
-    a.key > b.key ? 1 : -1,
-  );
   return (
     <S.FilterBox theme={theme}>
-      <S.FilterBoxLinks>{sortDatesOfRelease}</S.FilterBoxLinks>
+      <S.FilterBoxLinks>{filtersByDate}</S.FilterBoxLinks>
     </S.FilterBox>
   );
 }
 
-function ListOfGenre({ theme }) {
-  const { data: trackList } = useGetAllTracksQuery();
-  const genres = [];
-  trackList.forEach((track) => {
-    if (!genres.includes(track.genre)) {
-      genres.push(track.genre);
+function ListOfGenre({ theme, tracksData, selectedGenreFilter }) {
+  const genreFilter = useSelector((state) => state.track.genreFilter);
+  const isGenre = useSelector((state) => state.track.isGenre);
+  const dispatch = useDispatch();
+
+  const handleGenreFilter = ({ genre }) => {
+    if (selectedGenreFilter.includes(genre)) {
+      dispatch(removeGenreFilterArr(genre));
+    } else {
+      dispatch(setGenreFilterArr(genre));
     }
-  });
-  const listOfGenres = genres.map((genre) => (
-    <S.FilterBoxLinksItem theme={theme} key={genre}>
-      {genre}
-    </S.FilterBoxLinksItem>
-  ));
+    dispatch(
+      getFilteredTracklist({
+        genre: selectedGenreFilter,
+        playlist: tracksData,
+      }),
+    );
+  };
+  const listOfGenres = genreFilter
+    .filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    })
+    .map((genre) => (
+      <S.FilterBoxLinksItem
+        onClick={() => handleGenreFilter({ genre })}
+        isGenre={isGenre}
+        isGenreSelected={selectedGenreFilter.includes(genre)}
+        theme={theme}
+        key={genre}
+      >
+        {genre}
+      </S.FilterBoxLinksItem>
+    ));
 
   return (
     <S.FilterBox theme={theme}>

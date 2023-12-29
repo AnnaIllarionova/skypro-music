@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { SignIn } from "./pages/signin/signin";
 import { SignUp } from "./pages/signup/signup";
 import { MyPlaylist } from "./pages/my-playlist/my-playlist";
@@ -6,13 +6,13 @@ import { CategoriesOfHits } from "./pages/music-collections/categories-of-hits";
 import { ErrorPage } from "./pages/error-page/error-page";
 import { MainPage } from "./pages/main-page/main-page.jsx";
 import { ProtectedRoute } from "./components/protected-route/protected-route";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loginUser } from "./Api";
 import { ThemeContext, themes } from "./components/context/theme-context.jsx";
-import {
-  useGetTokenMutation,
-} from "./services/api-services.js";
+import { useGetTokenMutation } from "./services/api-services.js";
 import { AllTracksComponent } from "./components/playlist/all-tracks-component.jsx";
+import { useDispatch } from "react-redux";
+import { stopPlaying } from "./store/slices/slices.js";
 
 export const CurrentUserContext = React.createContext(null);
 
@@ -28,7 +28,6 @@ export const AppRoutes = () => {
   const [user, setUser] = useState(getUserFromLS());
   const [showError, setShowError] = useState("");
   const [isVisiable, setIsVisiable] = useState(false);
-
   const [currentTheme, setCurrentTheme] = useState(themes.dark);
 
   const toggleTheme = () => {
@@ -60,7 +59,7 @@ export const AppRoutes = () => {
         "accessToken",
         JSON.stringify(accessToken.data.access),
       );
-      console.log(JSON.parse(localStorage.getItem("accessToken")));
+
       localStorage.setItem(
         "refreshToken",
         JSON.stringify(accessToken.data.refresh),
@@ -75,13 +74,44 @@ export const AppRoutes = () => {
     }
   };
 
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
+    dispatch(stopPlaying());
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setUser(null);
     setPassword("");
     setEmail("");
     navigate("/signin");
   };
+
+  const [title, setTitle] = useState("");
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [showFilterTracks, setShowFilterTracks] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setTitle("Треки");
+      setShowFilterTracks(true);
+      setShowSidebar(true);
+    }
+
+    if (location.pathname === "/myplaylist") {
+      setTitle("Мои треки");
+      setShowFilterTracks(false);
+      setShowSidebar(false);
+    }
+
+    if (location.pathname.startsWith("/categories-of-hits/")) {
+      setShowFilterTracks(false);
+      setShowSidebar(false);
+    }
+  }, [location.pathname]);
+
+  const [searchText, setSearchText] = useState("");
 
   return (
     <Routes>
@@ -94,8 +124,12 @@ export const AppRoutes = () => {
                 value={{ theme: currentTheme, toggleTheme }}
               >
                 <MainPage
+                  setSearchText={setSearchText}
                   isVisiable={isVisiable}
                   setIsVisiable={setIsVisiable}
+                  showSidebar={showSidebar}
+                  showFilterTracks={showFilterTracks}
+                  title={title}
                 />
               </ThemeContext.Provider>
             </CurrentUserContext.Provider>
@@ -103,15 +137,24 @@ export const AppRoutes = () => {
         >
           <Route
             path="/"
-            element={<AllTracksComponent isVisiable={isVisiable} />}
+            element={
+              <AllTracksComponent
+                isVisiable={isVisiable}
+                searchText={searchText}
+              />
+            }
           />
           <Route
             path="/myplaylist"
-            element={<MyPlaylist isVisiable={isVisiable} />}
+            element={
+              <MyPlaylist isVisiable={isVisiable} searchText={searchText} />
+            }
           />
           <Route
             path="/categories-of-hits/:id"
-            element={<CategoriesOfHits />}
+            element={
+              <CategoriesOfHits setTitle={setTitle} searchText={searchText} />
+            }
           />
         </Route>
       </Route>

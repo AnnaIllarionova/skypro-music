@@ -10,14 +10,17 @@ import { useThemeContext } from "../../components/context/theme-context.jsx";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
-export const MainPage = ({ isVisiable, setIsVisiable }) => {
+export const MainPage = ({
+  isVisiable,
+  setIsVisiable,
+  title,
+  showFilterTracks,
+  showSidebar,
+  setSearchText,
+}) => {
   const { theme } = useThemeContext();
 
   const chosenTrack = useSelector((state) => state.track.chosenTrack);
-
-  useEffect(() => {
-    console.log(chosenTrack);
-  }, [chosenTrack]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,13 +33,14 @@ export const MainPage = ({ isVisiable, setIsVisiable }) => {
       <S.Main>
         <Navigation />
         <S.MainCenterblock>
-          <SearchComponent />
+          <SearchComponent setSearchText={setSearchText} />
+          <S.MainCenterblockH2 theme={theme}>{title}</S.MainCenterblockH2>
+          {showFilterTracks ? <FilterTracks /> : null}
           <Outlet />
         </S.MainCenterblock>
-        <Sidebar isVisiable={isVisiable} />
+        {showSidebar ? <Sidebar isVisiable={isVisiable} /> : null}
       </S.Main>
       {chosenTrack ? <MusicBar isVisiable={isVisiable} /> : null}
-
       <footer className="footer"></footer>
     </S.Container>
   );
@@ -44,20 +48,17 @@ export const MainPage = ({ isVisiable, setIsVisiable }) => {
 
 export const TrackListComponent = ({
   isVisiable,
-  title,
-  showFilterTracks,
   trackList,
   error,
   isLoading,
   isAllTracksLiked,
-}) => {
-  const { theme } = useThemeContext();
+  searchText,
 
+}) => {
   return (
     <>
-      <S.MainCenterblockH2 theme={theme}>{title}</S.MainCenterblockH2>
-      {showFilterTracks ? <FilterTracks /> : null}
       <GetPlaylist
+        searchText={searchText}
         isVisiable={isVisiable}
         trackList={trackList}
         error={error}

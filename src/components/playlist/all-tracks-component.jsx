@@ -1,26 +1,19 @@
+import { useDispatch } from "react-redux";
 import { TrackListComponent } from "../../pages/main-page/main-page";
 import { useGetAllTracksQuery } from "../../services/api-services";
-// import { useEffect } from "react";
 import * as S from "./playlist.styled";
+import { setCurrentPage } from "../../store/slices/slices";
+import { useEffect } from "react";
 
-export const AllTracksComponent = ({ isVisiable }) => {
+export const AllTracksComponent = ({ isVisiable, searchText }) => {
   const { data, error, isLoading } = useGetAllTracksQuery();
-  console.log(data);
-  const isEmptyList = !isLoading && (!data || data.length === 0);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const updateData = async () => {
-  //     try {
-  //       await refetch();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   updateData();
-  //   return () => {
-  //     updateData();
-  //   };
-  // }, [refetch]);
+  useEffect(() => {
+    dispatch(setCurrentPage({ currentPage: "Главная" }));
+  }, []);
+
+  const isEmptyList = !isLoading && (!data || data.length === 0);
 
   if (isEmptyList) {
     return <p>Плейлист пуст</p>;
@@ -40,13 +33,12 @@ export const AllTracksComponent = ({ isVisiable }) => {
 
   return (
     <TrackListComponent
+      searchText={searchText}
       isVisiable={isVisiable}
-      title="Треки"
-      showFilterTracks={true}
       trackList={data}
-      //   error={error}
       isLoading={isLoading}
       isAllTracksLiked={false}
+      error={error}
     />
   );
 };
