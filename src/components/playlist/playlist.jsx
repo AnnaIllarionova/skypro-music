@@ -62,14 +62,21 @@ export function TracksOfPlaylist({
     (state) => state.track.filteredTracklist,
   );
 
-  const filterTracks =
-  filteredTracklist &&
+  const filterTracks = (isAuthor && isGenre) || isAuthor || isGenre || isDateOfRelease ? 
     filteredTracklist.filter(
       (track) =>
         track.name.toLowerCase().includes(searchText.toLowerCase()) ||
         track.author.toLowerCase().includes(searchText.toLowerCase()) ||
         track.album.toLowerCase().includes(searchText.toLowerCase()),
-    );
+    ) : filterResults.filter(
+    (track) =>
+      track.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      track.author.toLowerCase().includes(searchText.toLowerCase()) ||
+      track.album.toLowerCase().includes(searchText.toLowerCase()),
+  );
+  console.log("filteredTraclist", filteredTracklist);
+  console.log("filter", filterTracks);
+  console.log("filterResults", filterResults);
 
   const tracks =
     trackList &&

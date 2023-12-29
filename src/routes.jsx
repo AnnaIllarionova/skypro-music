@@ -59,7 +59,7 @@ export const AppRoutes = () => {
         "accessToken",
         JSON.stringify(accessToken.data.access),
       );
-     
+
       localStorage.setItem(
         "refreshToken",
         JSON.stringify(accessToken.data.refresh),
@@ -75,10 +75,12 @@ export const AppRoutes = () => {
   };
 
   const dispatch = useDispatch();
-  
+
   const handleLogout = () => {
     dispatch(stopPlaying());
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setUser(null);
     setPassword("");
     setEmail("");
@@ -111,7 +113,6 @@ export const AppRoutes = () => {
 
   const [searchText, setSearchText] = useState("");
 
-
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
@@ -140,13 +141,13 @@ export const AppRoutes = () => {
               <AllTracksComponent
                 isVisiable={isVisiable}
                 searchText={searchText}
-               />
+              />
             }
           />
           <Route
             path="/myplaylist"
             element={
-              <MyPlaylist isVisiable={isVisiable} searchText={searchText}  />
+              <MyPlaylist isVisiable={isVisiable} searchText={searchText} />
             }
           />
           <Route

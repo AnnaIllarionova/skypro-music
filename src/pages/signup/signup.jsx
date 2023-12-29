@@ -2,6 +2,7 @@ import { useState } from "react";
 import * as S from "../signin/signin-signup.styled";
 import { authorizationForNewUser } from "../../Api";
 import { useNavigate } from "react-router-dom";
+import { useGetTokenMutation } from "../../services/api-services";
 
 export function SignUp({ setUser }) {
   const [login, setLogin] = useState("");
@@ -11,6 +12,7 @@ export function SignUp({ setUser }) {
   const [isNewUserLoading, setIsNewUserLoading] = useState(false);
   const [showError, setShowError] = useState("");
   const navigate = useNavigate();
+  const [getToken] = useGetTokenMutation();
 
   const handleAuthorizationNewUser = async (e) => {
     e.preventDefault();
@@ -25,9 +27,23 @@ export function SignUp({ setUser }) {
         password: password,
         username: login,
       });
-      setUser(dataNewUser);
-      navigate("/");
       localStorage.setItem("user", JSON.stringify(dataNewUser));
+      setUser(dataNewUser);
+      
+      const accessToken = await getToken({ email: email, password: password });
+      localStorage.setItem(
+        "accessToken",
+        JSON.stringify(accessToken.data.access),
+      );
+
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(accessToken.data.refresh),
+      );
+      console.log(localStorage.getItem("refreshToken"));
+      
+      navigate("/");
+      
     } catch (error) {
       setShowError(error.message);
       setIsNewUserLoading(false);
