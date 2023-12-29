@@ -74,9 +74,6 @@ export function TracksOfPlaylist({
       track.author.toLowerCase().includes(searchText.toLowerCase()) ||
       track.album.toLowerCase().includes(searchText.toLowerCase()),
   );
-  console.log("filteredTraclist", filteredTracklist);
-  console.log("filter", filterTracks);
-  console.log("filterResults", filterResults);
 
   const tracks =
     trackList &&
